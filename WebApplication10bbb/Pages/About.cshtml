@@ -1,0 +1,400 @@
+﻿@page
+@model AboutModel
+@{
+    ViewData["Title"] = "About";
+}
+<head>
+    <meta charset="utf-8" />
+    <title>Pacman</title>
+    <style>
+        * {
+            outline: 0px dotted purple;
+        }
+
+        div {
+            margin: 0px;
+            vertical-align:top;
+        }
+
+        .pacman {
+            width: 20px;
+            height: 20px;
+            background-image: url('images/pacman3.png');
+            display: inline-block;
+        }
+
+        .wall {
+            width: 20px;
+            height: 20px;
+            background-image: url('images/wall2.png');
+            display: inline-block;
+        }
+
+        .world {
+            background-color: #181819;
+            width:560px;
+            flex: 50%;
+        }
+
+        .coin {
+            width: 20px;
+            height: 20px;
+            background-image: url('images/coin2.png');
+            display: inline-block;
+        }
+
+        .ground {
+            width: 20px;
+            height: 20px;
+            /*background-image: url('images/bg2.png');*/
+            display: inline-block;
+        }
+
+        .ground2 {
+            width: 20px;
+            height: 20px;
+            background-color: red;
+            /*background-image: url('images/bg2.png');*/
+            display: inline-block;
+        }
+
+        .ghost1 {
+            width: 20px;
+            height: 20px;
+            background-image: url('images/blinky.png');
+            display: inline-block;
+        }
+
+        .ghost2 {
+            width: 20px;
+            height: 20px;
+            background-image: url('images/pinky.png');
+            display: inline-block;
+
+        }
+        .ghost3 {
+            width: 20px;
+            height: 20px;
+            background-image: url('images/clyde.png');
+            display: inline-block;
+        }
+
+        .column {
+            flex: 50%;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div>
+        <div id="world" class="world">
+
+        </div>
+
+        <div class="column">
+            <text>Реєстрація</text>
+            <input id="login_reg" type="text" placeholder="Логін">
+            <input id="password_reg" type="password" placeholder="Пароль">
+            <input id="password2_reg" type="password" placeholder="Повторіть пароль">
+            <button id="register">Зареєструватись</button>
+            <br />
+            <br />
+            <br />
+            <br />
+            <text>Авторизація</text>
+            <input id="login_sign" type="text" placeholder="Логін">
+            <input id="password_sign" type="password" placeholder="Пароль">
+            <button id="login_in">Увійти</button>
+        </div>
+
+    </div>
+    <div>
+        <button id="sendBtn" >Start game</button>
+        <button id="pause_btn">Pause</button>
+    </div>
+
+    <div>
+        <textarea id="text_field1"></textarea>
+
+        <textarea id="text_field2"></textarea>
+        <textarea id="text_field3"></textarea>
+
+        <textarea id="text_field4"></textarea>
+        <textarea id="text_field5"></textarea>
+        <textarea id="QWERTYY"></textarea>
+        <textarea id="text_field6"></textarea>
+    </div>
+
+    <script src="js/signalr.min.js"></script>
+
+    <script>
+            //1 = <div class="wal"></div>
+            //3 = <div class="ground"></div>            
+            //2 = <div class="coin"></div>
+            //5 = <div class="pacman"></div>
+            //6 = <div class="ghost1"></div>
+        pacman = {
+            x: 1,
+            y: 1
+        }
+
+        current_pacman = {
+            x:1,
+            y:1
+        }
+
+        current_ghost = {
+            x: 8,
+            y: 21,
+            previos:"coin"
+        }
+
+        current_pinky = {
+            x: 29,
+            y: 26,
+            previos: "coin"
+        }
+
+        current_clyde = {
+            x: 29,
+            y: 1,
+            previos: "coin"
+        }
+
+        new_pacman = {
+            x: 0,
+            y: 0
+        }
+
+
+        let hubUrl = 'https://localhost:44379/stocks';
+        const hubConnection = new signalR.HubConnectionBuilder()
+            .withUrl(hubUrl)
+            .configureLogging(signalR.LogLevel.Information)
+            .build();
+
+        var map = [
+            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+            [1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1],
+            [1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1],
+            [1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1],
+            [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+            [1, 2, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 2, 1],
+            [1, 2, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 2, 1],
+            [1, 2, 2, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 2, 2, 1],
+            [1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1],
+            [4, 4, 4, 4, 4, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 4, 4, 4, 4, 4],
+            [4, 4, 4, 4, 4, 1, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 2, 1, 4, 4, 4, 4, 4],
+            [4, 4, 4, 4, 4, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 4, 4, 4, 4, 4],
+            [1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 4, 4, 4, 4, 4, 4, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1],
+            [4, 4, 4, 4, 4, 4, 2, 4, 4, 2, 1, 4, 4, 4, 4, 4, 4, 1, 2, 4, 4, 2, 4, 4, 4, 4, 4, 4],
+            [1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 4, 4, 4, 4, 4, 4, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1],
+            [4, 4, 4, 4, 4, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 4, 4, 4, 4, 4],
+            [4, 4, 4, 4, 4, 1, 2, 1, 1, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 1, 1, 2, 1, 4, 4, 4, 4, 4],
+            [4, 4, 4, 4, 4, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 4, 4, 4, 4, 4],
+            [1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1],
+            [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+            [1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1],
+            [1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1],
+            [1, 2, 2, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 2, 2, 2, 1],
+            [1, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 1],
+            [1, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 1],
+            [1, 2, 2, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 2, 2, 1],
+            [1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1],
+            [1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1],
+            [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+
+        ];
+
+        document.getElementById("register").addEventListener("click", function (e) {
+
+            var xhr = new XMLHttpRequest();
+
+            xhr.open("POST", 'https://localhost:44379/api/Users', true)
+            xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+            xhr.setRequestHeader('UserName', document.querySelector('#login_reg').value);
+            xhr.setRequestHeader('UserPassword', document.querySelector('#password_reg').value);
+
+            xhr.send();
+
+            xhr.onload = function () {
+                document.getElementById("register").textContent = xhr.status;
+            }
+
+        });
+
+        document.getElementById("login_in").addEventListener("click", function (e) {
+
+            var xhr = new XMLHttpRequest();
+            
+            xhr.open("GET", 'https://localhost:44379/api/Users', true)
+            xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+            xhr.setRequestHeader('UserName', document.querySelector('#login_sign').value);
+            xhr.setRequestHeader('UserPassword', document.querySelector('#password_sign').value);
+
+            xhr.send();
+
+            xhr.onload = function () {
+                let send_btn = document.getElementById("login_in");
+                send_btn.textContent = xhr.status;
+            }
+
+        });
+
+
+        var el = document.getElementById('world');
+
+        function drawWorld() {
+            el.innerHTML = '';
+            for (var y = 0; y < map.length; y = y + 1) {
+                for (var x = 0; x < map[y].length; x = x + 1) {
+                    if (map[y][x] === 1) {
+                        el.innerHTML += '<div id="' + y + "o" + x + '" class="wall"></div>';
+                    }
+                    else if (map[y][x] === 2) {
+                        el.innerHTML += '<div id="' + y + "o" + x + '" class="coin"></div>';
+                    }
+                    else if (map[y][x] === 3) {
+                        el.innerHTML += '<div id="' + y + "o" + x + '" ground="wall"></div>';
+                    }
+                    else if (map[y][x] === 4) {
+                        el.innerHTML += '<div id="' + y + "o" + x + '" class="ground"></div>';
+                    }
+                    else if (map[y][x] === 5) {
+                        el.innerHTML += '<div id="' + y + "o" + x + '" class="pacman"></div>';
+                    }
+                    else if (map[y][x] === 6) {
+                        el.innerHTML += '<div id="' + y + "o" + x + '" class="ghost1"></div>';
+                    }
+                }
+                el.innerHTML += "<br>";
+            }
+        }
+                 
+
+        drawWorld();
+        document.onkeydown = function (event) {
+
+            if (event.keyCode === 37) {
+
+                hubConnection.invoke("MovePacmen", 4);
+
+            }
+            else if (event.keyCode === 38) {
+
+                hubConnection.invoke("MovePacmen", 8);
+
+            }
+            else if (event.keyCode === 39) {
+
+                hubConnection.invoke("MovePacmen", 6);
+
+            }
+            else if (event.keyCode === 40) {
+
+                hubConnection.invoke("MovePacmen", 2);
+
+            }
+
+        };
+        
+      
+        hubConnection.on("ChangeBlinkyPosition", function (blinkiX, blinkiY) {
+
+            let blinkyposX = document.getElementById(current_ghost.x.toString() + "o" + current_ghost.y.toString());
+            blinkyposX.className = current_ghost.previos;
+
+
+
+            let blinkyposY = document.getElementById(blinkiX.toString() + "o" + blinkiY.toString());
+            current_ghost.previos = blinkyposY.className.toString();
+            blinkyposY.className = "ghost1";
+
+            current_ghost.x = blinkiX;
+            current_ghost.y = blinkiY;
+
+        });
+        
+        hubConnection.on("ChangeClydePosition", function (clydeX, clydeY) {
+
+            let clydeposX = document.getElementById(current_clyde.x.toString() + "o" + current_clyde.y.toString());
+            clydeposX.className = "ground";
+            
+            let clydeposY = document.getElementById(clydeX.toString() + "o" + clydeY.toString());
+            clydeposY.className = "ghost3";
+
+            current_clyde.x = clydeX;
+            current_clyde.y = clydeY;
+
+        });
+
+        hubConnection.on("ChangePinkyPosition", function (pinkyX, pinkyY) {
+
+            let pinkyposX = document.getElementById(current_pinky.x.toString() + "o" + current_pinky.y.toString());
+            pinkyposX.className = "ground";
+
+            let pinkyposY = document.getElementById(pinkyX.toString() + "o" + pinkyY.toString());
+            pinkyposY.className = "ghost2";
+
+            current_pinky.x = pinkyX;
+            current_pinky.y = pinkyY;
+
+        });
+
+        hubConnection.on("ChangePacmanPosition", function (pacman_x, pacman_y, score) {
+
+            let firstElem4 = document.getElementById(current_pacman.x.toString() + "o" + current_pacman.y.toString());
+            firstElem4.className = "ground";
+           
+
+            let firstElem3 = document.getElementById(pacman_x.toString() + "o" + pacman_y.toString());
+            firstElem3.className = "pacman";
+                
+            current_pacman.x = pacman_x;
+            current_pacman.y = pacman_y;
+
+            let qwerty1 = document.getElementById("text_field1");
+            let qwerty2 = document.getElementById("text_field2");
+
+            qwerty1.textContent = 'Score ';
+            qwerty2.textContent = score;
+
+        });
+        
+        hubConnection.on("SEND", function (possitionX) {
+
+
+            let qwerty123 = document.getElementById("text_field6");
+            qwerty123.textContent = possitionX;
+            //let yyx = document.getElementById("text_field5");
+            //yyx.textContent = possitionY;  
+
+
+        });
+
+        var p = true;
+
+        hubConnection.start();
+
+        document.getElementById("sendBtn").addEventListener("click", function (e) {
+            hubConnection.invoke("StartGame");
+        });
+
+        document.getElementById("pause_btn").addEventListener("click", function (e) {
+            if (p) {
+                p = false;
+                document.getElementById("pause_btn").textContent = "Unpause";
+            }
+            else {
+                p = true;
+                document.getElementById("pause_btn").textContent = "Pause";
+            }
+            hubConnection.invoke("Pause");
+        });
+
+    </script>
+        
+</body>
