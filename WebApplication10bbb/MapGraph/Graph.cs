@@ -50,6 +50,7 @@ namespace WebApplication10bbb.MapGraph
                     }
                     else
                     {
+                        AddNode(fromNode);
                         Nodes[fromNode].AddConnection(Nodes[toNode], distance, twoWay);
                     }
                 }
@@ -62,6 +63,7 @@ namespace WebApplication10bbb.MapGraph
                     }
                     else
                     {
+                        AddNode(fromNode);
                         Nodes[fromNode].AddConnection(Nodes[toNode], distance, twoWay);
                     }
                 }
@@ -74,6 +76,7 @@ namespace WebApplication10bbb.MapGraph
                     }
                     else
                     {
+                        AddNode(fromNode);
                         Nodes[fromNode].AddConnection(Nodes[toNode], distance, twoWay);
                     }
                 }
@@ -86,6 +89,7 @@ namespace WebApplication10bbb.MapGraph
                     }
                     else
                     {
+                        AddNode(fromNode);
                         Nodes[fromNode].AddConnection(Nodes[toNode], distance, twoWay);
                     }
                 }
@@ -101,13 +105,10 @@ namespace WebApplication10bbb.MapGraph
                     }
                     else
                     {
-                        try
-                        {
+                        
+                            AddNode(fromNode);
                             Nodes[fromNode].AddConnection(Nodes[toNode], distance, twoWay);
-                        }
-                        catch (Exception)
-                        {                           
-                        }
+                        
                        
                     }
                 }
@@ -120,6 +121,7 @@ namespace WebApplication10bbb.MapGraph
                     }
                     else
                     {
+                        AddNode(fromNode);
                         Nodes[fromNode].AddConnection(Nodes[toNode], distance, twoWay);
                     }
                 }
@@ -132,6 +134,7 @@ namespace WebApplication10bbb.MapGraph
                     }
                     else
                     {
+                        AddNode(fromNode);
                         Nodes[fromNode].AddConnection(Nodes[toNode], distance, twoWay);
                     }
                 }
@@ -144,21 +147,17 @@ namespace WebApplication10bbb.MapGraph
                     }
                     else
                     {
+                        AddNode(fromNode);
                         Nodes[fromNode].AddConnection(Nodes[toNode], distance, twoWay);
                     }
                 }
             }
             else
             {
-                try
-                {
+               
+                    AddNode(fromNode);
                     Nodes[fromNode].AddConnection(Nodes[toNode], distance, twoWay);
-                }
-                catch (Exception)
-                {
-
-                    
-                }
+                
                 
             }
 

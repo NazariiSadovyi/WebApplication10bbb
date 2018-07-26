@@ -68,10 +68,13 @@ C:\Users\5B34~1\AppData\Local\Temp\vscode-chrome-debug.txt
 'dotnet.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\2.1.0\Microsoft.Extensions.Configuration.Binder.dll'. Skipped loading symbols. Module is optimized and the debugger option 'Just My Code' is enabled.
 'dotnet.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.NETCore.App\2.1.0\System.Runtime.InteropServices.RuntimeInformation.dll'. Skipped loading symbols. Module is optimized and the debugger option 'Just My Code' is enabled.
 'dotnet.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\2.1.0\Microsoft.AspNetCore.CookiePolicy.dll'. Skipped loading symbols. Module is optimized and the debugger option 'Just My Code' is enabled.
+'dotnet.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\2.1.0\Microsoft.EntityFrameworkCore.dll'. Skipped loading symbols. Module is optimized and the debugger option 'Just My Code' is enabled.
 'dotnet.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\2.1.0\Microsoft.AspNetCore.SignalR.dll'. Skipped loading symbols. Module is optimized and the debugger option 'Just My Code' is enabled.
 'dotnet.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\2.1.0\Microsoft.AspNetCore.SignalR.Core.dll'. Skipped loading symbols. Module is optimized and the debugger option 'Just My Code' is enabled.
 'dotnet.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\2.1.0\Microsoft.AspNetCore.SignalR.Common.dll'. Skipped loading symbols. Module is optimized and the debugger option 'Just My Code' is enabled.
 'dotnet.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\2.1.0\Microsoft.AspNetCore.Mvc.dll'. Skipped loading symbols. Module is optimized and the debugger option 'Just My Code' is enabled.
+'dotnet.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\2.1.0\Microsoft.Extensions.Caching.Memory.dll'. Skipped loading symbols. Module is optimized and the debugger option 'Just My Code' is enabled.
+'dotnet.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\2.1.0\Microsoft.Extensions.Caching.Abstractions.dll'. Skipped loading symbols. Module is optimized and the debugger option 'Just My Code' is enabled.
 'dotnet.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\2.1.0\Microsoft.AspNetCore.Http.Connections.dll'. Skipped loading symbols. Module is optimized and the debugger option 'Just My Code' is enabled.
 'dotnet.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\2.1.0\Microsoft.AspNetCore.Routing.dll'. Skipped loading symbols. Module is optimized and the debugger option 'Just My Code' is enabled.
 'dotnet.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\2.1.0\Microsoft.AspNetCore.Authorization.Policy.dll'. Skipped loading symbols. Module is optimized and the debugger option 'Just My Code' is enabled.
@@ -112,8 +115,6 @@ C:\Users\5B34~1\AppData\Local\Temp\vscode-chrome-debug.txt
 'dotnet.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\2.1.0\Microsoft.AspNetCore.Razor.Language.dll'. Skipped loading symbols. Module is optimized and the debugger option 'Just My Code' is enabled.
 'dotnet.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\2.1.0\Microsoft.CodeAnalysis.dll'. Skipped loading symbols. Module is optimized and the debugger option 'Just My Code' is enabled.
 'dotnet.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\2.1.0\Microsoft.AspNetCore.Mvc.Razor.Extensions.dll'. Skipped loading symbols. Module is optimized and the debugger option 'Just My Code' is enabled.
-'dotnet.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\2.1.0\Microsoft.Extensions.Caching.Abstractions.dll'. Skipped loading symbols. Module is optimized and the debugger option 'Just My Code' is enabled.
-'dotnet.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\2.1.0\Microsoft.Extensions.Caching.Memory.dll'. Skipped loading symbols. Module is optimized and the debugger option 'Just My Code' is enabled.
 'dotnet.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\2.1.0\Microsoft.AspNetCore.Mvc.Cors.dll'. Skipped loading symbols. Module is optimized and the debugger option 'Just My Code' is enabled.
 'dotnet.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\2.1.0\Microsoft.AspNetCore.Cors.dll'. Skipped loading symbols. Module is optimized and the debugger option 'Just My Code' is enabled.
 'dotnet.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.NETCore.App\2.1.0\System.Net.Primitives.dll'. Skipped loading symbols. Module is optimized and the debugger option 'Just My Code' is enabled.
@@ -160,7 +161,7 @@ Microsoft.AspNetCore.Hosting.Internal.WebHost:Information: Request starting HTTP
 'dotnet.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.NETCore.App\2.1.0\System.Security.Cryptography.X509Certificates.dll'. Skipped loading symbols. Module is optimized and the debugger option 'Just My Code' is enabled.
 'dotnet.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\2.1.0\Microsoft.AspNetCore.WebUtilities.dll'. Skipped loading symbols. Module is optimized and the debugger option 'Just My Code' is enabled.
 'dotnet.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\2.1.0\Microsoft.AspNetCore.Http.Extensions.dll'. Skipped loading symbols. Module is optimized and the debugger option 'Just My Code' is enabled.
-Microsoft.AspNetCore.Hosting.Internal.WebHost:Information: Request finished in 48.9503ms 200 
+Microsoft.AspNetCore.Hosting.Internal.WebHost:Information: Request finished in 116.5357ms 200 
 'dotnet.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.NETCore.App\2.1.0\System.Net.WebSockets.dll'. Skipped loading symbols. Module is optimized and the debugger option 'Just My Code' is enabled.
 'dotnet.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\2.1.0\Microsoft.AspNetCore.Authentication.Cookies.dll'. Skipped loading symbols. Module is optimized and the debugger option 'Just My Code' is enabled.
 'dotnet.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\2.1.0\Microsoft.AspNetCore.Authentication.dll'. Skipped loading symbols. Module is optimized and the debugger option 'Just My Code' is enabled.
@@ -168,51 +169,31 @@ Microsoft.AspNetCore.Hosting.Internal.WebHost:Information: Request finished in 4
 'dotnet.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\2.1.0\Microsoft.CodeAnalysis.CSharp.dll'. Skipped loading symbols. Module is optimized and the debugger option 'Just My Code' is enabled.
 'dotnet.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\2.1.0\Microsoft.AspNetCore.Diagnostics.Abstractions.dll'. Skipped loading symbols. Module is optimized and the debugger option 'Just My Code' is enabled.
 'dotnet.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.NETCore.App\2.1.0\System.ComponentModel.Annotations.dll'. Skipped loading symbols. Module is optimized and the debugger option 'Just My Code' is enabled.
-Microsoft.AspNetCore.Mvc.RazorPages.Internal.PageActionInvoker:Information: Route matched with {page = "/Index"}. Executing action /Index
+Microsoft.AspNetCore.Mvc.RazorPages.Internal.PageActionInvoker:Information: Route matched with {page = "/Index", action = "", controller = ""}. Executing action /Index
 Microsoft.AspNetCore.Mvc.RazorPages.Internal.PageActionInvoker:Information: Executing handler method OnGet with arguments ((null)) - ModelState is Valid
-Microsoft.AspNetCore.Mvc.RazorPages.Internal.PageActionInvoker:Information: Executed action /Index in 176.8679ms
-Microsoft.AspNetCore.Hosting.Internal.WebHost:Information: Request finished in 535.7292ms 200 text/html; charset=utf-8
-Microsoft.AspNetCore.Hosting.Internal.WebHost:Information: Request starting HTTP/1.1 GET http://localhost:44379/About  
-Microsoft.AspNetCore.Mvc.RazorPages.Internal.PageActionInvoker:Information: Route matched with {page = "/About"}. Executing action /About
+Microsoft.AspNetCore.Mvc.RazorPages.Internal.PageActionInvoker:Information: Executed action /Index in 588.7092ms
+Microsoft.AspNetCore.Hosting.Internal.WebHost:Information: Request finished in 1485.457ms 200 text/html; charset=utf-8
+Microsoft.AspNetCore.Hosting.Internal.WebHost:Information: Request starting HTTP/1.1 GET http://localhost:44379/Contact  
+Microsoft.AspNetCore.Mvc.RazorPages.Internal.PageActionInvoker:Information: Route matched with {page = "/Contact", action = "", controller = ""}. Executing action /Contact
 Microsoft.AspNetCore.Mvc.RazorPages.Internal.PageActionInvoker:Information: Executing handler method OnGet with arguments ((null)) - ModelState is Valid
-Microsoft.AspNetCore.Mvc.RazorPages.Internal.PageActionInvoker:Information: Executed action /About in 14.1886ms
-Microsoft.AspNetCore.Hosting.Internal.WebHost:Information: Request finished in 45.6491ms 200 text/html; charset=utf-8
+Microsoft.AspNetCore.Mvc.RazorPages.Internal.PageActionInvoker:Information: Executed action /Contact in 101.6357ms
+Microsoft.AspNetCore.Hosting.Internal.WebHost:Information: Request finished in 174.3665ms 200 text/html; charset=utf-8
 Microsoft.AspNetCore.Hosting.Internal.WebHost:Information: Request starting HTTP/1.1 POST http://localhost:44379/stocks/negotiate text/plain;charset=UTF-8 0
 'dotnet.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.NETCore.App\2.1.0\System.Runtime.Serialization.Primitives.dll'. Skipped loading symbols. Module is optimized and the debugger option 'Just My Code' is enabled.
-Microsoft.AspNetCore.Hosting.Internal.WebHost:Information: Request finished in 88.6236ms 200 application/json
-Microsoft.AspNetCore.Hosting.Internal.WebHost:Information: Request starting HTTP/1.1 GET http://localhost:44379/stocks?id=bOyd-Qu3hhER3k2TZELuTg  
+Microsoft.AspNetCore.Hosting.Internal.WebHost:Information: Request finished in 232.4394ms 200 application/json
+Microsoft.AspNetCore.Hosting.Internal.WebHost:Information: Request starting HTTP/1.1 GET http://localhost:44379/stocks?id=EzOFJ8bo1gX3R-xujzqSvQ  
 'dotnet.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\2.1.0\System.Net.WebSockets.WebSocketProtocol.dll'. Skipped loading symbols. Module is optimized and the debugger option 'Just My Code' is enabled.
-Information: WebSocket connected to wss://localhost:44379/stocks?id=bOyd-Qu3hhER3k2TZELuTg
+Information: WebSocket connected to wss://localhost:44379/stocks?id=EzOFJ8bo1gX3R-xujzqSvQ
 Information: Using HubProtocol 'json'.
 Microsoft.AspNetCore.SignalR.HubConnectionContext:Information: Completed connection handshake. Using HubProtocol 'json'.
 'dotnet.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.NETCore.App\2.1.0\System.Diagnostics.TraceSource.dll'. Skipped loading symbols. Module is optimized and the debugger option 'Just My Code' is enabled.
 'dotnet.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.NETCore.App\2.1.0\System.Data.Common.dll'. Skipped loading symbols. Module is optimized and the debugger option 'Just My Code' is enabled.
 'dotnet.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.NETCore.App\2.1.0\System.Xml.ReaderWriter.dll'. Skipped loading symbols. Module is optimized and the debugger option 'Just My Code' is enabled.
-The thread 0x1ca4 has exited with code 0 (0x0).
-Microsoft.AspNetCore.Hosting.Internal.WebHost:Information: Request starting HTTP/1.1 POST http://localhost:44379/stocks/negotiate text/plain;charset=UTF-8 0
-Microsoft.AspNetCore.Hosting.Internal.WebHost:Information: Request finished in 5.6105ms 200 application/json
-Microsoft.AspNetCore.Hosting.Internal.WebHost:Information: Request starting HTTP/1.1 GET http://localhost:44379/stocks?id=xgH3qQ3a9I9Yw7PwnuU-3A  
-Microsoft.AspNetCore.SignalR.HubConnectionContext:Information: Completed connection handshake. Using HubProtocol 'json'.
-The thread 0x2274 has exited with code 0 (0x0).
-The thread 0x7d8 has exited with code 0 (0x0).
-Microsoft.AspNetCore.Hosting.Internal.WebHost:Information: Request starting HTTP/1.1 POST http://localhost:44379/stocks/negotiate text/plain;charset=UTF-8 0
-Microsoft.AspNetCore.Hosting.Internal.WebHost:Information: Request finished in 29.077ms 200 application/json
-Microsoft.AspNetCore.Hosting.Internal.WebHost:Information: Request starting HTTP/1.1 GET http://localhost:44379/stocks?id=pVV_qvgStlTK1cQoyHy8Xg  
-Microsoft.AspNetCore.SignalR.HubConnectionContext:Information: Completed connection handshake. Using HubProtocol 'json'.
-The thread 0x2a00 has exited with code 0 (0x0).
-The thread 0xeec has exited with code 0 (0x0).
-The thread 0x5ec has exited with code 0 (0x0).
-The thread 0x3c8 has exited with code 0 (0x0).
-The thread 0x2858 has exited with code 0 (0x0).
-The thread 0x1fac has exited with code 0 (0x0).
-The thread 0x4ac has exited with code 0 (0x0).
-The thread 0x500 has exited with code 0 (0x0).
-The thread 0x1128 has exited with code 0 (0x0).
-The thread 0x9d4 has exited with code 0 (0x0).
-The thread 0x24dc has exited with code 0 (0x0).
-The thread 0xdf0 has exited with code 0 (0x0).
-Microsoft.AspNetCore.Hosting.Internal.WebHost:Information: Request finished in 214074.6584ms 101 
-Microsoft.AspNetCore.Hosting.Internal.WebHost:Information: Request finished in 269310.3327ms 101 
+The thread 0x217c has exited with code 0 (0x0).
+The thread 0x2b08 has exited with code 0 (0x0).
+The thread 0x24fc has exited with code 0 (0x0).
+The thread 0x1268 has exited with code 0 (0x0).
+The thread 0x371c has exited with code 0 (0x0).
 The program '' has exited with code -1 (0xffffffff).
-Microsoft.AspNetCore.Hosting.Internal.WebHost:Information: Request finished in 285321.8789ms 101 
-The program '[3764] dotnet.exe' has exited with code -1 (0xffffffff).
+Exception thrown: 'System.InvalidOperationException' in System.Private.CoreLib.dll
+The program '[9000] dotnet.exe' has exited with code -1 (0xffffffff).

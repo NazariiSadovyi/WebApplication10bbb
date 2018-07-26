@@ -6,20 +6,19 @@ using System.Threading.Tasks;
 
 namespace WebApplication10bbb.GhostsAndPacman
 {
-    public class Pinky
+    public class Inky
     {
-        GameMap _gameMap = new GameMap();
+        private GameMap _gameMap = new GameMap();
 
         public bool IsMoving = false;
         public bool MovingToHome = false;
         public bool PersecutionOrRunaway = true;
         public bool TimerType = false;
-
         public int position_x = 11;
         public int position_y = 13;
 
-        public int run_point_x = 1;
-        public int run_point_y = 1;
+        public int run_point_x = 29;
+        public int run_point_y = 26;
 
         public int finish_point_x;
         public int finish_point_y;
@@ -28,10 +27,12 @@ namespace WebApplication10bbb.GhostsAndPacman
         public int last_move_X;
         public int last_move_Y;
 
-
         private Timer timer;
 
-        public Pinky() {  }
+        public Inky()
+        {
+
+        }
 
         public void StartMoving()
         {

@@ -12,10 +12,12 @@ namespace WebApplication10bbb.GhostsAndPacman
         private GameMap _gameMap = new GameMap();
 
         public bool IsMoving = false;
+        public bool MovingToHome = false;
         public bool PersecutionOrRunaway = true;
         public bool TimerType = false;
         public int position_x = 11;
         public int position_y = 13;
+
 
         public int run_point_x = 1;
         public int run_point_y = 26;
@@ -39,6 +41,7 @@ namespace WebApplication10bbb.GhostsAndPacman
             IsMoving = true;
             timer = new Timer(Update_finish_point, null, 7000, 0);
         }
+
 
         private void Update_finish_point(object state)
         {

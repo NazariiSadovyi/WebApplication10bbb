@@ -22,14 +22,16 @@ namespace WebApplication10bbb
             return base.OnDisconnectedAsync(exception);
         }
 
+
         public override Task OnConnectedAsync()
         {
+            var frt = Context.User.Identity.Name;
             _gameLogic.Connected(Context.ConnectionId);
             return base.OnConnectedAsync();
         }
 
         public async Task MovePacmen(int move)
-        {            
+        {
             await _gameLogic.Move(move,Context.ConnectionId.ToString());            
         }
 

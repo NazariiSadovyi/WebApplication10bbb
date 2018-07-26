@@ -14,6 +14,9 @@ namespace WebApplication10bbb
     {
         public List<string> clients = new List<string>();
 
+        const int height = 29;
+        const int width = 26;
+
         private GameMap _gameMap = new GameMap();
 
         private Pacman _pacman = new Pacman();
@@ -24,7 +27,9 @@ namespace WebApplication10bbb
 
         private Clyde clyde;
 
-        private Timer PacmanTimer, ClydeTimer, PinkyTimer, BlinkyTimer;
+        private Inky inky;
+
+        private Timer PacmanTimer, ClydeTimer, PinkyTimer, BlinkyTimer, InkyTimer;
 
         private bool pause = false;
 
@@ -88,9 +93,11 @@ namespace WebApplication10bbb
             blinky = new Blinky();
             pinky = new Pinky();
             clyde = new Clyde();
+            inky = new Inky();
 
             start_time = DateTime.Now;
             PacmanTimer = new Timer(UpdatePacman, null, 0, 100);
+            InkyTimer = new Timer(UpdateInky, null, 0, 120);
             ClydeTimer = new Timer(UpdateCloudy, null, 0, 120);
             PinkyTimer = new Timer(UpdatePinky, null, 0, 120);
             BlinkyTimer = new Timer(UpdateBlinky, null, 0, 120);
@@ -157,13 +164,17 @@ namespace WebApplication10bbb
                     {
                         blinky.StartMoving();
                     }
-                    if ((score >= 30)&&(pinky.IsMoving == false))
+                    if ((score == 10) && (pinky.IsMoving == false))
                     {
                         pinky.StartMoving();
                     }
-                    if ((score >= 70) && (clyde.IsMoving == false))
+                    if ((score == 30) && (clyde.IsMoving == false))
                     {
                         clyde.StartMoving();
+                    }
+                    if ((score == 30) && (inky.IsMoving == false))
+                    {
+                        inky.StartMoving();
                     }
                     if (score == 284)
                     {
@@ -174,14 +185,56 @@ namespace WebApplication10bbb
                 else if (_gameMap.CoinMap[_pacman.position_x, _pacman.position_y] == 'k')
                 {
                     //score = score + 10;
-                    blinky.Frightened();
+                    if (blinky.IsFrightened)
+                    {
+                        blinky.FrightenedChange(new object());
+                        blinky.Frightened();
+                    }
+                    else
+                    {
+                        blinky.Frightened();
+                    }
+                    
                     if (pinky.IsMoving)
                     {
-                        pinky.Frightened();
+                        if (pinky.IsFrightened)
+                        {
+                            pinky.FrightenedChange(new object());
+                            pinky.Frightened();
+                        }
+                        else
+                        {
+                            pinky.Frightened();
+                        }
+                        
                     }
+
                     if (clyde.IsMoving)
                     {
-                        clyde.Frightened();
+                        if (clyde.IsFrightened)
+                        {
+                            clyde.FrightenedChange(new object());
+                            clyde.Frightened();
+                        }
+                        else
+                        {
+                            clyde.Frightened();
+                        }
+                       
+                    }
+
+                    if (inky.IsMoving)
+                    {
+                        if (inky.IsFrightened)
+                        {
+                            inky.FrightenedChange(new object());
+                            inky.Frightened();
+                        }
+                        else
+                        {
+                            inky.Frightened();
+                        }
+                        
                     }
 
                     _gameMap.CoinMap[_pacman.position_x, _pacman.position_y] = ' ';
@@ -200,14 +253,10 @@ namespace WebApplication10bbb
                 {
                     if (blinky.IsFrightened == true)
                     {
-                        object a = new object();
-                        blinky.FrightenedChange(a);
-                        blinky.position_x = 11;
-                        blinky.position_y = 13;
-                        blinky.move_X = 0;
-                        blinky.move_Y = -1;
+                        blinky.FrightenedChange(new object());
+                        blinky.MovingToHome = true;
                     }
-                    else 
+                    else if ((blinky.IsFrightened == false) && (blinky.MovingToHome == false))
                     {
                         _pacman.position_x = 1;
                         _pacman.position_y = 1;
@@ -221,14 +270,10 @@ namespace WebApplication10bbb
                 {
                     if (pinky.IsFrightened == true)
                     {
-                        object a = new object();
-                        pinky.FrightenedChange(a);
-                        pinky.position_x = 11;
-                        pinky.position_y = 13;
-                        pinky.move_X = 0;
-                        pinky.move_Y = 1;
+                        pinky.FrightenedChange(new object());
+                        pinky.MovingToHome = true;
                     }
-                    else
+                    else if ((pinky.IsFrightened == false) && (pinky.MovingToHome == false))
                     {
                         _pacman.position_x = 1;
                         _pacman.position_y = 1;
@@ -240,16 +285,12 @@ namespace WebApplication10bbb
                 // перевірка чи пакмен не натрапив на клуді
                 if ((_pacman.position_x == clyde.position_x) && (_pacman.position_y == clyde.position_y))
                 {
-                    if (pinky.IsFrightened == true)
+                    if (clyde.IsFrightened == true)
                     {
-                        object a = new object();
-                        clyde.FrightenedChange(a);
-                        clyde.position_x = 11;
-                        clyde.position_y = 13;
-                        clyde.move_X = 0;
-                        clyde.move_Y = 1;
+                        clyde.FrightenedChange(new object());
+                        clyde.MovingToHome = true;
                     }
-                    else if (clyde.IsMoving)
+                    else if ((clyde.IsFrightened == false) && (clyde.MovingToHome == false))
                     {
                         _pacman.position_x = 1;
                         _pacman.position_y = 1;
@@ -257,6 +298,23 @@ namespace WebApplication10bbb
                         _pacman.move_Y = 0;
                     }
                 }
+
+                if ((_pacman.position_x == inky.position_x) && (_pacman.position_y == inky.position_y))
+                {
+                    if (inky.IsFrightened == true)
+                    {
+                        inky.FrightenedChange(new object());
+                        inky.MovingToHome = true;
+                    }
+                    else if ((inky.IsFrightened == false) && (inky.MovingToHome == false))
+                    {
+                        _pacman.position_x = 1;
+                        _pacman.position_y = 1;
+                        _pacman.move_X = 1;
+                        _pacman.move_Y = 0;
+                    }
+                }
+
 
                 DateTime moment2 = DateTime.Now;
 
@@ -266,20 +324,353 @@ namespace WebApplication10bbb
 
         }
 
+        public void UpdateInky(object state)
+        {
+            //blinky_logic
+            if (inky.IsMoving)
+            {
+                if (inky.MovingToHome)
+                {
+                    inky.IsFrightened = false;
+
+                    InkyTimer.Change(50, 0);
+                    var qwerty = new Init().Inite(11, 14, inky.position_x, inky.position_y);
+
+                    inky.move_X = qwerty.Item1;
+                    inky.move_Y = qwerty.Item2;
+
+                    if ((inky.position_x == 11) && (inky.position_y == 14))
+                    {
+                        inky.MovingToHome = false;
+                        InkyTimer.Change(120, 120);
+                    }
+
+                }
+                else if (!inky.IsFrightened)
+                {
+                    if (inky.PersecutionOrRunaway)
+                    {
+                        inky.finish_point_x = inky.run_point_x;
+                        inky.finish_point_y = inky.run_point_y;
+
+                    }
+                    else if (!inky.PersecutionOrRunaway)
+                    {
+                        int x = 0;
+                        int y = 0;
+
+                        if (_pacman.position_x <= blinky.position_x)
+                        {
+                            x = blinky.position_x - _pacman.position_x;
+
+                            if (_pacman.position_y <= blinky.position_y)
+                            {
+                                y = blinky.position_y - _pacman.position_y;
+
+                                if (x >= y)
+                                {
+                                    int step = 0;
+                                    while (step != x + 1)
+                                    {
+                                        double kof = (((step) * 100) / x);
+                                        double newy = kof / 100 * y;
+
+                                        try
+                                        {
+                                            if (_gameMap.map[(_pacman.position_x - step), Convert.ToInt32(_pacman.position_y - newy)] != 'w')
+                                            {
+                                                inky.finish_point_x = _pacman.position_x - step;
+
+                                                inky.finish_point_y = Convert.ToInt32(_pacman.position_y - newy);
+                                            }
+                                        }
+                                        catch
+                                        {
+                                            step = x;
+                                        }
+                                        step++;
+                                    }
+                                }
+                                else if (x < y)
+                                {
+                                    int step = 0;
+                                    while (step != y + 1)
+                                    {
+                                        double kof = (((step) * 100) / y);
+                                        double newx = kof / 100 * x;
+
+                                        try
+                                        {
+                                            if (_gameMap.map[Convert.ToInt32(_pacman.position_x - newx), _pacman.position_y - step] != 'w')
+                                            {
+                                                inky.finish_point_x = Convert.ToInt32(_pacman.position_x - newx);
+
+                                                inky.finish_point_y = _pacman.position_y - step;
+                                            }
+                                        }
+                                        catch
+                                        {
+                                            step = y;
+                                        }
+                                        step++;
+                                    }
+
+                                }
+
+                            }
+                            else if (_pacman.position_y > blinky.position_y)
+                            {
+                                y = _pacman.position_y - blinky.position_y;
+
+                                if (x >= y)
+                                {
+                                    int step = 0;
+                                    while (step != x + 1)
+                                    {
+                                        double kof = (((step) * 100) / x);
+                                        double newy = kof / 100 * y;
+
+                                        try
+                                        {
+                                            if (_gameMap.map[(_pacman.position_x - step), Convert.ToInt32(_pacman.position_y + newy)] != 'w')
+                                            {
+                                                inky.finish_point_x = _pacman.position_x - step;
+
+                                                inky.finish_point_y = Convert.ToInt32(_pacman.position_y + newy);
+                                            }
+                                        }
+                                        catch
+                                        {
+                                            step = x;
+                                        }
+                                        step++;
+                                    }
+                                }
+                                else if (x < y)
+                                {
+                                    int step = 0;
+                                    while (step != y + 1)
+                                    {
+                                        double kof = (((step) * 100) / y);
+                                        double newx = kof / 100 * x;
+
+                                        try
+                                        {
+                                            if (_gameMap.map[Convert.ToInt32(_pacman.position_x - newx), _pacman.position_y + step] != 'w')
+                                            {
+                                                inky.finish_point_x = Convert.ToInt32(_pacman.position_x - newx);
+
+                                                inky.finish_point_y = _pacman.position_y + step;
+                                            }
+                                        }
+                                        catch
+                                        {
+                                            step = y;
+                                        }
+                                        step++;
+                                    }
+                                }
+                            }
+                        }
+                        else if (_pacman.position_x > blinky.position_x)
+                        {
+                            x = _pacman.position_x - blinky.position_x;
+
+                            if (_pacman.position_y <= blinky.position_y)
+                            {
+                                y = blinky.position_y - _pacman.position_y;
+
+                                if (x >= y)
+                                {
+                                    int step = 0;
+                                    while (step != x + 1)
+                                    {
+                                        double kof = (((step) * 100) / x);
+                                        double newy = kof / 100 * y;
+
+                                        try
+                                        {
+                                            if (_gameMap.map[(_pacman.position_x + step), Convert.ToInt32(_pacman.position_y - newy)] != 'w')
+                                            {
+                                                inky.finish_point_x = _pacman.position_x + step;
+
+                                                inky.finish_point_y = Convert.ToInt32(_pacman.position_y - newy);
+                                            }
+                                        }
+                                        catch
+                                        {
+                                            step = x;
+                                        }
+                                        step++;
+                                    }
+                                }
+                                else if (x < y)
+                                {
+                                    int step = 0;
+                                    while (step != y + 1)
+                                    {
+                                        double kof = (((step) * 100) / y);
+                                        double newx = kof / 100 * x;
+
+                                        try
+                                        {
+                                            if (_gameMap.map[Convert.ToInt32(_pacman.position_x + newx), _pacman.position_y - step] != 'w')
+                                            {
+                                                inky.finish_point_x = Convert.ToInt32(_pacman.position_x + newx);
+
+                                                inky.finish_point_y = _pacman.position_y - step;
+                                            }
+                                        }
+                                        catch
+                                        {
+                                            step = y;
+                                        }
+                                        step++;
+                                    }
+
+                                }
+                            }
+                            else if (_pacman.position_y > blinky.position_y)
+                            {
+                                y = _pacman.position_y - blinky.position_y;
+
+                                if (x >= y)
+                                {
+                                    int step = 0;
+                                    while (step != x + 1)
+                                    {
+                                        double kof = (((step) * 100) / x);
+                                        double newy = kof / 100 * y;
+
+                                        try
+                                        {
+                                            if (_gameMap.map[(_pacman.position_x + step), Convert.ToInt32(_pacman.position_y + newy)] != 'w')
+                                            {
+                                                inky.finish_point_x = _pacman.position_x + step;
+
+                                                inky.finish_point_y = Convert.ToInt32(_pacman.position_y + newy);
+                                            }
+                                        }
+                                        catch
+                                        {
+                                            step = x;
+                                        }
+                                        step++;
+                                    }
+                                }
+                                else if (x < y)
+                                {
+                                    int step = 0;
+                                    while (step != y + 1)
+                                    {
+                                        double kof = (((step) * 100) / y);
+                                        double newx = kof / 100 * x;
+
+                                        try
+                                        {
+                                            if (_gameMap.map[Convert.ToInt32(_pacman.position_x + newx), _pacman.position_y + step] != 'w')
+                                            {
+                                                inky.finish_point_x = Convert.ToInt32(_pacman.position_x + newx);
+
+                                                inky.finish_point_y = _pacman.position_y + step;
+                                            }
+                                        }
+                                        catch
+                                        {
+                                            step = y;
+                                        }
+                                        step++;
+                                    }
+
+                                }
+                            }
+                        }
+                        
+                    }
+
+                    if (inky.TimerType)
+                    {
+                        InkyTimer.Change(120, 120);
+                        inky.TimerType = false;
+                    }
+
+                    // визначення напрямку через граф
+                    if (_gameMap.map[inky.position_x, inky.position_y] == 'c')
+                    {                        
+                        var qwerty = new Init().Inite2(inky.finish_point_x, inky.finish_point_y, inky.position_x, inky.position_y, inky.move_X, inky.move_Y);
+
+                        inky.move_X = qwerty.Item1;
+                        inky.move_Y = qwerty.Item2;
+                          
+                    }
+
+                }
+                else
+                {
+                    // блінкі переходить у режим страху: зменшення швидкості, миттєво змінює напрямок, випадково визначає напрямок руху
+                    if (_gameMap.map[inky.position_x, inky.position_y] == 'c')
+                    {
+                        inky.RandomMove();
+                        InkyTimer.Change(300, 300);
+                        inky.TimerType = true;
+                    }
+                }
+
+
+                if (_gameMap.map[inky.position_x + inky.move_X, inky.position_y + inky.move_Y] != 'w')
+                {
+                    inky.position_x += inky.move_X;
+                    inky.position_y += inky.move_Y;
+                }
+
+                // перевірка чи гост не зловив пакмена
+                if ((_pacman.position_x == inky.position_x) && (_pacman.position_y == inky.position_y))
+                {
+                    if (inky.IsFrightened == true)
+                    {
+                        object a = new object();
+                        inky.FrightenedChange(a);
+                        inky.position_x = 11;
+                        inky.position_y = 13;
+                        inky.move_X = 0;
+                        inky.move_Y = -1;
+                    }
+                    else
+                    {
+                        _pacman.position_x = 1;
+                        _pacman.position_y = 1;
+                        _pacman.move_X = 1;
+                        _pacman.move_Y = 0;
+                    }
+                }
+
+                hub.Clients.Client(ConnectionID).SendAsync("ChangeInkyPosition", inky.position_x, inky.position_y, inky.IsFrightened);
+            }
+        }
+
         public void UpdateCloudy(object state)
         {
             if (clyde.IsMoving)
             {
-                int length_to_left = 1;
-                int length_to_right = 1;
-                int length_to_top = 1;
-                int length_to_bottom = 1;
-
-                string pacman_left = "";
-                string pacman_right = "";
-
                 //Clyde logic
-                if (!clyde.IsFrightened)
+                if (clyde.MovingToHome)
+                {
+                    clyde.IsFrightened = false;
+
+                    ClydeTimer.Change(50, 0);
+                    var qwerty = new Init().Inite(11, 14, clyde.position_x, clyde.position_y);
+
+                    clyde.move_X = qwerty.Item1;
+                    clyde.move_Y = qwerty.Item2;
+
+                    if ((clyde.position_x == 11) && (clyde.position_y == 14))
+                    {
+                        clyde.MovingToHome = false;
+                        ClydeTimer.Change(120, 120);
+                    }
+
+                }
+                else if (!clyde.IsFrightened)
                 {
                     if (clyde.PersecutionOrRunaway)
                     {
@@ -294,59 +685,8 @@ namespace WebApplication10bbb
                         {
                             int shot_way;
 
-                            if (_gameMap.map[_pacman.position_x, _pacman.position_y] == 'c')
-                            {
-                                shot_way = new Init().Shortest_way(_pacman.position_x, _pacman.position_y, clyde.position_x, clyde.position_y, clyde.move_X, clyde.move_Y);
-
-                            }
-                            else
-                            {
-                                if (_pacman.move_Y == 1 || _pacman.move_Y == -1)
-                                {
-                                    while ((_gameMap.map[_pacman.position_x, _pacman.position_y - length_to_left] == ' '))
-                                    {
-                                        length_to_left++;
-                                    }
-
-                                    while ((_gameMap.map[_pacman.position_x, _pacman.position_y + length_to_right] == ' '))
-                                    {
-                                        length_to_right++;
-                                    }
-
-                                    pacman_left = (_pacman.position_x + 100).ToString() + "_" + (_pacman.position_y + length_to_right + 100).ToString();
-                                    pacman_right = (_pacman.position_x + 100).ToString() + "_" + (_pacman.position_y - length_to_left + 100).ToString();
-
-                                    shot_way = new Init().Shortest_way2(_pacman.position_x, _pacman.position_y, pacman_left, pacman_right, length_to_left, length_to_right, clyde.position_x, clyde.position_y, clyde.move_X, clyde.move_Y);
-
-                                }
-                                else
-                                {
-                                    while ((_gameMap.map[_pacman.position_x - length_to_top, _pacman.position_y] == ' '))
-                                    {
-                                        length_to_top++;
-                                    }
-
-                                    while ((_gameMap.map[_pacman.position_x + length_to_bottom, _pacman.position_y] == ' '))
-                                    {
-                                        length_to_bottom++;
-                                    }
-
-
-                                    pacman_left = (_pacman.position_x + 100 - length_to_top).ToString() + "_" + (_pacman.position_y + 100).ToString();
-                                    pacman_right = (_pacman.position_x + 100 + length_to_bottom).ToString() + "_" + (_pacman.position_y + 100).ToString();
-
-                                    shot_way = new Init().Shortest_way2(_pacman.position_x, _pacman.position_y, pacman_left, pacman_right, length_to_top, length_to_bottom, clyde.position_x, clyde.position_y, clyde.move_X, clyde.move_Y);
-
-                                }
-
-
-                            }
-
-                            length_to_left = 1;
-                            length_to_right = 1;
-                            length_to_bottom = 1;
-                            length_to_top = 1;
-
+                            shot_way = new Init().Shortest_way(_pacman.position_x, _pacman.position_y, clyde.position_x, clyde.position_y, clyde.move_X, clyde.move_Y);
+                            
                             if (shot_way <= 12)
                             {
                                 clyde.finish_point_x = clyde.run_point_x;
@@ -367,77 +707,11 @@ namespace WebApplication10bbb
                     }
 
                     if (_gameMap.map[clyde.position_x, clyde.position_y] == 'c')
-                    {
-                        if (_gameMap.map[clyde.finish_point_x, clyde.finish_point_y] == 'c')
-                        {
-                            try
-                            {
-                                var qwerty = new Init().Inite2(clyde.finish_point_x, clyde.finish_point_y, clyde.position_x, clyde.position_y, clyde.move_X, clyde.move_Y);
-                                clyde.move_X = qwerty.Item1;
-                                clyde.move_Y = qwerty.Item2;
-                            }
-                            catch (Exception)
-                            {
-
-                                throw;
-                            }
-
-
-                            //hub.Clients.Client(ConnectionID).SendAsync("SendSomeThing", qwerty.Item1, qwerty.Item2);
-                        }
-                        else
-                        {
-                            if (_pacman.move_Y == 1 || _pacman.move_Y == -1)
-                            {
-                                while ((_gameMap.map[_pacman.position_x, _pacman.position_y - length_to_left] == ' '))
-                                {
-                                    length_to_left++;
-                                }
-
-                                while ((_gameMap.map[_pacman.position_x, _pacman.position_y + length_to_right] == ' '))
-                                {
-                                    length_to_right++;
-                                }
-
-                                pacman_left = (_pacman.position_x + 100).ToString() + "_" + (_pacman.position_y + length_to_right + 100).ToString();
-                                pacman_right = (_pacman.position_x + 100).ToString() + "_" + (_pacman.position_y - length_to_left + 100).ToString();
-
-                                var qwerty = new Init().Inite(_pacman.position_x, _pacman.position_y, pacman_left, pacman_right, length_to_left, length_to_right, clyde.position_x, clyde.position_y, clyde.move_X, clyde.move_Y);
-
-                                clyde.move_X = qwerty.Item1;
-                                clyde.move_Y = qwerty.Item2;
-                                //hub.Clients.Client(ConnectionID).SendAsync("SendSomeThing", qwerty.Item1, qwerty.Item2);
-
-
-                            }
-                            else
-                            {
-                                while ((_gameMap.map[_pacman.position_x - length_to_top, _pacman.position_y] == ' '))
-                                {
-                                    length_to_top++;
-                                }
-
-                                while ((_gameMap.map[_pacman.position_x + length_to_bottom, _pacman.position_y] == ' '))
-                                {
-                                    length_to_bottom++;
-                                }
-
-
-                                pacman_left = (_pacman.position_x + 100 - length_to_top).ToString() + "_" + (_pacman.position_y + 100).ToString();
-                                pacman_right = (_pacman.position_x + 100 + length_to_bottom).ToString() + "_" + (_pacman.position_y + 100).ToString();
-
-                                var qwerty = new Init().Inite(_pacman.position_x, _pacman.position_y, pacman_left, pacman_right, length_to_top, length_to_bottom, clyde.position_x, clyde.position_y, clyde.move_X, clyde.move_Y);
-
-                                clyde.move_X = qwerty.Item1;
-                                clyde.move_Y = qwerty.Item2;
-
-                                //hub.Clients.Client(ConnectionID).SendAsync("SendSomeThing", qwerty.Item1, qwerty.Item2);
-
-                            }
-
-
-                        }
-
+                    {                       
+                        var qwerty = new Init().Inite2(clyde.finish_point_x, clyde.finish_point_y, clyde.position_x, clyde.position_y, clyde.move_X, clyde.move_Y);
+                        clyde.move_X = qwerty.Item1;
+                        clyde.move_Y = qwerty.Item2;
+                         
                     }
                 }
                 else
@@ -457,16 +731,12 @@ namespace WebApplication10bbb
                 // перевірка чи клуді не зловив пакмена
                 if ((_pacman.position_x == clyde.position_x) && (_pacman.position_y == clyde.position_y))
                 {
-                    if (pinky.IsFrightened == true)
+                    if (clyde.IsFrightened == true)
                     {
-                        object a = new object();
-                        clyde.FrightenedChange(a);
-                        clyde.position_x = 11;
-                        clyde.position_y = 13;
-                        clyde.move_X = 0;
-                        clyde.move_Y = 1;
+                        clyde.FrightenedChange(new object());
+                        clyde.MovingToHome = true;
                     }
-                    else if (clyde.IsMoving)
+                    else if ((clyde.IsFrightened == false) && (clyde.MovingToHome == false))
                     {
                         _pacman.position_x = 1;
                         _pacman.position_y = 1;
@@ -475,7 +745,7 @@ namespace WebApplication10bbb
                     }
                 }
 
-                hub.Clients.Client(ConnectionID).SendAsync("ChangeClydePosition", clyde.position_x, clyde.position_y, clyde.IsFrightened);
+                hub.Clients.Client(ConnectionID).SendAsync("ChangeClydePosition", clyde.position_x, clyde.position_y, clyde.IsFrightened, clyde.MovingToHome);
             }
         }
 
@@ -483,15 +753,24 @@ namespace WebApplication10bbb
         {           
             if (pinky.IsMoving)
             {
-                int length_to_left = 1;
-                int length_to_right = 1;
-                int length_to_top = 1;
-                int length_to_bottom = 1;
+                if (pinky.MovingToHome)
+                {
+                    pinky.IsFrightened = false;
 
-                string pacman_left = "";
-                string pacman_right = "";
+                    PinkyTimer.Change(50, 0);
+                    var qwerty = new Init().Inite(11, 14, pinky.position_x, pinky.position_y);
 
-                if (!pinky.IsFrightened)
+                    pinky.move_X = qwerty.Item1;
+                    pinky.move_Y = qwerty.Item2;
+
+                    if ((pinky.position_x == 11) && (pinky.position_y == 14))
+                    {
+                        pinky.MovingToHome = false;
+                        PinkyTimer.Change(120, 120);
+                    }
+
+                }
+                else if (!pinky.IsFrightened)
                 {
                     //pinky_logic
                     if (pinky.PersecutionOrRunaway)
@@ -522,76 +801,16 @@ namespace WebApplication10bbb
                     }
 
                     if (_gameMap.map[pinky.position_x, pinky.position_y] == 'c')
-                    {
-                        if (_gameMap.map[pinky.finish_point_x, pinky.finish_point_y] == 'c')
-                        {
-                            var qwerty = new Init().Inite2(pinky.finish_point_x, pinky.finish_point_y, pinky.position_x, pinky.position_y, pinky.move_X, pinky.move_Y);
+                    {                        
+                        var qwerty = new Init().Inite2(pinky.finish_point_x, pinky.finish_point_y, pinky.position_x, pinky.position_y, pinky.move_X, pinky.move_Y);
 
-                            pinky.move_X = qwerty.Item1;
-                            pinky.move_Y = qwerty.Item2;
-                            //hub.Clients.Client(ConnectionID).SendAsync("SendSomeThing", qwerty.Item1, qwerty.Item2);
-                        }
-                        else
-                        {
-                            if (_pacman.move_Y == 1 || _pacman.move_Y == -1)
-                            {
-                                while ((_gameMap.map[pinky.finish_point_x, pinky.finish_point_y - length_to_left] == ' '))
-                                {
-                                    length_to_left++;
-                                }
-
-                                while ((_gameMap.map[pinky.finish_point_x, pinky.finish_point_y + length_to_right] == ' '))
-                                {
-                                    length_to_right++;
-                                }
-
-                                pacman_left = (pinky.finish_point_x + 100).ToString() + "_" + (pinky.finish_point_y + length_to_right + 100).ToString();
-                                pacman_right = (pinky.finish_point_x + 100).ToString() + "_" + (pinky.finish_point_y - length_to_left + 100).ToString();
-
-                                var qwerty = new Init().Inite(pinky.finish_point_x, pinky.finish_point_y, pacman_left, pacman_right, length_to_left, length_to_right, pinky.position_x, pinky.position_y, pinky.move_X, pinky.move_Y);
-
-                                pinky.move_X = qwerty.Item1;
-                                pinky.move_Y = qwerty.Item2;
-                                //hub.Clients.Client(ConnectionID).SendAsync("SendSomeThing", qwerty.Item1, qwerty.Item2);
-
-
-                            }
-                            else
-                            {
-                                while ((_gameMap.map[pinky.finish_point_x - length_to_top, pinky.finish_point_y] == ' '))
-                                {
-                                    length_to_top++;
-                                }
-
-                                while ((_gameMap.map[pinky.finish_point_x + length_to_bottom, pinky.finish_point_y] == ' '))
-                                {
-                                    length_to_bottom++;
-                                }
-
-
-                                pacman_left = (pinky.finish_point_x + 100 - length_to_top).ToString() + "_" + (pinky.finish_point_y + 100).ToString();
-                                pacman_right = (pinky.finish_point_x + 100 + length_to_bottom).ToString() + "_" + (pinky.finish_point_y + 100).ToString();
-
-                                var qwerty = new Init().Inite(pinky.finish_point_x, pinky.finish_point_y, pacman_left, pacman_right, length_to_top, length_to_bottom, pinky.position_x, pinky.position_y, pinky.move_X, pinky.move_Y);
-
-                                pinky.move_X = qwerty.Item1;
-                                pinky.move_Y = qwerty.Item2;
-
-                                //hub.Clients.Client(ConnectionID).SendAsync("SendSomeThing", qwerty.Item1, qwerty.Item2);
-
-                            }
-
-
-                        }
-
-                        length_to_left = 1;
-                        length_to_right = 1;
-                        length_to_bottom = 1;
-                        length_to_top = 1;
+                        pinky.move_X = qwerty.Item1;
+                        pinky.move_Y = qwerty.Item2;
+                        
                     }
 
                 }
-                else
+                else if (pinky.IsFrightened)
                 {
                     // пінкі переходить у режим страху: зменшення швидкості, миттєво змінює напрямок, випадково визначає напрямок руху
                     if (_gameMap.map[pinky.position_x, pinky.position_y] == 'c')
@@ -613,14 +832,10 @@ namespace WebApplication10bbb
                 {
                     if (pinky.IsFrightened == true)
                     {
-                        object a = new object();
-                        pinky.FrightenedChange(a);
-                        pinky.position_x = 11;
-                        pinky.position_y = 13;
-                        pinky.move_X = 0;
-                        pinky.move_Y = 1;
+                        pinky.FrightenedChange(new object());
+                        pinky.MovingToHome = true;
                     }
-                    else
+                    else if ((pinky.IsFrightened == false) && (pinky.MovingToHome == false))
                     {
                         _pacman.position_x = 1;
                         _pacman.position_y = 1;
@@ -628,7 +843,7 @@ namespace WebApplication10bbb
                         _pacman.move_Y = 0;
                     }
                 }
-                
+
                 hub.Clients.Client(ConnectionID).SendAsync("ChangePinkyPosition", pinky.position_x, pinky.position_y, pinky.IsFrightened);
             }
         }
@@ -638,15 +853,24 @@ namespace WebApplication10bbb
             //blinky_logic
             if (blinky.IsMoving)
             {
-                int length_to_left = 1;
-                int length_to_right = 1;
-                int length_to_top = 1;
-                int length_to_bottom = 1;
+                if (blinky.MovingToHome)
+                {
+                    blinky.IsFrightened = false;
+                    
+                    BlinkyTimer.Change(50, 0);
+                    var qwerty = new Init().Inite(11,14,blinky.position_x,blinky.position_y);
 
-                string pacman_left = "";
-                string pacman_right = "";
+                    blinky.move_X = qwerty.Item1;
+                    blinky.move_Y = qwerty.Item2;
 
-                if (!blinky.IsFrightened)
+                    if ((blinky.position_x == 11) && (blinky.position_y == 14))
+                    {
+                        blinky.MovingToHome = false;
+                        BlinkyTimer.Change(120, 120);
+                    }
+
+                }
+                else if(!blinky.IsFrightened)
                 {
                     if (blinky.PersecutionOrRunaway)
                     {
@@ -666,79 +890,18 @@ namespace WebApplication10bbb
                         blinky.TimerType = false;
                     }
 
-                    
-
+                    // визначення напрямку через граф
                     if (_gameMap.map[blinky.position_x, blinky.position_y] == 'c')
                     {
-                        if (_gameMap.map[blinky.finish_point_x, blinky.finish_point_y] == 'c')
-                        {
-                            var qwerty = new Init().Inite2(blinky.finish_point_x, blinky.finish_point_y, blinky.position_x, blinky.position_y, blinky.move_X, blinky.move_Y);
+                        var qwerty = new Init().Inite2(blinky.finish_point_x, blinky.finish_point_y, blinky.position_x, blinky.position_y, blinky.move_X, blinky.move_Y);
 
-                            blinky.move_X = qwerty.Item1;
-                            blinky.move_Y = qwerty.Item2;
-                            //hub.Clients.Client(ConnectionID).SendAsync("SendSomeThing", qwerty.Item1, qwerty.Item2);
-                        }
-                        else
-                        {
-                            if (_pacman.move_Y == 1 || _pacman.move_Y == -1)
-                            {
-                                while ((_gameMap.map[_pacman.position_x, _pacman.position_y - length_to_left] == ' '))
-                                {
-                                    length_to_left++;
-                                }
-
-                                while ((_gameMap.map[_pacman.position_x, _pacman.position_y + length_to_right] == ' '))
-                                {
-                                    length_to_right++;
-                                }
-
-                                pacman_left = (_pacman.position_x + 100).ToString() + "_" + (_pacman.position_y + length_to_right + 100).ToString();
-                                pacman_right = (_pacman.position_x + 100).ToString() + "_" + (_pacman.position_y - length_to_left + 100).ToString();
-
-                                var qwerty = new Init().Inite(_pacman.position_x, _pacman.position_y, pacman_left, pacman_right, length_to_left, length_to_right, blinky.position_x, blinky.position_y, blinky.move_X, blinky.move_Y);
-
-                                blinky.move_X = qwerty.Item1;
-                                blinky.move_Y = qwerty.Item2;
-                                //hub.Clients.Client(ConnectionID).SendAsync("SendSomeThing", qwerty.Item1, qwerty.Item2);
-
-
-                            }
-                            else
-                            {
-                                while ((_gameMap.map[_pacman.position_x - length_to_top, _pacman.position_y] == ' '))
-                                {
-                                    length_to_top++;
-                                }
-
-                                while ((_gameMap.map[_pacman.position_x + length_to_bottom, _pacman.position_y] == ' '))
-                                {
-                                    length_to_bottom++;
-                                }
-
-
-                                pacman_left = (_pacman.position_x + 100 - length_to_top).ToString() + "_" + (_pacman.position_y + 100).ToString();
-                                pacman_right = (_pacman.position_x + 100 + length_to_bottom).ToString() + "_" + (_pacman.position_y + 100).ToString();
-
-                                var qwerty = new Init().Inite(_pacman.position_x, _pacman.position_y, pacman_left, pacman_right, length_to_top, length_to_bottom, blinky.position_x, blinky.position_y, blinky.move_X, blinky.move_Y);
-
-                                blinky.move_X = qwerty.Item1;
-                                blinky.move_Y = qwerty.Item2;
-
-                                //hub.Clients.Client(ConnectionID).SendAsync("SendSomeThing", qwerty.Item1, qwerty.Item2);
-
-                            }
-
-
-                        }
-
-                        length_to_left = 1;
-                        length_to_right = 1;
-                        length_to_bottom = 1;
-                        length_to_top = 1;
+                        blinky.move_X = qwerty.Item1;
+                        blinky.move_Y = qwerty.Item2;
+                        
                     }
 
                 }
-                else
+                else if (blinky.IsFrightened)
                 {
                     // блінкі переходить у режим страху: зменшення швидкості, миттєво змінює напрямок, випадково визначає напрямок руху
                     if (_gameMap.map[blinky.position_x, blinky.position_y] == 'c')
@@ -748,6 +911,7 @@ namespace WebApplication10bbb
                         blinky.TimerType = true;
                     }
                 }
+               
 
 
                 if (_gameMap.map[blinky.position_x + blinky.move_X, blinky.position_y + blinky.move_Y] != 'w')
@@ -761,14 +925,10 @@ namespace WebApplication10bbb
                 {
                     if (blinky.IsFrightened == true)
                     {
-                        object a = new object();
-                        blinky.FrightenedChange(a);
-                        blinky.position_x = 11;
-                        blinky.position_y = 13;
-                        blinky.move_X = 0;
-                        blinky.move_Y = -1;
+                        blinky.FrightenedChange(new object());
+                        blinky.MovingToHome = true;
                     }
-                    else
+                    else if ((blinky.IsFrightened == false) && (blinky.MovingToHome == false))
                     {
                         _pacman.position_x = 1;
                         _pacman.position_y = 1;
@@ -777,7 +937,7 @@ namespace WebApplication10bbb
                     }
                 }
 
-                hub.Clients.Client(ConnectionID).SendAsync("ChangeBlinkyPosition", blinky.position_x, blinky.position_y, blinky.IsFrightened);
+                hub.Clients.Client(ConnectionID).SendAsync("ChangeBlinkyPosition", blinky.position_x, blinky.position_y, blinky.IsFrightened, blinky.MovingToHome);
             }
         }
         
