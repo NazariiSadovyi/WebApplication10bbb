@@ -1,96 +1,468 @@
 ﻿@page
-@model IndexModel
+@model WebApplication10bbb.Pages.IndexModel
 @{
     ViewData["Title"] = "Home page";
 }
 
-<div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="6000">
-    <ol class="carousel-indicators">
-        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-        <li data-target="#myCarousel" data-slide-to="1"></li>
-        <li data-target="#myCarousel" data-slide-to="2"></li>
-    </ol>
-    <div class="carousel-inner" role="listbox">
-        <div class="item active">
-            <img src="~/images/banner1.svg" alt="ASP.NET" class="img-responsive" />
-            <div class="carousel-caption" role="option">
-                <p>
-                    Learn how to build ASP.NET apps that can run anywhere.
-                    <a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkID=525028&clcid=0x409">
-                        Learn More
-                    </a>
-                </p>
-            </div>
-        </div>
-        <div class="item">
-            <img src="~/images/banner2.svg" alt="Visual Studio" class="img-responsive" />
-            <div class="carousel-caption" role="option">
-                <p>
-                    There are powerful new features in Visual Studio for building modern web apps.
-                    <a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkID=525030&clcid=0x409">
-                        Learn More
-                    </a>
-                </p>
-            </div>
-        </div>
-        <div class="item">
-            <img src="~/images/banner3.svg" alt="Microsoft Azure" class="img-responsive" />
-            <div class="carousel-caption" role="option">
-                <p>
-                    Learn how Microsoft's Azure cloud platform allows you to build, deploy, and scale web apps.
-                    <a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkID=525027&clcid=0x409">
-                        Learn More
-                    </a>
-                </p>
-            </div>
-        </div>
-    </div>
-    <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
-        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-        <span class="sr-only">Previous</span>
-    </a>
-    <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
-        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-        <span class="sr-only">Next</span>
-    </a>
+<style>
+    #myContainer {
+        width: 448px;
+        height: 496px;
+        background-image: url('images/background.png');
+        position: relative;
+    }
+
+    #pacman {
+        width: 16px;
+        top: 16px;
+        left: 16px;
+        height: 16px;
+        position: absolute;
+        background-color: yellow;
+    }
+
+    #blinky {
+        top: 224px;
+        left: 184px;
+        width: 16px;
+        height: 16px;
+        position: absolute;
+        background-color: red;
+    }
+
+    #inky {
+        top: 224px;
+        left: 184px;
+        width: 16px;
+        height: 16px;
+        position: absolute;
+        background-color: deepskyblue;
+    }
+
+    #pinky {
+        width: 16px;
+        top: 224px;
+        left: 216px;
+        height: 16px;
+        position: absolute;
+        background-color: pink;
+    }
+
+    #clyde {
+        width: 16px;
+        top: 224px;
+        left: 248px;
+        height: 16px;
+        position: absolute;
+        background-color: darkorange;
+    }
+
+    .coin {
+        width: 4px;
+        height: 4px;
+        position: absolute;
+        background-color: lawngreen;
+    }
+
+    .ground {
+        width: 4px;
+        height: 4px;
+        position: absolute;
+        background-color: transparent;
+    }
+
+    .energizer {
+        width: 8px;
+        height: 8px;
+        position: absolute;
+        background-color: mediumblue;
+    }
+</style>
+
+<p>
+    <button id="sendBtn">Click Me</button>
+    <button id="pause">Pause</button>
+    <input id="login" type="text">
+</p>
+
+<div id="myContainer">
+
+
+
 </div>
 
-<div class="row">
-    <div class="col-md-3">
-        <h2>Application uses</h2>
-        <ul>
-            <li>Sample pages using ASP.NET Core Razor Pages</li>
-            <li>Theming using <a href="https://go.microsoft.com/fwlink/?LinkID=398939">Bootstrap</a></li>
-        </ul>
-    </div>
-    <div class="col-md-3">
-        <h2>How to</h2>
-        <ul>
-            <li><a href="https://go.microsoft.com/fwlink/?linkid=852130">Working with Razor Pages.</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699315">Manage User Secrets using Secret Manager.</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699316">Use logging to log a message.</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699317">Add packages using NuGet.</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699319">Target development, staging or production environment.</a></li>
-        </ul>
-    </div>
-    <div class="col-md-3">
-        <h2>Overview</h2>
-        <ul>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=518008">Conceptual overview of what is ASP.NET Core</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699320">Fundamentals of ASP.NET Core such as Startup and middleware.</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=398602">Working with Data</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=398603">Security</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=699321">Client side development</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=699322">Develop on different platforms</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=699323">Read more on the documentation site</a></li>
-        </ul>
-    </div>
-    <div class="col-md-3">
-        <h2>Run &amp; Deploy</h2>
-        <ul>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=517851">Run your app</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=517853">Run tools such as EF migrations and more</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=398609">Publish to Microsoft Azure App Service</a></li>
-        </ul>
-    </div>
+<div>
+    <textarea id="tf"></textarea>
+
 </div>
+
+<script src="js/signalr.min.js"></script>
+
+<script>
+
+    var item = 16;
+
+    document.getElementById("myContainer").style.backgroundSize = "448px 496px";
+
+    var map = [
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+        [1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1],
+        [1, 3, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 3, 1],
+        [1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1],
+        [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+        [1, 2, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 2, 1],
+        [1, 2, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 2, 1],
+        [1, 2, 2, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 2, 2, 1],
+        [1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1],
+        [4, 4, 4, 4, 4, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 4, 4, 4, 4, 4],
+        [4, 4, 4, 4, 4, 1, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 2, 1, 4, 4, 4, 4, 4],
+        [4, 4, 4, 4, 4, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 4, 4, 4, 4, 4],
+        [1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 4, 4, 4, 4, 4, 4, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1],
+        [4, 4, 4, 4, 4, 1, 2, 2, 2, 2, 1, 4, 4, 4, 4, 4, 4, 1, 2, 2, 2, 2, 1, 4, 4, 4, 4, 4],
+        [1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 4, 4, 4, 4, 4, 4, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1],
+        [4, 4, 4, 4, 4, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 4, 4, 4, 4, 4],
+        [4, 4, 4, 4, 4, 1, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 2, 1, 4, 4, 4, 4, 4],
+        [4, 4, 4, 4, 4, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 4, 4, 4, 4, 4],
+        [1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1],
+        [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+        [1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1],
+        [1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1],
+        [1, 3, 2, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 2, 2, 3, 1],
+        [1, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 1],
+        [1, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 1],
+        [1, 2, 2, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 2, 2, 1],
+        [1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1],
+        [1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1],
+        [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+
+    ];
+
+    var el = document.getElementById('myContainer');
+
+    function drawWorld() {
+        el.innerHTML = '';
+        for (var y = 0; y < map.length; y = y + 1) {
+            for (var x = 0; x < map[y].length; x = x + 1) {
+                if (map[y][x] === 2) {
+                    var yy = y * item + 6;
+                    var xx = x * item + 6;
+                    el.innerHTML += '<div id="' + y + "o" + x + '" class="coin" style="top:' + yy + 'px; left:' + xx + 'px"></div>';
+                } else if (map[y][x] === 3) {
+                    var yy = y * item + 4;
+                    var xx = x * item + 4;
+                    el.innerHTML += '<div id="' + y + "o" + x + '" class="energizer" style="top:' + yy + 'px; left:' + xx + 'px"></div>';
+                }
+            }
+            el.innerHTML += "<br>";
+        }
+
+        el.innerHTML += '<div id="pacman"></div>';
+        el.innerHTML += '<div id="blinky"></div>';
+        el.innerHTML += '<div id="pinky"></div>';
+        el.innerHTML += '<div id="clyde"></div>';
+        el.innerHTML += '<div id="inky"></div>';
+
+        var w = window.innerWidth;
+        el.style.left = (w - 448) / 2;
+    }
+
+    drawWorld();
+
+    document.getElementById("blinky").style.backgroundSize = "16px 16px";
+
+    current_pacman = {
+        x: 1,
+        y: 1
+    }
+
+    let hubUrl = 'https://localhost:44379/stocks';
+    const hubConnection = new signalR.HubConnectionBuilder()
+        .withUrl(hubUrl)
+        .configureLogging(signalR.LogLevel.Information)
+        .build();
+    hubConnection.start();
+
+    document.getElementById("sendBtn").addEventListener("click", function (e) {
+        hubConnection.invoke("StartGame");
+    });
+
+    document.onkeydown = function (event) {
+
+        if (event.keyCode === 37) {
+
+            hubConnection.invoke("MovePacmen", 4);
+
+        }
+        else if (event.keyCode === 38) {
+
+            hubConnection.invoke("MovePacmen", 8);
+
+        }
+        else if (event.keyCode === 39) {
+
+            hubConnection.invoke("MovePacmen", 6);
+
+        }
+        else if (event.keyCode === 40) {
+
+            hubConnection.invoke("MovePacmen", 2);
+
+        }
+
+    };
+
+    previos_pacman = {
+        x: 16,
+        y: 16
+    }
+
+    previos_blinky = {
+        x: 11,
+        y: 13
+    }
+
+    previos_pinky = {
+        x: 11,
+        y: 13
+    }
+
+    previos_clydi = {
+        x: 11,
+        y: 13
+    }
+
+    previos_inky = {
+        x: 11,
+        y: 13
+    }
+
+    hubConnection.on("ChangePacmanPosition", function (pacman_x, pacman_y, score) {
+
+        var elem = document.getElementById("pacman");
+
+        var some_coin = document.getElementById(pacman_x + "o" + pacman_y);
+        some_coin.className = 'ground';
+
+        ObjectMove(pacman_x, pacman_y, previos_pacman.x, previos_pacman.y, elem.id, 12);
+
+        previos_pacman.x = pacman_x;
+        previos_pacman.y = pacman_y;
+
+        document.getElementById('tf').textContent = score;
+
+        //elem.style.top = pacman_x*8 + 'px';
+        //elem.style.left = pacman_y*8 + 'px';
+    });
+
+
+
+    hubConnection.on("ChangeBlinkyPosition", function (blinky_x, blinky_y, IsFrightened, MovingToHome) {
+
+        var blinky = document.getElementById("blinky");
+        var time = 15;
+
+        if (MovingToHome == true) {
+            blinky.style.backgroundColor = 'white';
+            time = 6;
+        }
+        else if (IsFrightened == true) {
+            blinky.style.backgroundColor = 'darkblue';
+            time = 37;
+        }
+        else {
+            time = 15;
+            blinky.style.backgroundColor = 'red';
+        }
+
+        //if (previos_blinky.y < blinky_y)
+        //{
+        //    blinky.style.backgroundImage = "url('images/BlinkyRight.png')";
+        //}
+        //else if (previos_blinky.y > blinky_y)
+        //{
+        //    blinky.style.backgroundImage = "url('images/BlinkyLeft.png')";
+        //}
+
+        ObjectMove(blinky_x, blinky_y, previos_blinky.x, previos_blinky.y, blinky.id, time);
+
+        previos_blinky.x = blinky_x;
+        previos_blinky.y = blinky_y;
+
+    });
+
+    hubConnection.on("ChangePinkyPosition", function (pinky_x, pinky_y, IsFrightened, MovingToHome) {
+
+        var pinky = document.getElementById("pinky");
+
+        var time = 15;
+
+        if (MovingToHome == true) {
+            pinky.style.backgroundColor = 'white';
+            time = 6;
+        }
+        else if (IsFrightened == true) {
+            pinky.style.backgroundColor = 'darkblue';
+            time = 37;
+        }
+        else {
+            time = 15;
+            pinky.style.backgroundColor = 'pink';
+        }
+
+        ObjectMove(pinky_x, pinky_y, previos_pinky.x, previos_pinky.y, pinky.id, time);
+
+        previos_pinky.x = pinky_x;
+        previos_pinky.y = pinky_y;
+    });
+
+    hubConnection.on("ChangeInkyPosition", function (inky_x, inky_y, IsFrightened, MovingToHome) {
+
+        var inky = document.getElementById("inky");
+
+        var time = 15;
+
+        if (MovingToHome == true) {
+            inky.style.backgroundColor = 'white';
+            time = 6;
+        }
+        else if (IsFrightened == true) {
+            inky.style.backgroundColor = 'darkblue';
+            time = 37;
+        }
+        else {
+            time = 15;
+            inky.style.backgroundColor = 'deepskyblue';
+        }
+
+        ObjectMove(inky_x, inky_y, previos_inky.x, previos_inky.y, inky.id, time);
+
+        previos_inky.x = inky_x;
+        previos_inky.y = inky_y;
+    });
+
+
+    hubConnection.on("ChangeClydePosition", function (clyde_x, clyde_y, IsFrightened, MovingToHome) {
+
+        var clyde = document.getElementById("clyde");
+
+        var time = 15;
+
+        if (MovingToHome == true) {
+            clyde.style.backgroundColor = 'white';
+            time = 6;
+        }
+        else if (IsFrightened == true) {
+            clyde.style.backgroundColor = 'darkblue';
+            time = 37;
+        }
+        else {
+            time = 15;
+            clyde.style.backgroundColor = 'darkorange';
+        }
+
+        ObjectMove(clyde_x, clyde_y, previos_clydi.x, previos_clydi.y, clyde.id, time);
+
+        previos_clydi.x = clyde_x;
+        previos_clydi.y = clyde_y;
+    });
+
+    hubConnection.on("EndGame", function () {
+        alert("You win!");
+    });
+
+    var p = false;
+
+    document.getElementById("pause").addEventListener("click", function (e) {
+        if (p) {
+            p = false;
+            document.getElementById("pause").textContent = "Unpause";
+        }
+        else {
+            p = true;
+            document.getElementById("pause").textContent = "Pause";
+        }
+        hubConnection.invoke("Pause");
+    });
+
+    function ObjectMove(x, y, px, py, object_id, time) {
+
+        var object = document.getElementById(object_id);
+
+        if (py < y) {
+            var yy = y * item - item;
+
+            var pos = 0;
+            var id = setInterval(frame, time);
+            function frame() {
+                if (pos == 8) {
+                    clearInterval(id);
+                } else {
+                    pos++;
+                    yyy = yy + pos * 2;
+                    object.style.left = yyy + 'px';
+                }
+            }
+        }
+        else if (py > y) {
+            var yy = y * item + item;
+
+            var pos = 0;
+            var id = setInterval(frame, time);
+            function frame() {
+                if (pos == 8) {
+                    clearInterval(id);
+                } else {
+                    pos++;
+                    yyy = yy - pos * 2;
+
+                    object.style.left = yyy + 'px';
+                }
+            }
+        }
+        else if (px < x) {
+            var xx = x * item - item;
+            var pos = 0;
+            var id = setInterval(frame, time);
+            function frame() {
+                if (pos == 8) {
+                    clearInterval(id);
+                } else {
+                    pos++;
+                    xxx = xx + pos * 2;
+                    object.style.top = xxx + 'px';
+                }
+            }
+        }
+        else if (px > x) {
+            var xx = x * item + item;
+            var pos = 0;
+            var id = setInterval(frame, time);
+            function frame() {
+                if (pos == 8) {
+                    clearInterval(id);
+                } else {
+                    pos++;
+                    xxx = xx - pos * 2;
+                    object.style.top = xxx + 'px';
+                }
+            }
+        }
+
+
+    }
+
+    window.addEventListener("resize", myFunctionq);
+
+    
+    function myFunctionq() {
+        var w = window.innerWidth;
+        el.style.left = (w - 448) / 2;
+    }
+</script>
+
+<script>
+ 
+</script>
+

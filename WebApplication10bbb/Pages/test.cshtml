@@ -1,0 +1,242 @@
+﻿@page
+@model WebApplication10bbb.Pages.testModel
+@{
+   
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>test</title>
+
+    <style>
+
+
+        #myContainer {
+            width: 224px;
+            height: 248px;
+            background-image: url('images/background.png');
+            /*position: relative;*/
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            margin: 0 auto;
+        }
+
+        #pacman {
+            width: 8px;
+            /*top: 8px;
+            left: 8px;*/
+            height: 8px;
+            position: absolute;
+            background-color: yellow;
+        }
+
+        #blinky {
+            top: 112px;
+            left: 92px;
+            width: 8px;
+            height: 8px;
+            position: absolute;
+            background-color: red;
+        }
+
+        #inky {
+            top: 112px;
+            left: 92px;
+            width: 8px;
+            height: 8px;
+            position: absolute;
+            background-color: deepskyblue;
+        }
+
+        #pinky {
+            width: 8px;
+            top: 112px;
+            left: 108px;
+            height: 8px;
+            position: absolute;
+            background-color: pink;
+        }
+
+        #clyde {
+            width: 8px;
+            top: 112px;
+            left: 124px;
+            height: 8px;
+            position: absolute;
+            background-color: darkorange;
+        }
+
+        .coin {
+            width: 2px;
+            height: 2px;
+            position: absolute;
+            background-color: lawngreen;
+        }
+
+        .ground {
+            width: 2px;
+            height: 2px;
+            position: absolute;
+            background-color: transparent;
+        }
+
+        .energizer {
+            width: 4px;
+            height: 4px;
+            position: absolute;
+            background-color: mediumblue;
+        }
+    </style>
+  
+    <style>
+        /* Important styles */
+        .nav {
+            text-align: center;
+        }
+
+            .nav ul, .nav li, .nav a {
+                display: inline-block;
+                *display: inline;
+                zoom: 1;
+            }
+
+        /* Fancy aesthetic styling */
+        .nav {
+            font: 14px sans-serif;
+            margin: 20px 0;
+        }
+
+            .nav ul {
+                background: #333;
+                border-radius: 5px;
+                box-shadow: 0 0 5px rgba(0,0,0,0.5);
+                margin: 0;
+                overflow: hidden;
+                padding: 0;
+            }
+
+            .nav a {
+                background-color: #555555;
+                background-image: -webkit-gradient(linear, left top, left bottom, from(#555555), to(#333333));
+                background-image: -webkit-linear-gradient(top, #555555, #333333);
+                background-image: -moz-linear-gradient(top, #555555, #333333);
+                background-image: -o-linear-gradient(top, #555555, #333333);
+                background-image: linear-gradient(to bottom, #555555, #333333);
+                color: #f1f1f1;
+                padding: 10px 15px;
+                text-decoration: none;
+            }
+
+                .nav a:hover {
+                    background-color: #444444;
+                    background-image: -webkit-gradient(linear, left top, left bottom, from(#444444), to(#333333));
+                    background-image: -webkit-linear-gradient(top, #444444, #333333);
+                    background-image: -moz-linear-gradient(top, #444444, #333333);
+                    background-image: -o-linear-gradient(top, #444444, #333333);
+                    background-image: linear-gradient(to bottom, #444444, #333333);
+                }
+    </style>
+
+</head>
+<body>
+    <div class="nav">
+        <div>
+            <div id="pacman"></div>
+        </div>
+        <ul>
+            
+            <li>
+                <a href="#">Home</a>
+            </li>
+            <li>
+                <a href="#">Products</a>
+            </li>
+            <li>
+                <a href="#">Services</a>
+            </li>
+            <li>
+                <a href="#">About</a>
+            </li>
+            <li>
+                <a href="#">Contact</a>
+            </li>
+        </ul>
+    </div>
+
+    <script>
+
+        var map = [
+            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+            [1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1],
+            [1, 3, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 3, 1],
+            [1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1],
+            [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+            [1, 2, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 2, 1],
+            [1, 2, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 2, 1],
+            [1, 2, 2, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 2, 2, 1],
+            [1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1],
+            [4, 4, 4, 4, 4, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 4, 4, 4, 4, 4],
+            [4, 4, 4, 4, 4, 1, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 2, 1, 4, 4, 4, 4, 4],
+            [4, 4, 4, 4, 4, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 4, 4, 4, 4, 4],
+            [1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 4, 4, 4, 4, 4, 4, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1],
+            [4, 4, 4, 4, 4, 1, 2, 2, 2, 2, 1, 4, 4, 4, 4, 4, 4, 1, 2, 2, 2, 2, 1, 4, 4, 4, 4, 4],
+            [1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 4, 4, 4, 4, 4, 4, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1],
+            [4, 4, 4, 4, 4, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 4, 4, 4, 4, 4],
+            [4, 4, 4, 4, 4, 1, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 2, 1, 4, 4, 4, 4, 4],
+            [4, 4, 4, 4, 4, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 4, 4, 4, 4, 4],
+            [1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1],
+            [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+            [1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1],
+            [1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1],
+            [1, 3, 2, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 2, 2, 3, 1],
+            [1, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 1],
+            [1, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 1],
+            [1, 2, 2, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 2, 2, 1],
+            [1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1],
+            [1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1],
+            [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+
+        ];
+
+        document.getElementById('content_container').style.backgroundSize = "224px 248px";
+
+        var el = document.getElementById('content_container');
+
+         function drawWorld() {
+        el.innerHTML = '';
+        for (var y = 0; y < map.length; y = y + 1) {
+            for (var x = 0; x < map[y].length; x = x + 1) {
+                if (map[y][x] === 2) {
+                    var yy = y * 8 + 3;
+                    var xx = x * 8 + 3;
+                    el.innerHTML += '<div id="' + y + "o" + x + '" class="coin" style="top:'+ yy + 'px; left:' + xx + 'px"></div>';
+                }else if (map[y][x] === 3) {
+                    var yy = y * 8 + 2;
+                    var xx = x * 8 + 2;
+                    el.innerHTML += '<div id="' + y + "o" + x + '" class="energizer" style="top:' + yy + 'px; left:' + xx + 'px"></div>';
+                }
+            }
+            el.innerHTML += "<br>";
+        }
+
+        el.innerHTML += '<div id="pacman"></div>';
+        el.innerHTML += '<div id="blinky"></div>';
+        el.innerHTML += '<div id="pinky"></div>';
+        el.innerHTML += '<div id="clyde"></div>';
+        el.innerHTML += '<div id="inky"></div>';
+    }
+
+    drawWorld();
+
+    </script>
+
+</body>
+
+
+</html>
