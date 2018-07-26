@@ -367,7 +367,13 @@ namespace WebApplication10bbb
                             {
                                 y = blinky.position_y - _pacman.position_y;
 
-                                if (x >= y)
+                                if (x == y)
+                                {
+                                    inky.finish_point_x = _pacman.position_x;
+
+                                    inky.finish_point_y = _pacman.position_y;
+                                }
+                                else if (x > y)
                                 {
                                     int step = 0;
                                     while (step != x + 1)
@@ -628,14 +634,10 @@ namespace WebApplication10bbb
                 {
                     if (inky.IsFrightened == true)
                     {
-                        object a = new object();
-                        inky.FrightenedChange(a);
-                        inky.position_x = 11;
-                        inky.position_y = 13;
-                        inky.move_X = 0;
-                        inky.move_Y = -1;
+                        inky.FrightenedChange(new object());
+                        inky.MovingToHome = true;
                     }
-                    else
+                    else if ((inky.IsFrightened == false) && (inky.MovingToHome == false))
                     {
                         _pacman.position_x = 1;
                         _pacman.position_y = 1;
@@ -644,7 +646,7 @@ namespace WebApplication10bbb
                     }
                 }
 
-                hub.Clients.Client(ConnectionID).SendAsync("ChangeInkyPosition", inky.position_x, inky.position_y, inky.IsFrightened);
+                hub.Clients.Client(ConnectionID).SendAsync("ChangeInkyPosition", inky.position_x, inky.position_y, inky.IsFrightened, inky.MovingToHome);
             }
         }
 

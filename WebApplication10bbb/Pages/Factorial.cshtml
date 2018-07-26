@@ -1,0 +1,14 @@
+﻿@page
+@model FactorialModel
+@{
+    ViewData["Title"] = "Factorial";
+}
+
+@if (Model.IsCorrect)
+{
+    <h2>Факториал числа @Model.Number равен @Model.Result</h2>
+}
+else
+{
+    <p>Передано некорректное число</p>
+}

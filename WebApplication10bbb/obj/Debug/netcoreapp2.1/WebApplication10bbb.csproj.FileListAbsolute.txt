@@ -30,4 +30,4 @@ c:\users\назар\source\repos\WebApplication10bbb\WebApplication10bbb\obj\Deb
 c:\users\назар\source\repos\WebApplication10bbb\WebApplication10bbb\obj\Debug\netcoreapp2.1\WebApplication10bbb.pdb
 c:\users\назар\source\repos\WebApplication10bbb\WebApplication10bbb\obj\Debug\netcoreapp2.1\WebApplication10bbb.csproj.CopyComplete
 C:\Users\Назар\source\repos\WebApplication10bbb\WebApplication10bbb\obj\Debug\netcoreapp2.1\WebApplication10bbb.csprojAssemblyReference.cache
-C:\Users\Назар\source\repos\WebApplication10bbb\WebApplication10bbb\obj\Debug\netcoreapp2.1\Razor\Pages\Index2.g.cshtml.cs
+C:\Users\Назар\source\repos\WebApplication10bbb\WebApplication10bbb\obj\Debug\netcoreapp2.1\Razor\Pages\Factorial.g.cshtml.cs

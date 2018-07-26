@@ -163,6 +163,8 @@
     
     drawWorld();
 
+    document.getElementById("blinky").style.backgroundSize = "8px 8px";
+
     current_pacman = {
         x: 1,
         y: 1
@@ -247,10 +249,10 @@
         //elem.style.left = pacman_y*8 + 'px';
     });
 
+    var blinky = document.getElementById("blinky");
+
     hubConnection.on("ChangeBlinkyPosition", function (blinky_x, blinky_y, IsFrightened, MovingToHome) {
-
-        var blinky = document.getElementById("blinky");
-
+            
         var time = 15;
 
         if (MovingToHome == true)
@@ -267,6 +269,15 @@
             time = 15;
             blinky.style.backgroundColor = 'red';
         }
+
+        //if (previos_blinky.y < blinky_y)
+        //{
+        //    blinky.style.backgroundImage = "url('images/BlinkyRight.png')";
+        //}
+        //else if (previos_blinky.y > blinky_y)
+        //{
+        //    blinky.style.backgroundImage = "url('images/BlinkyLeft.png')";
+        //}
 
         ObjectMove(blinky_x, blinky_y, previos_blinky.x, previos_blinky.y, blinky.id, time);
 
@@ -439,107 +450,5 @@
 
         
     }
-
-    function myMoveLeft(x, y) {
-
-        //document.getElementById('tf').textContent = previos;
-
-        var pac = document.getElementById('pacman');
-        //var conte = document.getElementById('myContainer');
-        //var px = document.getElementById("pacman").style.top;
-        //var py = document.getElementById("pacman").style.left;
-                
-        var yy = y * 8 - 8;
-
-        var pos = 0;
-        var id = setInterval(frame, 12);
-        function frame() {
-            if (pos == 8) {
-                clearInterval(id);
-            } else {
-                pos++;
-                yyy = yy + pos;
-                
-                pac.style.left =yyy  + 'px';
-            }
-        }
-    }
-
-    function myMoveRight(x, y, previos) {
-
-        document.getElementById('tf').textContent = previos;
-
-        var pac = document.getElementById('pacman');
-        var conte = document.getElementById('myContainer');
-        var px = document.getElementById("pacman").style.top;
-        var py = document.getElementById("pacman").style.left;
-
-        var xx = x * 8 + 8;
-        var yy = y * 8 + 8;
-
-        var pos = 0;
-        var id = setInterval(frame, 11);
-        function frame() {
-            if (pos == 8) {
-                clearInterval(id);
-            } else {
-                pos++;
-                yyy = yy - pos;
-
-                pac.style.left = yyy + 'px';
-            }
-        }
-    }
-
-    function myMoveBottom(x, y, previos) {
-
-        document.getElementById('tf').textContent = previos;
-
-        var pac = document.getElementById('pacman');
-        var conte = document.getElementById('myContainer');
-        var px = document.getElementById("pacman").style.top;
-        var py = document.getElementById("pacman").style.left;
-
-        var xx = x * 8 - 8;
-        var yy = y * 8 - 8;
-
-        var pos = 0;
-        var id = setInterval(frame, 11);
-        function frame() {
-            if (pos == 8) {
-                clearInterval(id);
-            } else {
-                pos++;
-                xxx = xx + pos;
-
-                pac.style.top = xxx + 'px';
-            }
-        }
-    }
-
-    function myMoveTop(x, y, previos) {
-
-        document.getElementById('tf').textContent = previos;
-
-        var pac = document.getElementById('pacman');
-        var conte = document.getElementById('myContainer');
-        var px = document.getElementById("pacman").style.top;
-        var py = document.getElementById("pacman").style.left;
-
-        var xx = x * 8 + 8;
-        var yy = y * 8 + 8;
-
-        var pos = 0;
-        var id = setInterval(frame, 11);
-        function frame() {
-            if (pos == 8) {
-                clearInterval(id);
-            } else {
-                pos++;
-                xxx = xx - pos;
-
-                pac.style.top = xxx + 'px';
-            }
-        }
-    }
+        
 </script>
