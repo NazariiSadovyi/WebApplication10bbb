@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -37,6 +37,10 @@ namespace WebApplication10bbb
             services.AddDbContext<Ternopil_DBContext>(options =>
                 options.UseSqlServer(connection));
 
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+               .AddCookie(options =>
+                    options.LoginPath = "/LoginPage"
+                );
 
             services.AddSignalR();
             services.AddSingleton<GameLogic>();
@@ -59,12 +63,13 @@ namespace WebApplication10bbb
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
-
+            app.UseAuthentication();
             app.UseSignalR(routes =>
             {
                 routes.MapHub<GameHub>("/stocks");
             });
 
+            
             app.UseMvc();
         }
     }

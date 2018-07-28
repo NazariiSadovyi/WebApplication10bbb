@@ -20,16 +20,22 @@ namespace WebApplication10bbb
 
         private Blinky blinky = new Blinky();
 
-        internal void Disconnected(string connectionId)
+        internal void Disconnected(string connectionId, string username)
         {
             try
             {
                 foreach (var item in dict)
                 {
-                    if (item.Key == connectionId)
-                    {
-                        item.Value.Dispose();
-                        dict.Remove(connectionId);
+                    if (item.Key == username)
+                    {                        
+                        if (item.Value.clients.Count == 1)
+                        {
+                            dict.Remove(username);
+                        } 
+                        else
+                        {
+                            item.Value.clients.Remove(connectionId);
+                        }
                     }
                 }
 
@@ -48,11 +54,11 @@ namespace WebApplication10bbb
             Hub = hub;
         }
 
-        internal Task Move(int move,string connectionId)
+        internal Task Move(int move,string username)
         {
             foreach (var item in dict)
             {
-                if (item.Key == connectionId)
+                if (item.Key == username)
                 {
                     item.Value.Move(move);
                 }
@@ -61,11 +67,11 @@ namespace WebApplication10bbb
             return Task.CompletedTask;
         }
 
-        internal Task StartGame(string connectionId)
+        internal Task StartGame(string username)
         {
             foreach (var item in dict)
             {
-                if (item.Key == connectionId)
+                if (item.Key == username)
                 {
                     item.Value.StartGame();
                 }
@@ -74,11 +80,11 @@ namespace WebApplication10bbb
             return Task.CompletedTask;
         }
         
-        internal Task PauseGame(string connectionId)
+        internal Task PauseGame(string username)
         {
             foreach (var item in dict)
             {
-                if (item.Key == connectionId)
+                if (item.Key == username)
                 {
                     item.Value.PauseGame();
                 }
@@ -91,16 +97,27 @@ namespace WebApplication10bbb
 
         Dictionary<string, Class> dict = new Dictionary<string, Class>();
 
-        public void Connected(string connectionId)
+        public void Connected(string connectionId, string username)
         {
-            if (ta.Contains(connectionId))
+            if (dict.Count == 0)
             {
-                
+                dict.Add(username, new Class(connectionId, Hub));
             }
             else
             {
-                dict.Add(connectionId, new Class(connectionId, Hub));
+                foreach (var item in dict)
+                {
+                    if (item.Key == username)
+                    {
+                        item.Value.clients.Add(connectionId);
+                    }
+                    else
+                    {
+                        dict.Add(username, new Class(connectionId, Hub));
+                    }
+                }
             }
+            
         }
 
     }

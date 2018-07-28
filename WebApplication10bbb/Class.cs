@@ -14,6 +14,8 @@ namespace WebApplication10bbb
     {
         public List<string> clients = new List<string>();
 
+        public string UserName;
+
         const int height = 29;
         const int width = 26;
 
@@ -41,7 +43,7 @@ namespace WebApplication10bbb
 
         public Class(string connectionID, IHubContext<GameHub> hub)
         {
-            this.ConnectionID = connectionID;
+            clients.Add(connectionID);
             this.hub = hub;
            
         }
@@ -113,16 +115,52 @@ namespace WebApplication10bbb
             {
                 _pacman.last_move_X = _pacman.move_X;
                 _pacman.last_move_Y = _pacman.move_Y;
-
-                blinky.last_move_X = blinky.move_X;
-                blinky.last_move_Y = blinky.move_Y;
-
-
+                              
                 _pacman.move_X = 0;
                 _pacman.move_Y = 0;
 
-                blinky.move_X = 0;
-                blinky.move_Y = 0;
+                blinky.IsMoving = false;
+                if (blinky.IsFrightened)
+                {
+                    blinky.StopFrightened();
+                }
+                else
+                {
+                    blinky.StopPersecutionOrRunaway();
+                }
+
+                pinky.IsMoving = false;
+                if (pinky.IsFrightened)
+                {
+                    pinky.StopFrightened();
+                }
+                else
+                {
+                    pinky.StopPersecutionOrRunaway();
+                }
+
+
+                inky.IsMoving = false;
+                if (inky.IsFrightened)
+                {
+                    inky.StopFrightened();
+                }
+                else
+                {
+                    inky.StopPersecutionOrRunaway();
+                }
+
+
+                clyde.IsMoving = false;
+                if (clyde.IsFrightened)
+                {
+                    clyde.StopFrightened();
+                }
+                else
+                {
+                    clyde.StopPersecutionOrRunaway();
+                }
+
                 pause = true;
             }
             else
@@ -131,17 +169,52 @@ namespace WebApplication10bbb
                 _pacman.move_X = _pacman.last_move_X;
                 _pacman.move_Y = _pacman.last_move_Y;
 
-                blinky.move_X = blinky.last_move_X;
-                blinky.move_Y = blinky.last_move_Y;
-            }
+                blinky.IsMoving = true;
+                if (blinky.IsFrightened)
+                {
+                    blinky.ContinuousFrightened();
+                }
+                else
+                {
+                    blinky.ContinuousMoving();
+                }
 
-          
+                pinky.IsMoving = true;
+                if (pinky.IsFrightened)
+                {
+                    pinky.ContinuousFrightened();
+                }
+                else
+                {
+                    pinky.ContinuousMoving();
+                }
+
+                inky.IsMoving = true;
+                if (inky.IsFrightened)
+                {
+                    inky.ContinuousFrightened();
+                }
+                else
+                {
+                    inky.ContinuousMoving();
+                }
+
+                clyde.IsMoving = true;
+                if (clyde.IsFrightened)
+                {
+                    clyde.ContinuousFrightened();
+                }
+                else
+                {
+                    clyde.ContinuousMoving();
+                }
+
+            }
 
             return Task.CompletedTask;
         }
 
-        
-
+        List<string> ited_coin = new List<string>();
 
         DateTime start_time;
         DateTime current_time;
@@ -178,9 +251,12 @@ namespace WebApplication10bbb
                     }
                     if (score == 284)
                     {
-                        hub.Clients.Client(ConnectionID).SendAsync("EndGame");
+                        hub.Clients.Clients(clients).SendAsync("EndGame");
                     }
 
+                    string som = (_pacman.position_x + 100).ToString() + "o" + (_pacman.position_y + 100).ToString();
+                    ited_coin.Add((_pacman.position_x + 100).ToString() + "o" + (_pacman.position_y + 100).ToString());
+                    
                 }
                 else if (_gameMap.CoinMap[_pacman.position_x, _pacman.position_y] == 'k')
                 {
@@ -260,8 +336,8 @@ namespace WebApplication10bbb
                     {
                         _pacman.position_x = 1;
                         _pacman.position_y = 1;
-                        _pacman.move_X = 1;
-                        _pacman.move_Y = 0;
+                        _pacman.move_X = 0;
+                        _pacman.move_Y = 1;
                     }
                 }
 
@@ -277,8 +353,8 @@ namespace WebApplication10bbb
                     {
                         _pacman.position_x = 1;
                         _pacman.position_y = 1;
-                        _pacman.move_X = 1;
-                        _pacman.move_Y = 0;
+                        _pacman.move_X = 0;
+                        _pacman.move_Y = 1;
                     }
                 }
 
@@ -294,8 +370,8 @@ namespace WebApplication10bbb
                     {
                         _pacman.position_x = 1;
                         _pacman.position_y = 1;
-                        _pacman.move_X = 1;
-                        _pacman.move_Y = 0;
+                        _pacman.move_X = 0;
+                        _pacman.move_Y = 1;
                     }
                 }
 
@@ -310,15 +386,15 @@ namespace WebApplication10bbb
                     {
                         _pacman.position_x = 1;
                         _pacman.position_y = 1;
-                        _pacman.move_X = 1;
-                        _pacman.move_Y = 0;
+                        _pacman.move_X = 0;
+                        _pacman.move_Y = 1;
                     }
                 }
 
 
                 DateTime moment2 = DateTime.Now;
 
-                hub.Clients.Client(ConnectionID).SendAsync("ChangePacmanPosition", _pacman.position_x, _pacman.position_y, score * 10);
+                hub.Clients.Clients(clients).SendAsync("ChangePacmanPosition", _pacman.position_x, _pacman.position_y, score * 10, 1);
 
             }
 
@@ -326,14 +402,14 @@ namespace WebApplication10bbb
 
         public void UpdateInky(object state)
         {
-            //blinky_logic
+            //inky_logic
             if (inky.IsMoving)
             {
                 if (inky.MovingToHome)
                 {
                     inky.IsFrightened = false;
 
-                    InkyTimer.Change(50, 0);
+                    InkyTimer.Change(50, 50);
                     var qwerty = new Init().Inite(11, 14, inky.position_x, inky.position_y);
 
                     inky.move_X = qwerty.Item1;
@@ -359,19 +435,34 @@ namespace WebApplication10bbb
                         int x = 0;
                         int y = 0;
 
-                        if (_pacman.position_x <= blinky.position_x)
+                        if (_gameMap.map[_pacman.position_x + _pacman.move_X,_pacman.position_y + _pacman.move_Y] != 'w')
                         {
-                            x = blinky.position_x - _pacman.position_x;
-
-                            if (_pacman.position_y <= blinky.position_y)
+                            inky.pacman_position_plus_two_x = _pacman.position_x + _pacman.move_X;
+                            inky.pacman_position_plus_two_y = _pacman.position_y + _pacman.move_Y;
+                        }
+                        try
+                        {
+                            if (_gameMap.map[_pacman.position_x + _pacman.move_X + _pacman.move_X, _pacman.position_y + _pacman.move_Y + _pacman.move_Y] != 'w')
                             {
-                                y = blinky.position_y - _pacman.position_y;
+                                inky.pacman_position_plus_two_x = _pacman.position_x + _pacman.move_X + _pacman.move_X;
+                                inky.pacman_position_plus_two_y = _pacman.position_y + _pacman.move_Y + _pacman.move_Y;
+                            }
+                        }
+                        catch { }
+
+                        if (inky.pacman_position_plus_two_x <= blinky.position_x)
+                        {
+                            x = blinky.position_x - inky.pacman_position_plus_two_x;
+
+                            if (inky.pacman_position_plus_two_y <= blinky.position_y)
+                            {
+                                y = blinky.position_y - inky.pacman_position_plus_two_y;
 
                                 if (x == y)
                                 {
-                                    inky.finish_point_x = _pacman.position_x;
+                                    inky.finish_point_x = inky.pacman_position_plus_two_x;
 
-                                    inky.finish_point_y = _pacman.position_y;
+                                    inky.finish_point_y = inky.pacman_position_plus_two_y;
                                 }
                                 else if (x > y)
                                 {
@@ -383,11 +474,11 @@ namespace WebApplication10bbb
 
                                         try
                                         {
-                                            if (_gameMap.map[(_pacman.position_x - step), Convert.ToInt32(_pacman.position_y - newy)] != 'w')
+                                            if (_gameMap.map[(inky.pacman_position_plus_two_x - step), Convert.ToInt32(inky.pacman_position_plus_two_y - newy)] != 'w')
                                             {
-                                                inky.finish_point_x = _pacman.position_x - step;
+                                                inky.finish_point_x = inky.pacman_position_plus_two_x - step;
 
-                                                inky.finish_point_y = Convert.ToInt32(_pacman.position_y - newy);
+                                                inky.finish_point_y = Convert.ToInt32(inky.pacman_position_plus_two_y - newy);
                                             }
                                         }
                                         catch
@@ -407,11 +498,11 @@ namespace WebApplication10bbb
 
                                         try
                                         {
-                                            if (_gameMap.map[Convert.ToInt32(_pacman.position_x - newx), _pacman.position_y - step] != 'w')
+                                            if (_gameMap.map[Convert.ToInt32(inky.pacman_position_plus_two_x - newx), inky.pacman_position_plus_two_y - step] != 'w')
                                             {
-                                                inky.finish_point_x = Convert.ToInt32(_pacman.position_x - newx);
+                                                inky.finish_point_x = Convert.ToInt32(inky.pacman_position_plus_two_x - newx);
 
-                                                inky.finish_point_y = _pacman.position_y - step;
+                                                inky.finish_point_y = inky.pacman_position_plus_two_y - step;
                                             }
                                         }
                                         catch
@@ -424,9 +515,9 @@ namespace WebApplication10bbb
                                 }
 
                             }
-                            else if (_pacman.position_y > blinky.position_y)
+                            else if (inky.pacman_position_plus_two_y > blinky.position_y)
                             {
-                                y = _pacman.position_y - blinky.position_y;
+                                y = inky.pacman_position_plus_two_y - blinky.position_y;
 
                                 if (x >= y)
                                 {
@@ -438,11 +529,11 @@ namespace WebApplication10bbb
 
                                         try
                                         {
-                                            if (_gameMap.map[(_pacman.position_x - step), Convert.ToInt32(_pacman.position_y + newy)] != 'w')
+                                            if (_gameMap.map[(inky.pacman_position_plus_two_x - step), Convert.ToInt32(inky.pacman_position_plus_two_y + newy)] != 'w')
                                             {
-                                                inky.finish_point_x = _pacman.position_x - step;
+                                                inky.finish_point_x = inky.pacman_position_plus_two_x - step;
 
-                                                inky.finish_point_y = Convert.ToInt32(_pacman.position_y + newy);
+                                                inky.finish_point_y = Convert.ToInt32(inky.pacman_position_plus_two_y + newy);
                                             }
                                         }
                                         catch
@@ -462,11 +553,11 @@ namespace WebApplication10bbb
 
                                         try
                                         {
-                                            if (_gameMap.map[Convert.ToInt32(_pacman.position_x - newx), _pacman.position_y + step] != 'w')
+                                            if (_gameMap.map[Convert.ToInt32(inky.pacman_position_plus_two_x - newx), inky.pacman_position_plus_two_y + step] != 'w')
                                             {
-                                                inky.finish_point_x = Convert.ToInt32(_pacman.position_x - newx);
+                                                inky.finish_point_x = Convert.ToInt32(inky.pacman_position_plus_two_x - newx);
 
-                                                inky.finish_point_y = _pacman.position_y + step;
+                                                inky.finish_point_y = inky.pacman_position_plus_two_y + step;
                                             }
                                         }
                                         catch
@@ -478,13 +569,13 @@ namespace WebApplication10bbb
                                 }
                             }
                         }
-                        else if (_pacman.position_x > blinky.position_x)
+                        else if (inky.pacman_position_plus_two_x > blinky.position_x)
                         {
-                            x = _pacman.position_x - blinky.position_x;
+                            x = inky.pacman_position_plus_two_x - blinky.position_x;
 
-                            if (_pacman.position_y <= blinky.position_y)
+                            if (inky.pacman_position_plus_two_y <= blinky.position_y)
                             {
-                                y = blinky.position_y - _pacman.position_y;
+                                y = blinky.position_y - inky.pacman_position_plus_two_y;
 
                                 if (x >= y)
                                 {
@@ -496,11 +587,11 @@ namespace WebApplication10bbb
 
                                         try
                                         {
-                                            if (_gameMap.map[(_pacman.position_x + step), Convert.ToInt32(_pacman.position_y - newy)] != 'w')
+                                            if (_gameMap.map[(inky.pacman_position_plus_two_x + step), Convert.ToInt32(inky.pacman_position_plus_two_y - newy)] != 'w')
                                             {
-                                                inky.finish_point_x = _pacman.position_x + step;
+                                                inky.finish_point_x = inky.pacman_position_plus_two_x + step;
 
-                                                inky.finish_point_y = Convert.ToInt32(_pacman.position_y - newy);
+                                                inky.finish_point_y = Convert.ToInt32(inky.pacman_position_plus_two_y - newy);
                                             }
                                         }
                                         catch
@@ -520,11 +611,11 @@ namespace WebApplication10bbb
 
                                         try
                                         {
-                                            if (_gameMap.map[Convert.ToInt32(_pacman.position_x + newx), _pacman.position_y - step] != 'w')
+                                            if (_gameMap.map[Convert.ToInt32(inky.pacman_position_plus_two_x + newx), inky.pacman_position_plus_two_y - step] != 'w')
                                             {
-                                                inky.finish_point_x = Convert.ToInt32(_pacman.position_x + newx);
+                                                inky.finish_point_x = Convert.ToInt32(inky.pacman_position_plus_two_x + newx);
 
-                                                inky.finish_point_y = _pacman.position_y - step;
+                                                inky.finish_point_y = inky.pacman_position_plus_two_y - step;
                                             }
                                         }
                                         catch
@@ -536,9 +627,9 @@ namespace WebApplication10bbb
 
                                 }
                             }
-                            else if (_pacman.position_y > blinky.position_y)
+                            else if (inky.pacman_position_plus_two_y > blinky.position_y)
                             {
-                                y = _pacman.position_y - blinky.position_y;
+                                y = inky.pacman_position_plus_two_y - blinky.position_y;
 
                                 if (x >= y)
                                 {
@@ -550,11 +641,11 @@ namespace WebApplication10bbb
 
                                         try
                                         {
-                                            if (_gameMap.map[(_pacman.position_x + step), Convert.ToInt32(_pacman.position_y + newy)] != 'w')
+                                            if (_gameMap.map[(inky.pacman_position_plus_two_x + step), Convert.ToInt32(inky.pacman_position_plus_two_y + newy)] != 'w')
                                             {
-                                                inky.finish_point_x = _pacman.position_x + step;
+                                                inky.finish_point_x = inky.pacman_position_plus_two_x + step;
 
-                                                inky.finish_point_y = Convert.ToInt32(_pacman.position_y + newy);
+                                                inky.finish_point_y = Convert.ToInt32(inky.pacman_position_plus_two_y + newy);
                                             }
                                         }
                                         catch
@@ -574,11 +665,11 @@ namespace WebApplication10bbb
 
                                         try
                                         {
-                                            if (_gameMap.map[Convert.ToInt32(_pacman.position_x + newx), _pacman.position_y + step] != 'w')
+                                            if (_gameMap.map[Convert.ToInt32(inky.pacman_position_plus_two_x + newx), inky.pacman_position_plus_two_y + step] != 'w')
                                             {
-                                                inky.finish_point_x = Convert.ToInt32(_pacman.position_x + newx);
+                                                inky.finish_point_x = Convert.ToInt32(inky.pacman_position_plus_two_x + newx);
 
-                                                inky.finish_point_y = _pacman.position_y + step;
+                                                inky.finish_point_y = inky.pacman_position_plus_two_y + step;
                                             }
                                         }
                                         catch
@@ -591,7 +682,7 @@ namespace WebApplication10bbb
                                 }
                             }
                         }
-                        
+
                     }
 
                     if (inky.TimerType)
@@ -646,7 +737,7 @@ namespace WebApplication10bbb
                     }
                 }
 
-                hub.Clients.Client(ConnectionID).SendAsync("ChangeInkyPosition", inky.position_x, inky.position_y, inky.IsFrightened, inky.MovingToHome);
+                hub.Clients.Clients(clients).SendAsync("ChangeInkyPosition", inky.position_x, inky.position_y, inky.IsFrightened, inky.MovingToHome);
             }
         }
 
@@ -659,7 +750,7 @@ namespace WebApplication10bbb
                 {
                     clyde.IsFrightened = false;
 
-                    ClydeTimer.Change(50, 0);
+                    ClydeTimer.Change(50, 50);
                     var qwerty = new Init().Inite(11, 14, clyde.position_x, clyde.position_y);
 
                     clyde.move_X = qwerty.Item1;
@@ -689,7 +780,7 @@ namespace WebApplication10bbb
 
                             shot_way = new Init().Shortest_way(_pacman.position_x, _pacman.position_y, clyde.position_x, clyde.position_y, clyde.move_X, clyde.move_Y);
                             
-                            if (shot_way <= 12)
+                            if (shot_way <= 15)
                             {
                                 clyde.finish_point_x = clyde.run_point_x;
                                 clyde.finish_point_y = clyde.run_point_y;
@@ -747,7 +838,7 @@ namespace WebApplication10bbb
                     }
                 }
 
-                hub.Clients.Client(ConnectionID).SendAsync("ChangeClydePosition", clyde.position_x, clyde.position_y, clyde.IsFrightened, clyde.MovingToHome);
+                hub.Clients.Clients(clients).SendAsync("ChangeClydePosition", clyde.position_x, clyde.position_y, clyde.IsFrightened, clyde.MovingToHome);
             }
         }
 
@@ -759,7 +850,7 @@ namespace WebApplication10bbb
                 {
                     pinky.IsFrightened = false;
 
-                    PinkyTimer.Change(50, 0);
+                    PinkyTimer.Change(50, 50);
                     var qwerty = new Init().Inite(11, 14, pinky.position_x, pinky.position_y);
 
                     pinky.move_X = qwerty.Item1;
@@ -846,7 +937,7 @@ namespace WebApplication10bbb
                     }
                 }
 
-                hub.Clients.Client(ConnectionID).SendAsync("ChangePinkyPosition", pinky.position_x, pinky.position_y, pinky.IsFrightened);
+                hub.Clients.Clients(clients).SendAsync("ChangePinkyPosition", pinky.position_x, pinky.position_y, pinky.IsFrightened);
             }
         }
 
@@ -859,7 +950,7 @@ namespace WebApplication10bbb
                 {
                     blinky.IsFrightened = false;
                     
-                    BlinkyTimer.Change(50, 0);
+                    BlinkyTimer.Change(50, 50);
                     var qwerty = new Init().Inite(11,14,blinky.position_x,blinky.position_y);
 
                     blinky.move_X = qwerty.Item1;
@@ -934,12 +1025,12 @@ namespace WebApplication10bbb
                     {
                         _pacman.position_x = 1;
                         _pacman.position_y = 1;
-                        _pacman.move_X = 1;
-                        _pacman.move_Y = 0;
+                        _pacman.move_X = 0;
+                        _pacman.move_Y = 1;
                     }
                 }
 
-                hub.Clients.Client(ConnectionID).SendAsync("ChangeBlinkyPosition", blinky.position_x, blinky.position_y, blinky.IsFrightened, blinky.MovingToHome);
+                hub.Clients.Clients(clients).SendAsync("ChangeBlinkyPosition", blinky.position_x, blinky.position_y, blinky.IsFrightened, blinky.MovingToHome, blinky.PersecutionOrRunawayWatch.ElapsedMilliseconds.ToString(), blinky.IsFrightenedWatch.ElapsedMilliseconds.ToString());
             }
         }
         

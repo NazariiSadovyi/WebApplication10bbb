@@ -3,12 +3,56 @@
 @{
     ViewData["Title"] = "Home page";
 }
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
 
 <style>
+
+
+    html {
+        height: 100%;
+        /*background-image: linear-gradient(to right top, #3498db 0%, #3498db 100%);*/
+    }
+
+    nav {
+        max-width: 700px;
+        -webkit-mask-image: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, #ffffff 25%, #ffffff 75%, rgba(255, 255, 255, 0) 100%);
+        margin: 0 auto;
+        padding: 0px 0;
+    }
+
+        nav ul {
+            text-align: center;
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.2) 25%, rgba(255, 255, 255, 0.2) 75%, rgba(255, 255, 255, 0) 100%);
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.1), inset 0 0 1px rgba(255, 255, 255, 0.6);
+        }
+
+            nav ul li {
+                display: inline-block;
+            }
+
+                nav ul li a {
+                    padding: 10px;
+                    font-family: "Open Sans";
+                    text-transform: uppercase;
+                    color: rgba(0, 35, 122, 0.5);
+                    font-size: 12px;
+                    text-decoration: none;
+                    display: block;
+                }
+
+                    nav ul li a:hover {
+                        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1), inset 0 0 1px rgba(255, 255, 255, 0.6);
+                        background: rgba(255, 255, 255, 0.1);
+                        color: rgba(0, 35, 122, 0.7);
+                    }
+
+
+
     #myContainer {
         width: 448px;
         height: 496px;
-        background-image: url('images/background.png');
+        background-image: url('images/wallpacman.jpg');
         position: relative;
     }
 
@@ -16,6 +60,7 @@
         width: 16px;
         top: 16px;
         left: 16px;
+        border-radius:50%;
         height: 16px;
         position: absolute;
         background-color: yellow;
@@ -28,6 +73,7 @@
         height: 16px;
         position: absolute;
         background-color: red;
+        border-radius: 50%;
     }
 
     #inky {
@@ -37,6 +83,7 @@
         height: 16px;
         position: absolute;
         background-color: deepskyblue;
+        border-radius: 50%;
     }
 
     #pinky {
@@ -46,6 +93,7 @@
         height: 16px;
         position: absolute;
         background-color: pink;
+        border-radius: 50%;
     }
 
     #clyde {
@@ -55,6 +103,7 @@
         height: 16px;
         position: absolute;
         background-color: darkorange;
+        border-radius: 50%;
     }
 
     .coin {
@@ -62,6 +111,7 @@
         height: 4px;
         position: absolute;
         background-color: lawngreen;
+        border-radius: 50%;
     }
 
     .ground {
@@ -76,31 +126,54 @@
         height: 8px;
         position: absolute;
         background-color: mediumblue;
+        border-radius: 50%;
     }
+
+    table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+   
 </style>
 
+<nav>
+    <ul>        
+        <li>
+            <button id="sendBtn" type="submit" style="background-color:transparent; padding:10px; font-size: 12px; border:none">Нова гра</button>
+        </li>
+        <li>
+            <button id="pause" type="submit" style="background-color:transparent; padding:10px; font-size: 12px; border:none">Пауза</button>
+        </li>
+        <li>            
+            <button type="submit" style="background-color:transparent; padding:10px; font-size: 12px; border:none">Статистика</button>
+        </li>
+        <li>
+            <form method="Post">
+                <button type="submit" style="background-color:transparent; padding:10px; font-size: 12px; border:none">Вихід</button>
+            </form>
+        </li>
+    </ul>
+</nav>
+<div id="myContainer"></div>
 <p>
-    <button id="sendBtn">Click Me</button>
-    <button id="pause">Pause</button>
+
+
     <input id="login" type="text">
+    <textarea id="tf"></textarea>
+    <textarea id="tf1"></textarea>
+    <textarea id="tf2"></textarea>
+    <textarea id="tf3"></textarea>
 </p>
 
-<div id="myContainer">
-
-
-
-</div>
-
-<div>
-    <textarea id="tf"></textarea>
-
-</div>
 
 <script src="js/signalr.min.js"></script>
 
 <script>
 
     var item = 16;
+
 
     document.getElementById("myContainer").style.backgroundSize = "448px 496px";
 
@@ -182,7 +255,10 @@
         .withUrl(hubUrl)
         .configureLogging(signalR.LogLevel.Information)
         .build();
+
     hubConnection.start();
+
+
 
     document.getElementById("sendBtn").addEventListener("click", function (e) {
         hubConnection.invoke("StartGame");
@@ -238,7 +314,7 @@
         y: 13
     }
 
-    hubConnection.on("ChangePacmanPosition", function (pacman_x, pacman_y, score) {
+    hubConnection.on("ChangePacmanPosition", function (pacman_x, pacman_y, score, ited_coin) {
 
         var elem = document.getElementById("pacman");
 
@@ -250,7 +326,7 @@
         previos_pacman.x = pacman_x;
         previos_pacman.y = pacman_y;
 
-        document.getElementById('tf').textContent = score;
+        document.getElementById('tf').textContent = ited_coin;
 
         //elem.style.top = pacman_x*8 + 'px';
         //elem.style.left = pacman_y*8 + 'px';
@@ -258,7 +334,10 @@
 
 
 
-    hubConnection.on("ChangeBlinkyPosition", function (blinky_x, blinky_y, IsFrightened, MovingToHome) {
+    hubConnection.on("ChangeBlinkyPosition", function (blinky_x, blinky_y, IsFrightened, MovingToHome, time1, time2) {
+
+        document.getElementById("tf1").textContent = time1;
+        document.getElementById("tf2").textContent = time2;
 
         var blinky = document.getElementById("blinky");
         var time = 15;
@@ -392,7 +471,7 @@
 
         if (py < y) {
             var yy = y * item - item;
-
+            object.style.top = x * item;
             var pos = 0;
             var id = setInterval(frame, time);
             function frame() {
@@ -407,7 +486,7 @@
         }
         else if (py > y) {
             var yy = y * item + item;
-
+            object.style.top = x * item;
             var pos = 0;
             var id = setInterval(frame, time);
             function frame() {
@@ -423,6 +502,7 @@
         }
         else if (px < x) {
             var xx = x * item - item;
+            object.style.left = y * item;
             var pos = 0;
             var id = setInterval(frame, time);
             function frame() {
@@ -437,6 +517,7 @@
         }
         else if (px > x) {
             var xx = x * item + item;
+            object.style.left = y * item;
             var pos = 0;
             var id = setInterval(frame, time);
             function frame() {
@@ -453,16 +534,16 @@
 
     }
 
+
+</script>
+
+<script>
     window.addEventListener("resize", myFunctionq);
 
-    
+
     function myFunctionq() {
         var w = window.innerWidth;
         el.style.left = (w - 448) / 2;
     }
-</script>
-
-<script>
- 
 </script>
 

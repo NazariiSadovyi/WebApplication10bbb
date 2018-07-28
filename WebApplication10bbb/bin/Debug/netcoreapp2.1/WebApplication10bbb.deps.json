@@ -25,6 +25,7 @@
       "WebApplication10bbb/1.0.0": {
         "dependencies": {
           "Microsoft.AspNetCore.App": "2.1.0",
+          "Microsoft.AspNetCore.Authentication.Cookies": "2.1.0",
           "Microsoft.AspNetCore.SignalR": "1.0.0",
           "Microsoft.EntityFrameworkCore.SqlServer": "2.1.0",
           "Microsoft.EntityFrameworkCore.SqlServer.Design": "1.1.6",

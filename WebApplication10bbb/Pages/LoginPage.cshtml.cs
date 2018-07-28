@@ -9,15 +9,14 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace WebApplication10bbb.Pages
 {
-    public class testModel : PageModel
+    public class LoginPageModel : PageModel
     {
-        public string Message { get; set; }
         public void OnGet()
         {
-            Message = "Введите число";
+
         }
 
-        public async Task<IActionResult> OnPost()
+        public async Task<IActionResult> OnPostSignIn()
         {
             List<Claim> claims = new List<Claim>
               {
@@ -32,6 +31,11 @@ namespace WebApplication10bbb.Pages
             await HttpContext.SignInAsync(principal);
 
             return Redirect("/Index");
+        }
+
+        public async Task<IActionResult> OnPostSignUp()
+        {           
+           return Redirect("/RegisterPage");
         }
     }
 }

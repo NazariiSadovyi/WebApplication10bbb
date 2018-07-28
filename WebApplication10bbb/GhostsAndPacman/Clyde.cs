@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -28,7 +29,13 @@ namespace WebApplication10bbb.GhostsAndPacman
         public int last_move_X;
         public int last_move_Y;
 
-        private Timer timer;
+        private Timer PersecutionOrRunawayTimer;
+
+        public DateTime dateTime_current = new DateTime();
+        public DateTime dateTime_new = new DateTime();
+
+        public Stopwatch PersecutionOrRunawayWatch = new Stopwatch();
+        public Stopwatch IsFrightenedWatch = new Stopwatch();
 
         public Clyde()
         {
@@ -38,28 +45,58 @@ namespace WebApplication10bbb.GhostsAndPacman
         public void StartMoving()
         {
             IsMoving = true;
-            timer = new Timer(Update_finish_point, null, 7000, 0);
+            PersecutionOrRunawayTimer = new Timer(Update_finish_point, null, 0, 0);
+            PersecutionOrRunawayWatch.Start();
         }
+
+
+        int time = 7000;
+        int current_timer;
 
         private void Update_finish_point(object state)
         {
             if (PersecutionOrRunaway)
             {
                 PersecutionOrRunaway = false;
-                timer.Change(20000, 0);
+                PersecutionOrRunawayTimer.Change(time, 0);
+                PersecutionOrRunawayWatch.Restart();
+                time = 7000;
             }
             else
             {
                 PersecutionOrRunaway = true;
-                timer.Change(7000, 0);
+                PersecutionOrRunawayTimer.Change(time, 0);
+                PersecutionOrRunawayWatch.Restart();
+                time = 20000;
             }
 
         }
 
-        public bool IsFrightened = false;
-        Timer FrightenedTimer;
+        public void StopPersecutionOrRunaway()
+        {
+            PersecutionOrRunawayTimer.Dispose();
+            PersecutionOrRunawayWatch.Stop();
 
-        
+        }
+
+        public void ContinuousMoving()
+        {
+            if (PersecutionOrRunaway)
+            {
+                PersecutionOrRunawayTimer = new Timer(Update_finish_point, null, 7000 - Convert.ToInt32(PersecutionOrRunawayWatch.ElapsedMilliseconds), 0);
+            }
+            else
+            {
+                PersecutionOrRunawayTimer = new Timer(Update_finish_point, null, 20000 - Convert.ToInt32(PersecutionOrRunawayWatch.ElapsedMilliseconds), 0);
+            }
+
+            PersecutionOrRunawayWatch.Start();
+
+        }
+
+        public bool IsFrightened = false;
+
+        Timer FrightenedTimer;
 
         public void Frightened()
         {
@@ -83,6 +120,7 @@ namespace WebApplication10bbb.GhostsAndPacman
 
             IsFrightened = true;
             FrightenedTimer = new Timer(FrightenedChange, null, 10000, 0);
+            IsFrightenedWatch.Restart();
         }
 
         public void RandomMove()
@@ -123,10 +161,24 @@ namespace WebApplication10bbb.GhostsAndPacman
             }
         }
 
+        public void StopFrightened()
+        {
+            FrightenedTimer.Dispose();
+            IsFrightenedWatch.Stop();
+
+        }
+
+        public void ContinuousFrightened()
+        {
+            FrightenedTimer = new Timer(FrightenedChange, null, 10000 - Convert.ToInt32(IsFrightenedWatch.ElapsedMilliseconds), 0);
+            PersecutionOrRunawayWatch.Start();
+        }
+
         public void FrightenedChange(object state)
         {
             IsFrightened = false;
             FrightenedTimer.Dispose();
+            IsFrightenedWatch.Reset();
         }
     }
 }
