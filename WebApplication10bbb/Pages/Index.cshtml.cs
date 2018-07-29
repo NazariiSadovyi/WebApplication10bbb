@@ -57,7 +57,7 @@ namespace WebApplication10bbb.Pages
             // sign-in  
             await HttpContext.SignOutAsync();
 
-            return Redirect("/LoginPage"); 
+            return Redirect("/LoginPage/a");
         }
     }
 }

@@ -46,17 +46,17 @@
         width: 100%;
     }
 
-        .form-item input {
-            background: #fafafa;
-            border: none;
-            border-bottom: 2px solid #e9e9e9;
-            color: #666;
-            font-family: 'Open Sans', sans-serif;
-            font-size: 1em;
-            height: 50px;
-            transition: border-color 0.3s;
-            width: 100%;
-        }
+    .input {
+        background: #fafafa;
+        border: none;
+        border-bottom: 2px solid #e9e9e9;
+        color: #666;
+        font-family: 'Open Sans', sans-serif;
+        font-size: 1em;
+        height: 50px;
+        transition: border-color 0.3s;
+        width: 100%;
+    }
 
             .form-item input:focus {
                 border-bottom: 2px solid #c0c0c0;
@@ -108,18 +108,46 @@
     <h1>Реєстрація</h1>
     <form method="post">
         <div>
-            <input asp-for="UserName" />
-            <span asp-validation-for="UserName"></span>
+            <input asp-for="UserName" placeholder="Ім'я користувача" style="  
+                background: #fafafa;
+                border: none;
+                border-bottom: 2px solid #e9e9e9;
+                color: #666;
+                font-family: 'Open Sans', sans-serif;
+                font-size: 1em;
+                height: 50px;
+                transition: border-color 0.3s;
+                width: 100%;"/>
+            
+                <span asp-validation-for="UserName" style="color:red"></span>
+           
         </div>
        
-            <input asp-for="Password" name="Password" id="Password"/>
-            <span asp-validation-for="Password" ></span>
+            <input asp-for="Password" name="Password" type="password" placeholder="Пароль" id="Password" style="  
+                background: #fafafa;
+                border: none;
+                border-bottom: 2px solid #e9e9e9;
+                color: #666;
+                font-family: 'Open Sans', sans-serif;
+                font-size: 1em;
+                height: 50px;
+                transition: border-color 0.3s;
+                width: 100%;"/>
+            <span asp-validation-for="Password" style="color:red"></span>
        
-            <input asp-for="Password2" />
-            <span asp-validation-for="Password2"></span>
+            @*<input asp-for="Password2" name="ConfPasswor" id="ConfPasswor"/>
+            <span asp-validation-for="Password2" asp-for=""></span>*@
         
+
+            @if (Model.Result != null)
+            {
+                <div>
+                    <label style="color:red">@Model.Result</label>
+                </div>
+            }
+
         <div class="button-panel">
-            <input type="submit" class="button" title="Sign In" value="Sign In" />
+            <input type="submit" class="button" title="Sign In" value="Зареєструватись" />
         </div>
         <div class="form-footer">
         </div>

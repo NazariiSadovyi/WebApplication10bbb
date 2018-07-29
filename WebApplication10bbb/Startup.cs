@@ -39,7 +39,7 @@ namespace WebApplication10bbb
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                .AddCookie(options =>
-                    options.LoginPath = "/LoginPage"
+                    options.LoginPath = "/LoginPage/ "
                 );
 
             services.AddSignalR();

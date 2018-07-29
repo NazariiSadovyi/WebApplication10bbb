@@ -265,10 +265,12 @@ namespace WebApplication10bbb
                     {
                         blinky.FrightenedChange(new object());
                         blinky.Frightened();
+                        
                     }
                     else
                     {
                         blinky.Frightened();
+                        BlinkyTimer.Change(120, 300);
                     }
                     
                     if (pinky.IsMoving)
@@ -281,6 +283,7 @@ namespace WebApplication10bbb
                         else
                         {
                             pinky.Frightened();
+                            PinkyTimer.Change(120, 300);
                         }
                         
                     }
@@ -295,6 +298,7 @@ namespace WebApplication10bbb
                         else
                         {
                             clyde.Frightened();
+                            ClydeTimer.Change(120, 300);
                         }
                        
                     }
@@ -309,6 +313,7 @@ namespace WebApplication10bbb
                         else
                         {
                             inky.Frightened();
+                            InkyTimer.Change(120, 300);
                         }
                         
                     }
@@ -707,8 +712,7 @@ namespace WebApplication10bbb
                     // блінкі переходить у режим страху: зменшення швидкості, миттєво змінює напрямок, випадково визначає напрямок руху
                     if (_gameMap.map[inky.position_x, inky.position_y] == 'c')
                     {
-                        inky.RandomMove();
-                        InkyTimer.Change(300, 300);
+                        inky.RandomMove();                      
                         inky.TimerType = true;
                     }
                 }
@@ -813,7 +817,7 @@ namespace WebApplication10bbb
                     if (_gameMap.map[clyde.position_x, clyde.position_y] == 'c')
                     {
                         clyde.RandomMove();
-                        ClydeTimer.Change(300, 300);
+                       
                         clyde.TimerType = true;
                     }
                 }
@@ -908,8 +912,7 @@ namespace WebApplication10bbb
                     // пінкі переходить у режим страху: зменшення швидкості, миттєво змінює напрямок, випадково визначає напрямок руху
                     if (_gameMap.map[pinky.position_x, pinky.position_y] == 'c')
                     {
-                        pinky.RandomMove();
-                        PinkyTimer.Change(300, 300);
+                        pinky.RandomMove();                        
                         pinky.TimerType = true;
                     }
                 }
@@ -996,11 +999,12 @@ namespace WebApplication10bbb
                 }
                 else if (blinky.IsFrightened)
                 {
+                    //BlinkyTimer.Change(300, 300);
                     // блінкі переходить у режим страху: зменшення швидкості, миттєво змінює напрямок, випадково визначає напрямок руху
                     if (_gameMap.map[blinky.position_x, blinky.position_y] == 'c')
                     {
                         blinky.RandomMove();
-                        BlinkyTimer.Change(300,300);
+                        
                         blinky.TimerType = true;
                     }
                 }

@@ -15,22 +15,21 @@ namespace WebApplication10bbb.Pages
     public class RegisterPageModel : PageModel
     {
         [BindProperty]
-        [Required]
-        [StringLength(20, MinimumLength = 5)]
+        [Required(ErrorMessage = "Поле Ім'я користувача обов'язкове.")]
+        [StringLength(20, MinimumLength = 5,ErrorMessage = "Поле Ім'я користувача має бути з мінімальною довжиною 5 і максимальною довжиною 20.")]
         public string UserName { get; set; }
 
         [BindProperty(Name = "Password")]
-        // [Required()]
-        // [StringLength(20, MinimumLength = 5, ErrorMessage = "Please enter student name.")]
-        //[RegularExpression("^((?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])|(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[^a-zA-Z0-9])|(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[^a-zA-Z0-9])|(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^a-zA-Z0-9])).{8,}$", ErrorMessage = "Passwords must be at least 8 characters and contain at 3 of 4 of the following: upper case (A-Z), lower case (a-z), number (0-9) and special character (e.g. !@#$%^&*)")]
+        [Required(ErrorMessage = "Поле Пароль обов'язкове.")]
+        [RegularExpression("^((?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])|(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[^a-zA-Z0-9])|(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[^a-zA-Z0-9])|(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^a-zA-Z0-9])).{8,}$", ErrorMessage = "Паролі повинні містити принаймні 8 символів і містити в 3 з 4 наступних: верхній регістр (AZ), нижній регістр (az), число (0 -9) та спеціальний символ (наприклад !@#$%^&*)")]
         public string Password { get; set; }
 
 
-        [NotMapped]
-        [BindProperty(Name = "Password2"), Required]
-        [Compare(nameof(Password))] 
-        public string Password2 { get; set; }
 
+        //[BindProperty(Name = "Password2"), Required(ErrorMessage = "Поле Повторіть пароль обов'язкове.")]        
+        //public string Password2 { get; set; }
+
+        public string Result = null;
 
         public void OnGet()
         {
@@ -39,16 +38,19 @@ namespace WebApplication10bbb.Pages
 
         public async Task<IActionResult> OnPost()
         {
+            
+
             if (!ModelState.IsValid)
             {
                 return Page();
             }
             else
             {
+             
                 var client = new HttpClient();
 
-                string user = Request.Form["UserName"];
-                string password = Request.Form["Password"];
+                string user = UserName;
+                string password = Password;
 
                 var request = new HttpRequestMessage(HttpMethod.Post, "https://localhost:44379/api/Users");
 
@@ -63,12 +65,15 @@ namespace WebApplication10bbb.Pages
                 //var friends = JsonConvert.DeserializeObject<List<FriendModel>>(json);
                 if (response.IsSuccessStatusCode)
                 {
-                    return Redirect("/LoginPage");
+                    return Redirect("/LoginPage/" + UserName);
                 }
                 else
-                {
+                {                    
+                    Result = "Користувач з таким іменем вже зареєстрований";
+                     
                     return Page();
                 }
+                
             }          
         }
     }

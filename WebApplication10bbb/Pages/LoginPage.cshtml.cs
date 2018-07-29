@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
@@ -11,6 +13,16 @@ namespace WebApplication10bbb.Pages
 {
     public class LoginPageModel : PageModel
     {
+        [BindProperty]
+        [Required(ErrorMessage = "Поле 'Ім'я користувача' незаповнене")]
+        [StringLength(20, MinimumLength = 5, ErrorMessage = "Поле 'Ім'я користувача' має бути з мінімальною довжиною 5 і максимальною довжиною 20.")]
+        public string UserName { get; set; }
+
+        [BindProperty]
+        [Required(ErrorMessage = "Поле 'Пароль' незаповнене")]
+        [RegularExpression("^((?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])|(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[^a-zA-Z0-9])|(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[^a-zA-Z0-9])|(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^a-zA-Z0-9])).{8,}$", ErrorMessage = "Пароль повиннен містити принаймні 8 символів і обовя'зково містити 3 з 4 наступних: верхній регістр (AZ), нижній регістр (az), число (0 -9) та спеціальний символ (наприклад !@#$%^&*)")]
+        public string Password { get; set; }
+
         public void OnGet()
         {
 
@@ -18,19 +30,38 @@ namespace WebApplication10bbb.Pages
 
         public async Task<IActionResult> OnPostSignIn()
         {
-            List<Claim> claims = new List<Claim>
-              {
-                 new Claim(ClaimTypes.Name, Request.Form["UserName"])
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
+            else
+            {
+                var client = new HttpClient();
 
-             };
+                string user = UserName;
+                string password = Password;
 
-            ClaimsIdentity identity = new ClaimsIdentity(claims, "login");
-            ClaimsPrincipal principal = new ClaimsPrincipal(identity);
+                var request = new HttpRequestMessage(HttpMethod.Get, "https://localhost:44379/api/Users");
 
-            // sign-in  
-            await HttpContext.SignInAsync(principal);
+                //request.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
-            return Redirect("/Index");
+                request.Headers.Add("UserName", user);
+                request.Headers.Add("UserPassword", password);
+
+                var response = await client.SendAsync(request);
+
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return Redirect("/Index");                   
+                }
+                else
+                {
+                    return Page();
+                }
+
+                  
+            }
         }
 
         public async Task<IActionResult> OnPostSignUp()

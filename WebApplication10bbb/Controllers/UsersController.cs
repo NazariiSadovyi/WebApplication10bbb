@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -40,6 +42,18 @@ namespace WebApplication10bbb.Controllers
             {
                 if (users.UserPassword == UserPassword)
                 {
+                    List<Claim> claims = new List<Claim>
+                    {
+                        new Claim(ClaimTypes.Name, UserName)
+                    };
+
+                    ClaimsIdentity identity = new ClaimsIdentity(claims, "login");
+                    ClaimsPrincipal principal = new ClaimsPrincipal(identity);
+
+                    // sign-in  
+                    await HttpContext.SignInAsync(principal);
+
+
                     return Ok();
                 }
                 else
