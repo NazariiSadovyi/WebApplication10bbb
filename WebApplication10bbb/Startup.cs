@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using WebApplication10bbb.Data;
+using WebApplication10bbb.DB;
 
 namespace WebApplication10bbb
 {
@@ -34,7 +34,7 @@ namespace WebApplication10bbb
             });
 
             string connection = Configuration.GetConnectionString("DefaultConnection");
-            services.AddDbContext<Ternopil_DBContext>(options =>
+            services.AddDbContext<PacmanDBContext>(options =>
                 options.UseSqlServer(connection));
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

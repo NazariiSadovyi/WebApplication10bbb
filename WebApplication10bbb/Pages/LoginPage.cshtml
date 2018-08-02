@@ -70,7 +70,7 @@
             }
 
     .button-panel {
-        margin: 2em 0 0;
+        margin: 1em 0 0;
         width: 100%;
     }
 
@@ -114,6 +114,7 @@
     <h1>Вхід</h1>
     <form method="post">
         <label style="color:forestgreen">@success</label>
+
         <div>
             <input asp-for="UserName" placeholder="Ім'я користувача" style="
                 background: #fafafa;
@@ -142,9 +143,14 @@
                 width: 100%;" />
         <span asp-validation-for="Password" style="color:red"></span>
 
-        <div class="button-panel">
-            <input type="submit" class="button" asp-page-handler="SignIn" title="Увійти" value="Увійти" />
-        </div>
+        @if (Model.Result != null)
+        {
+            <label style="color:red">@Model.Result</label>
+        }
+
+            <div class="button-panel">
+                <input type="submit" class="button" asp-page-handler="SignIn" title="Увійти" value="Увійти" />
+            </div>
     </form>
     <div class="form-footer">
         <form method="post">

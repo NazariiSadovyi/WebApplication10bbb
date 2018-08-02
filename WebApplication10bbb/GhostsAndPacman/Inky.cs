@@ -13,6 +13,7 @@ namespace WebApplication10bbb.GhostsAndPacman
 
         public bool IsMoving = false;
         public bool MovingToHome = false;
+        public bool IsPaused = false;
         public bool PersecutionOrRunaway = true;
         public bool TimerType = false;
         public int position_x = 11;

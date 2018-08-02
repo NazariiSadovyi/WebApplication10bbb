@@ -8,11 +8,12 @@ using System.Threading.Tasks;
 
 namespace WebApplication10bbb.GhostsAndPacman
 {
-    public class Pinky
+    public class Pinky:IDisposable
     {
         private GameMap _gameMap = new GameMap();
 
         public bool IsMoving = false;
+        public bool IsPaused = false;
         public bool MovingToHome = false;
         public bool PersecutionOrRunaway = false;
         public bool TimerType = false;
@@ -50,9 +51,7 @@ namespace WebApplication10bbb.GhostsAndPacman
             PersecutionOrRunawayWatch.Start();
         }
 
-
         int time = 7000;
-        int current_timer;
 
         private void Update_finish_point(object state)
         {
@@ -180,6 +179,11 @@ namespace WebApplication10bbb.GhostsAndPacman
             IsFrightened = false;
             FrightenedTimer.Dispose();
             IsFrightenedWatch.Reset();
+        }
+
+        public void Dispose()
+        {
+           
         }
     }
 }

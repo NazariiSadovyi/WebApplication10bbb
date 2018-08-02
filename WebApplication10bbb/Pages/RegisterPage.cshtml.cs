@@ -6,9 +6,12 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using WebApplication10bbb.DB;
 
 namespace WebApplication10bbb.Pages
 {
@@ -23,58 +26,63 @@ namespace WebApplication10bbb.Pages
         [Required(ErrorMessage = "Поле Пароль обов'язкове.")]
         [RegularExpression("^((?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])|(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[^a-zA-Z0-9])|(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[^a-zA-Z0-9])|(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^a-zA-Z0-9])).{8,}$", ErrorMessage = "Паролі повинні містити принаймні 8 символів і містити в 3 з 4 наступних: верхній регістр (AZ), нижній регістр (az), число (0 -9) та спеціальний символ (наприклад !@#$%^&*)")]
         public string Password { get; set; }
+              
 
-
-
-        //[BindProperty(Name = "Password2"), Required(ErrorMessage = "Поле Повторіть пароль обов'язкове.")]        
-        //public string Password2 { get; set; }
+        [BindProperty(Name = "Password2"), Required(ErrorMessage = "Поле Повторіть пароль обов'язкове.")]        
+        public string Password2 { get; set; }
 
         public string Result = null;
 
+        private readonly PacmanDBContext _context;
+        public RegisterPageModel(PacmanDBContext pacmanDBContext)
+        {
+            _context = pacmanDBContext;
+        }
         public void OnGet()
         {
-
+           
         }
 
         public async Task<IActionResult> OnPost()
         {
-            
-
             if (!ModelState.IsValid)
             {
                 return Page();
+                               
             }
             else
             {
-             
-                var client = new HttpClient();
-
-                string user = UserName;
-                string password = Password;
-
-                var request = new HttpRequestMessage(HttpMethod.Post, "https://localhost:44379/api/Users");
-
-                //request.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-
-                request.Headers.Add("UserName", user);
-                request.Headers.Add("UserPassword", password);
-
-                var response = await client.SendAsync(request);
-
-
-                //var friends = JsonConvert.DeserializeObject<List<FriendModel>>(json);
-                if (response.IsSuccessStatusCode)
+                if (Password != Password2)
                 {
-                    return Redirect("/LoginPage/" + UserName);
-                }
-                else
-                {                    
-                    Result = "Користувач з таким іменем вже зареєстрований";
-                     
+                    Result = "Паролі не збігаються";
                     return Page();
                 }
+
+                _context.Users.Add(new Users { UserName = UserName, UserPassword = Password });
+                try
+                {
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateException)
+                {
+                    if (UsersExists(UserName))
+                    {
+                        Result = "Користувач з таким іменем вже зареєстрований";
+
+                        return Page();
+                    }
+                   
+                }
+
+                return Redirect("/LoginPage/" + UserName);
+              
                 
             }          
+        }
+
+        private bool UsersExists(string id)
+        {
+            return _context.Users.Any(e => e.UserName == id);
         }
     }
 }

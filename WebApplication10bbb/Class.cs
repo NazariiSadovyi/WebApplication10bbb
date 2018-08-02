@@ -10,28 +10,25 @@ using WebApplication10bbb.MapGraph;
 
 namespace WebApplication10bbb
 {
-    public class Class:IDisposable
+    public class Class
     {
         public List<string> clients = new List<string>();
-
+        
         public string UserName;
-
-        const int height = 29;
-        const int width = 26;
 
         private GameMap _gameMap = new GameMap();
 
         private Pacman _pacman = new Pacman();
+      
+        private GhostBlinky blinky;
+        
+        private GhostPinky pinky;
+      
+        private GhostClyde clyde;
+ 
+        private GhostInky inky;
 
-        private Blinky blinky;
-
-        private Pinky pinky;
-
-        private Clyde clyde;
-
-        private Inky inky;
-
-        private Timer PacmanTimer, ClydeTimer, PinkyTimer, BlinkyTimer, InkyTimer;
+        public Timer PacmanTimer, ClydeTimer, PinkyTimer, BlinkyTimer, InkyTimer;
 
         private bool pause = false;
 
@@ -45,7 +42,6 @@ namespace WebApplication10bbb
         {
             clients.Add(connectionID);
             this.hub = hub;
-           
         }
 
         public Task Move(int move)
@@ -92,12 +88,12 @@ namespace WebApplication10bbb
 
         internal Task StartGame()
         {
-            blinky = new Blinky();
-            pinky = new Pinky();
-            clyde = new Clyde();
-            inky = new Inky();
+            blinky = new GhostBlinky();            
+            pinky = new GhostPinky();
+            clyde = new GhostClyde();
+            inky = new GhostInky();
 
-            start_time = DateTime.Now;
+
             PacmanTimer = new Timer(UpdatePacman, null, 0, 100);
             InkyTimer = new Timer(UpdateInky, null, 0, 120);
             ClydeTimer = new Timer(UpdateCloudy, null, 0, 120);
@@ -108,6 +104,43 @@ namespace WebApplication10bbb
         }
 
         private int score;
+        private int ghost_start_score;
+        private int bonus_score = 100;
+        private int sum_bonus_score = 0;
+
+        private void StopGhostMoving(Ghost ghost)
+        {
+            if (ghost.IsMoving == true)
+            {
+                ghost.IsMoving = false;
+                ghost.IsPaused = true;
+                if (ghost.IsFrightened)
+                {
+                    ghost.StopFrightened();
+                }
+                else
+                {
+                    ghost.StopPersecutionOrRunaway();
+                }
+            }
+        }
+
+        private void ContinGhostMoving(Ghost ghost)
+        {
+            if (ghost.IsPaused == true)
+            {
+                ghost.IsMoving = true;
+                ghost.IsPaused = false;
+                if (ghost.IsFrightened)
+                {
+                    ghost.ContinuousFrightened();
+                }
+                else
+                {
+                    ghost.ContinuousMoving();
+                }
+            }
+        }
 
         internal Task PauseGame()
         {
@@ -115,51 +148,17 @@ namespace WebApplication10bbb
             {
                 _pacman.last_move_X = _pacman.move_X;
                 _pacman.last_move_Y = _pacman.move_Y;
-                              
+
                 _pacman.move_X = 0;
                 _pacman.move_Y = 0;
+                  
+                StopGhostMoving(blinky);
 
-                blinky.IsMoving = false;
-                if (blinky.IsFrightened)
-                {
-                    blinky.StopFrightened();
-                }
-                else
-                {
-                    blinky.StopPersecutionOrRunaway();
-                }
+                StopGhostMoving(pinky);
 
-                pinky.IsMoving = false;
-                if (pinky.IsFrightened)
-                {
-                    pinky.StopFrightened();
-                }
-                else
-                {
-                    pinky.StopPersecutionOrRunaway();
-                }
+                StopGhostMoving(clyde);
 
-
-                inky.IsMoving = false;
-                if (inky.IsFrightened)
-                {
-                    inky.StopFrightened();
-                }
-                else
-                {
-                    inky.StopPersecutionOrRunaway();
-                }
-
-
-                clyde.IsMoving = false;
-                if (clyde.IsFrightened)
-                {
-                    clyde.StopFrightened();
-                }
-                else
-                {
-                    clyde.StopPersecutionOrRunaway();
-                }
+                StopGhostMoving(inky);
 
                 pause = true;
             }
@@ -168,46 +167,14 @@ namespace WebApplication10bbb
                 pause = false;
                 _pacman.move_X = _pacman.last_move_X;
                 _pacman.move_Y = _pacman.last_move_Y;
+                           
+                ContinGhostMoving(blinky);
+                         
+                ContinGhostMoving(pinky);
 
-                blinky.IsMoving = true;
-                if (blinky.IsFrightened)
-                {
-                    blinky.ContinuousFrightened();
-                }
-                else
-                {
-                    blinky.ContinuousMoving();
-                }
+                ContinGhostMoving(clyde);
 
-                pinky.IsMoving = true;
-                if (pinky.IsFrightened)
-                {
-                    pinky.ContinuousFrightened();
-                }
-                else
-                {
-                    pinky.ContinuousMoving();
-                }
-
-                inky.IsMoving = true;
-                if (inky.IsFrightened)
-                {
-                    inky.ContinuousFrightened();
-                }
-                else
-                {
-                    inky.ContinuousMoving();
-                }
-
-                clyde.IsMoving = true;
-                if (clyde.IsFrightened)
-                {
-                    clyde.ContinuousFrightened();
-                }
-                else
-                {
-                    clyde.ContinuousMoving();
-                }
+                ContinGhostMoving(inky);
 
             }
 
@@ -216,36 +183,69 @@ namespace WebApplication10bbb
 
         List<string> ited_coin = new List<string>();
 
-        DateTime start_time;
-        DateTime current_time;
-        
-        bool m = true;
-       
+        private void CheckPacmanTouchGhost(Ghost ghost)
+        {
+            if ((_pacman.position_x == ghost.position_x) && (_pacman.position_y == ghost.position_y))
+            {
+                if (ghost.IsFrightened == true)
+                {
+                    ghost.FrightenedChange(new object());
+                    ghost.MovingToHome = true;
+                    bonus_score = bonus_score * 2;
+                    sum_bonus_score += bonus_score;
+                    hub.Clients.Clients(clients).SendAsync("Eated_ghost", ghost.position_x, ghost.position_y, bonus_score);
+                }
+                else if ((ghost.IsFrightened == false) && (ghost.MovingToHome == false))
+                {
+                    _pacman.position_x = 1;
+                    _pacman.position_y = 1;
+                    _pacman.move_X = 0;
+                    _pacman.move_Y = 1;
+                }
 
+            }
+        }
+
+        private void MakeGhostFrightened(Ghost ghost, Timer timer)
+        {
+            if (ghost.IsMoving)
+            {
+                if (ghost.IsFrightened)
+                {
+                    ghost.FrightenedChange(new object());
+                    ghost.Frightened();
+
+                }
+                else
+                {
+                    ghost.Frightened();
+                    timer.Change(120, 300);
+                }
+            }
+        }
 
         private void UpdatePacman(object state)
         {
-            DateTime moment = DateTime.Now;
-
             if (pause == false)
             {
                 if (_gameMap.CoinMap[_pacman.position_x , _pacman.position_y ] == 'c')
                 {
                     _gameMap.CoinMap[_pacman.position_x, _pacman.position_y] = ' ';
                     score++;
-                    if (score == 1)
+                    ghost_start_score++;
+                    if (ghost_start_score == 1)
                     {
                         blinky.StartMoving();
                     }
-                    if ((score == 10) && (pinky.IsMoving == false))
+                    if ((ghost_start_score == 10) && (pinky.IsMoving == false))
                     {
                         pinky.StartMoving();
                     }
-                    if ((score == 30) && (clyde.IsMoving == false))
+                    if ((ghost_start_score == 20) && (clyde.IsMoving == false))
                     {
                         clyde.StartMoving();
                     }
-                    if ((score == 30) && (inky.IsMoving == false))
+                    if ((ghost_start_score == 30) && (inky.IsMoving == false))
                     {
                         inky.StartMoving();
                     }
@@ -261,62 +261,15 @@ namespace WebApplication10bbb
                 else if (_gameMap.CoinMap[_pacman.position_x, _pacman.position_y] == 'k')
                 {
                     //score = score + 10;
-                    if (blinky.IsFrightened)
-                    {
-                        blinky.FrightenedChange(new object());
-                        blinky.Frightened();
-                        
-                    }
-                    else
-                    {
-                        blinky.Frightened();
-                        BlinkyTimer.Change(120, 300);
-                    }
+                    bonus_score = 100;
                     
-                    if (pinky.IsMoving)
-                    {
-                        if (pinky.IsFrightened)
-                        {
-                            pinky.FrightenedChange(new object());
-                            pinky.Frightened();
-                        }
-                        else
-                        {
-                            pinky.Frightened();
-                            PinkyTimer.Change(120, 300);
-                        }
-                        
-                    }
+                    MakeGhostFrightened(blinky, BlinkyTimer);
+                    
+                    MakeGhostFrightened(pinky, PinkyTimer);
 
-                    if (clyde.IsMoving)
-                    {
-                        if (clyde.IsFrightened)
-                        {
-                            clyde.FrightenedChange(new object());
-                            clyde.Frightened();
-                        }
-                        else
-                        {
-                            clyde.Frightened();
-                            ClydeTimer.Change(120, 300);
-                        }
-                       
-                    }
+                    MakeGhostFrightened(clyde, ClydeTimer);
 
-                    if (inky.IsMoving)
-                    {
-                        if (inky.IsFrightened)
-                        {
-                            inky.FrightenedChange(new object());
-                            inky.Frightened();
-                        }
-                        else
-                        {
-                            inky.Frightened();
-                            InkyTimer.Change(120, 300);
-                        }
-                        
-                    }
+                    MakeGhostFrightened(inky, InkyTimer);
 
                     _gameMap.CoinMap[_pacman.position_x, _pacman.position_y] = ' ';
                 }
@@ -329,77 +282,20 @@ namespace WebApplication10bbb
                     _pacman.position_y += _pacman.move_Y;
                 }
 
-                // перевірка чи пакмен не натрапив на блінкі
-                if ((_pacman.position_x == blinky.position_x) && (_pacman.position_y == blinky.position_y))
-                {
-                    if (blinky.IsFrightened == true)
-                    {
-                        blinky.FrightenedChange(new object());
-                        blinky.MovingToHome = true;
-                    }
-                    else if ((blinky.IsFrightened == false) && (blinky.MovingToHome == false))
-                    {
-                        _pacman.position_x = 1;
-                        _pacman.position_y = 1;
-                        _pacman.move_X = 0;
-                        _pacman.move_Y = 1;
-                    }
-                }
+                // перевірка чи пакмен не натрапив на блінкі            
+                CheckPacmanTouchGhost(blinky);
 
-                // перевірка чи пакмен не натрапив на пінкі
-                if ((_pacman.position_x == pinky.position_x) && (_pacman.position_y == pinky.position_y))
-                {
-                    if (pinky.IsFrightened == true)
-                    {
-                        pinky.FrightenedChange(new object());
-                        pinky.MovingToHome = true;
-                    }
-                    else if ((pinky.IsFrightened == false) && (pinky.MovingToHome == false))
-                    {
-                        _pacman.position_x = 1;
-                        _pacman.position_y = 1;
-                        _pacman.move_X = 0;
-                        _pacman.move_Y = 1;
-                    }
-                }
+                // перевірка чи пакмен не натрапив на пінкі             
+                CheckPacmanTouchGhost(pinky);
 
                 // перевірка чи пакмен не натрапив на клуді
-                if ((_pacman.position_x == clyde.position_x) && (_pacman.position_y == clyde.position_y))
-                {
-                    if (clyde.IsFrightened == true)
-                    {
-                        clyde.FrightenedChange(new object());
-                        clyde.MovingToHome = true;
-                    }
-                    else if ((clyde.IsFrightened == false) && (clyde.MovingToHome == false))
-                    {
-                        _pacman.position_x = 1;
-                        _pacman.position_y = 1;
-                        _pacman.move_X = 0;
-                        _pacman.move_Y = 1;
-                    }
-                }
+                CheckPacmanTouchGhost(clyde);
 
-                if ((_pacman.position_x == inky.position_x) && (_pacman.position_y == inky.position_y))
-                {
-                    if (inky.IsFrightened == true)
-                    {
-                        inky.FrightenedChange(new object());
-                        inky.MovingToHome = true;
-                    }
-                    else if ((inky.IsFrightened == false) && (inky.MovingToHome == false))
-                    {
-                        _pacman.position_x = 1;
-                        _pacman.position_y = 1;
-                        _pacman.move_X = 0;
-                        _pacman.move_Y = 1;
-                    }
-                }
+                // перевірка чи пакмен не натрапив на інкі
+                CheckPacmanTouchGhost(inky);
+                                
 
-
-                DateTime moment2 = DateTime.Now;
-
-                hub.Clients.Clients(clients).SendAsync("ChangePacmanPosition", _pacman.position_x, _pacman.position_y, score * 10, 1);
+                hub.Clients.Clients(clients).SendAsync("ChangePacmanPosition", _pacman.position_x, _pacman.position_y, score * 10 + sum_bonus_score);
 
             }
 
@@ -453,7 +349,19 @@ namespace WebApplication10bbb
                                 inky.pacman_position_plus_two_y = _pacman.position_y + _pacman.move_Y + _pacman.move_Y;
                             }
                         }
-                        catch { }
+                        catch
+                        {
+                            if (_gameMap.map[_pacman.position_x + _pacman.move_X, _pacman.position_y + _pacman.move_Y] != 'w')
+                            {
+                                inky.pacman_position_plus_two_x = _pacman.position_x + _pacman.move_X;
+                                inky.pacman_position_plus_two_y = _pacman.position_y + _pacman.move_Y;
+                            }
+                            else
+                            {
+                                inky.pacman_position_plus_two_x = _pacman.position_x;
+                                inky.pacman_position_plus_two_y = _pacman.position_y;
+                            }
+                        }
 
                         if (inky.pacman_position_plus_two_x <= blinky.position_x)
                         {
@@ -698,11 +606,15 @@ namespace WebApplication10bbb
 
                     // визначення напрямку через граф
                     if (_gameMap.map[inky.position_x, inky.position_y] == 'c')
-                    {                        
-                        var qwerty = new Init().Inite2(inky.finish_point_x, inky.finish_point_y, inky.position_x, inky.position_y, inky.move_X, inky.move_Y);
-
-                        inky.move_X = qwerty.Item1;
-                        inky.move_Y = qwerty.Item2;
+                    {
+                        try
+                        {
+                            var qwerty = new Init().Inite2(inky.finish_point_x, inky.finish_point_y, inky.position_x, inky.position_y, inky.move_X, inky.move_Y);
+                            inky.move_X = qwerty.Item1;
+                            inky.move_Y = qwerty.Item2;
+                        }
+                        catch { }
+                        
                           
                     }
 
@@ -725,21 +637,8 @@ namespace WebApplication10bbb
                 }
 
                 // перевірка чи гост не зловив пакмена
-                if ((_pacman.position_x == inky.position_x) && (_pacman.position_y == inky.position_y))
-                {
-                    if (inky.IsFrightened == true)
-                    {
-                        inky.FrightenedChange(new object());
-                        inky.MovingToHome = true;
-                    }
-                    else if ((inky.IsFrightened == false) && (inky.MovingToHome == false))
-                    {
-                        _pacman.position_x = 1;
-                        _pacman.position_y = 1;
-                        _pacman.move_X = 1;
-                        _pacman.move_Y = 0;
-                    }
-                }
+                CheckPacmanTouchGhost(inky);
+
 
                 hub.Clients.Clients(clients).SendAsync("ChangeInkyPosition", inky.position_x, inky.position_y, inky.IsFrightened, inky.MovingToHome);
             }
@@ -771,7 +670,7 @@ namespace WebApplication10bbb
                 {
                     if (clyde.PersecutionOrRunaway)
                     {
-                        //рух в кут в точку розбігання
+                        //рух в кут, в точку розбігання
                         clyde.finish_point_x = clyde.run_point_x;
                         clyde.finish_point_y = clyde.run_point_y;
                     }
@@ -826,21 +725,7 @@ namespace WebApplication10bbb
                 clyde.position_y += clyde.move_Y;
 
                 // перевірка чи клуді не зловив пакмена
-                if ((_pacman.position_x == clyde.position_x) && (_pacman.position_y == clyde.position_y))
-                {
-                    if (clyde.IsFrightened == true)
-                    {
-                        clyde.FrightenedChange(new object());
-                        clyde.MovingToHome = true;
-                    }
-                    else if ((clyde.IsFrightened == false) && (clyde.MovingToHome == false))
-                    {
-                        _pacman.position_x = 1;
-                        _pacman.position_y = 1;
-                        _pacman.move_X = 1;
-                        _pacman.move_Y = 0;
-                    }
-                }
+                CheckPacmanTouchGhost(clyde);
 
                 hub.Clients.Clients(clients).SendAsync("ChangeClydePosition", clyde.position_x, clyde.position_y, clyde.IsFrightened, clyde.MovingToHome);
             }
@@ -923,24 +808,11 @@ namespace WebApplication10bbb
                     pinky.position_y += pinky.move_Y;
                 }
 
-                // перевірка чи пінкі не зловив пакмена
-                if ((_pacman.position_x == pinky.position_x) && (_pacman.position_y == pinky.position_y))
-                {
-                    if (pinky.IsFrightened == true)
-                    {
-                        pinky.FrightenedChange(new object());
-                        pinky.MovingToHome = true;
-                    }
-                    else if ((pinky.IsFrightened == false) && (pinky.MovingToHome == false))
-                    {
-                        _pacman.position_x = 1;
-                        _pacman.position_y = 1;
-                        _pacman.move_X = 1;
-                        _pacman.move_Y = 0;
-                    }
-                }
+                // перевірка чи пінкі не зловив пакмена               
+                CheckPacmanTouchGhost(pinky);
 
-                hub.Clients.Clients(clients).SendAsync("ChangePinkyPosition", pinky.position_x, pinky.position_y, pinky.IsFrightened);
+
+                hub.Clients.Clients(clients).SendAsync("ChangePinkyPosition", pinky.position_x, pinky.position_y, pinky.IsFrightened, pinky.MovingToHome);
             }
         }
 
@@ -999,7 +871,6 @@ namespace WebApplication10bbb
                 }
                 else if (blinky.IsFrightened)
                 {
-                    //BlinkyTimer.Change(300, 300);
                     // блінкі переходить у режим страху: зменшення швидкості, миттєво змінює напрямок, випадково визначає напрямок руху
                     if (_gameMap.map[blinky.position_x, blinky.position_y] == 'c')
                     {
@@ -1017,24 +888,10 @@ namespace WebApplication10bbb
                     blinky.position_y += blinky.move_Y;
                 }
 
-                // перевірка чи гост не зловив пакмена
-                if ((_pacman.position_x == blinky.position_x) && (_pacman.position_y == blinky.position_y))
-                {
-                    if (blinky.IsFrightened == true)
-                    {
-                        blinky.FrightenedChange(new object());
-                        blinky.MovingToHome = true;
-                    }
-                    else if ((blinky.IsFrightened == false) && (blinky.MovingToHome == false))
-                    {
-                        _pacman.position_x = 1;
-                        _pacman.position_y = 1;
-                        _pacman.move_X = 0;
-                        _pacman.move_Y = 1;
-                    }
-                }
+                // перевірка чи пінкі не зловив пакмена     
+                CheckPacmanTouchGhost(blinky);
 
-                hub.Clients.Clients(clients).SendAsync("ChangeBlinkyPosition", blinky.position_x, blinky.position_y, blinky.IsFrightened, blinky.MovingToHome, blinky.PersecutionOrRunawayWatch.ElapsedMilliseconds.ToString(), blinky.IsFrightenedWatch.ElapsedMilliseconds.ToString());
+                hub.Clients.Clients(clients).SendAsync("ChangeBlinkyPosition", blinky.position_x, blinky.position_y, blinky.IsFrightened, blinky.MovingToHome);
             }
         }
         

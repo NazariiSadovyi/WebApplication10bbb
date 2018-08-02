@@ -13,6 +13,7 @@ namespace WebApplication10bbb.GhostsAndPacman
         private GameMap _gameMap = new GameMap();
 
         public bool IsMoving = false;
+        public bool IsPaused = false;
         public bool MovingToHome = false;
         public bool PersecutionOrRunaway = false;
         public bool TimerType = false;
