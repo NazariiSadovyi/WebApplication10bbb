@@ -44,7 +44,7 @@ namespace AspNetCore
             WriteLiteral("\r\n<h2>Login</h2>\r\n");
             EndContext();
             BeginContext(132, 162, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "586b5db9e1a2451aa84975b5a772f29d", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "76ec087eff3344878decfa9b480d84d1", async() => {
                 BeginContext(152, 135, true);
                 WriteLiteral("\r\n    <input type=\"text\" name=\"UserName\" />\r\n    <input type=\"password\" name=\"UserPassword\" />\r\n\r\n    <button type=\"submit\"></button>\r\n");
                 EndContext();

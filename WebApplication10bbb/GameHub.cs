@@ -45,7 +45,7 @@ namespace WebApplication10bbb
 
         public async Task StartGame()
         {
-            await _gameLogic.StartGame(Context.User.Identity.Name);
+            await _gameLogic.StartGame(Context.User.Identity.Name, Context.ConnectionId);
         }
 
     }

@@ -23,22 +23,10 @@ namespace WebApplication10bbb
         internal void Disconnected(string connectionId, string username)
         {
             try
-            {
-                foreach (var item in dict)
-                {
-                    if (item.Key == username)
-                    {                        
-                        if (item.Value.clients.Count == 1)
-                        {
-                            dict.Remove(username);
-                        } 
-                        else
-                        {
-                            item.Value.clients.Remove(connectionId);
-                        }
-                    }
-                }
-
+            {   
+                dict[username].clients.Remove(connectionId);
+                dict[username].PauseGame();
+                
             }
             catch (Exception)
             {
@@ -69,16 +57,18 @@ namespace WebApplication10bbb
 
 
 
-        internal Task StartGame(string username)
-        {
-            foreach (var item in dict)
+        internal Task StartGame(string username, string con_id)
+        {            
+            if (dict[username].IsGameStarted == false)
             {
-                if (item.Key == username)
-                {
-                    item.Value.StartGame();
-                }
+                dict[username].StartGame();
+                dict[username].IsGameStarted = true;
             }
-            
+            else
+            {
+                dict[username].StartNewGame();
+            }
+
             return Task.CompletedTask;
         }
         
@@ -112,6 +102,7 @@ namespace WebApplication10bbb
                     if (item.Key == username)
                     {
                         item.Value.clients.Add(connectionId);
+                        item.Value.ContGameAfterReconect();
                     }
                     else
                     {

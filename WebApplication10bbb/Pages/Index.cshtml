@@ -6,6 +6,8 @@
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <style>
 
 
@@ -69,13 +71,13 @@
     }
 
     #blinky {
-        top: 224px;
-        left: 184px;
+        top: 182px;
+        left: 214px;
         width: 26px;
         height: 26px;
         position: absolute;
-        /*background-color: red;*/
-        /*border-radius: 50%;*/
+        background-size: 26px 26px;
+        background-image: url('images/blinkyright.png');
     }
 
     #inky {
@@ -542,14 +544,13 @@
 
 
 <script src="js/signalr.min.js"></script>
+<script src="hammer.min.js"></script>
+<script src='js/hammer.min.js'></script>
 
 <script>
 
     var item = 16;
-
-
-    //document.getElementById("myContainer").style.backgroundSize = "448px 496px";
-
+    
     var map = [
         [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
         [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
@@ -586,6 +587,26 @@
     ];
 
     var el = document.getElementById('myContainer');
+
+    var mc = new Hammer(el);
+
+    // listen to events...
+    mc.on("panleft panright panup pandown", function (ev) {
+     
+        if (ev.type === "panleft" ) {
+            hubConnection.invoke("MovePacmen", 4);
+        }
+        else if (ev.type === "panright") {
+            hubConnection.invoke("MovePacmen", 6);
+        }
+        else if (ev.type === "panup") {
+            hubConnection.invoke("MovePacmen", 8);
+        }
+        else if (ev.type === "pandown") {
+            hubConnection.invoke("MovePacmen", 2);
+        }       
+        
+    });
 
     function drawWorld() {
     //    el.innerHTML = '';
@@ -632,6 +653,8 @@
     }
 
     let hubUrl = 'https://localhost:44379/stocks';
+    //let hubUrl = 'https://pacmansadoviy.azurewebsites.net/stocks';
+   
     const hubConnection = new signalR.HubConnectionBuilder().withUrl(hubUrl).configureLogging(signalR.LogLevel.Information).build();
 
     hubConnection.start();
@@ -979,9 +1002,33 @@
         previos_clydi.y = clyde_y;
     });
 
-    hubConnection.on("EndGame", function () {
+    hubConnection.on("EndGame",function () {
         alert("You win!");
     });
+
+    hubConnection.on("PacmanLoseLife", async function (life) {
+        var l = document.getElementById("lifes");
+        l.textContent = life;
+
+        await sleep(100);
+
+        document.getElementById("pinky").style.left = '212px';
+        document.getElementById("pinky").style.top = '220px';
+        document.getElementById("pinky").style.backgroundImage = "url('images/pinkyright.png')";
+
+        document.getElementById("inky").style.left = '182px';
+        document.getElementById("inky").style.top = '220px';
+        document.getElementById("inky").style.backgroundImage = "url('images/inkyright.png')";
+
+        document.getElementById("clyde").style.left = '240px';
+        document.getElementById("clyde").style.top = '220px';
+        document.getElementById("clyde").style.backgroundImage = "url('images/cludyright.png')";
+
+    });
+
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
 
     hubConnection.on("Eated_ghost", function (ited_x, ited_y, bonuss_scores) {
 
@@ -1015,26 +1062,46 @@
         //alert("dsfsdf");
 
     });
+
+    hubConnection.on("ContinGameAfterReconnect", function (eated_coin) {
+
+        document.getElementById("circl").style.animationPlayState = 'paused';
+        for (var i = 0; i < eated_coin.length; i = i + 1) {
+            document.getElementById(eated_coin[i]).className = 'ground';            
+        };
+        pauses();
+
+    });
+
     
+
     var p = false;
 
     document.getElementById("pause").addEventListener("click", function (e) {
+        pauses();
+        hubConnection.invoke("Pause");
+    });
+
+    function pauses() {
         if (p) {
             p = false;
-            document.getElementById("pause").textContent = "Unpause";
+            document.getElementById("pause").textContent = "Пауза";
         }
         else {
             p = true;
-            document.getElementById("pause").textContent = "Pause";
+            document.getElementById("pause").textContent = "Продовжити гру";
         }
-        hubConnection.invoke("Pause");
-    });
-    
+    }
+
     function ObjectMove(x, y, px, py, object_id, time) {
 
         var object = document.getElementById(object_id);
 
-        if (py < y) {
+        if ((px != x) && (py != y)) {
+            object.style.top = x * item - 5;
+            object.style.left = y * item - 5;
+         }
+        else if (py < y) {
             var yy = y * item - item;
             object.style.top = x * item - 5;
             var pos = 0;

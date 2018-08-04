@@ -11,6 +11,7 @@ namespace WebApplication10bbb.GhostsAndPacman
         {
             run_point_x = 1;
             run_point_y = 1;
+            initial_score_limit = 10;
         }
     }
 }

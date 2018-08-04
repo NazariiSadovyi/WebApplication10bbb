@@ -33,7 +33,9 @@ namespace WebApplication10bbb.GhostsAndPacman
         public int last_move_X; // останній напрямок руху (для паузи)
         public int last_move_Y;
 
-        private Timer PersecutionOrRunawayTimer; // таймер який режиму руху             
+        public int initial_score_limit;
+
+        public Timer PersecutionOrRunawayTimer; // таймер який режиму руху             
 
         public Stopwatch PersecutionOrRunawayWatch = new Stopwatch(); // секундомір режиму руху (для паузи)
         public Stopwatch IsFrightenedWatch = new Stopwatch(); // секундомір режиму страху (для паузи)
@@ -77,7 +79,6 @@ namespace WebApplication10bbb.GhostsAndPacman
         {
             PersecutionOrRunawayTimer.Dispose();
             PersecutionOrRunawayWatch.Stop();
-
         }
 
         // продовження таймера в режимі розбігання\переслідування
@@ -96,7 +97,7 @@ namespace WebApplication10bbb.GhostsAndPacman
 
         }
           
-        Timer FrightenedTimer;
+        public Timer FrightenedTimer;
 
         // перехід у режим страху і розворот у протилежну сторону
         public void Frightened()
