@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,6 +16,8 @@ namespace WebApplication10bbb
         public List<string> clients = new List<string>();
 
         public string UserName;
+
+        public Stopwatch stopwatch = new Stopwatch();
 
         public bool IsGameStarted = false;
 
@@ -124,6 +127,8 @@ namespace WebApplication10bbb
             blinky.StartMoving();
 
             ghost_start_score = 0;
+
+            _gameMap.CoinMap = _gameMap.DefaultCoinMap;
 
             return Task.CompletedTask;
         }
@@ -970,30 +975,35 @@ namespace WebApplication10bbb
         
         public void Dispose()
         {
-            BlinkyTimer.Dispose();
-            PinkyTimer.Dispose();
-            ClydeTimer.Dispose();
-            InkyTimer.Dispose();
+            try
+            {
+                BlinkyTimer.Dispose();
+                PinkyTimer.Dispose();
+                ClydeTimer.Dispose();
+                InkyTimer.Dispose();
 
-            blinky.PersecutionOrRunawayTimer.Dispose();
-            blinky.FrightenedTimer.Dispose();
-            blinky.PersecutionOrRunawayWatch.Stop();
-            blinky.IsFrightenedWatch.Stop();
+                blinky.PersecutionOrRunawayTimer.Dispose();
+                blinky.FrightenedTimer.Dispose();
+                blinky.PersecutionOrRunawayWatch.Stop();
+                blinky.IsFrightenedWatch.Stop();
 
-            pinky.PersecutionOrRunawayTimer.Dispose();
-            pinky.FrightenedTimer.Dispose();
-            pinky.PersecutionOrRunawayWatch.Stop();
-            pinky.IsFrightenedWatch.Stop();
+                pinky.PersecutionOrRunawayTimer.Dispose();
+                pinky.FrightenedTimer.Dispose();
+                pinky.PersecutionOrRunawayWatch.Stop();
+                pinky.IsFrightenedWatch.Stop();
 
-            inky.PersecutionOrRunawayTimer.Dispose();
-            inky.FrightenedTimer.Dispose();
-            inky.PersecutionOrRunawayWatch.Stop();
-            inky.IsFrightenedWatch.Stop();
+                inky.PersecutionOrRunawayTimer.Dispose();
+                inky.FrightenedTimer.Dispose();
+                inky.PersecutionOrRunawayWatch.Stop();
+                inky.IsFrightenedWatch.Stop();
 
-            clyde.PersecutionOrRunawayTimer.Dispose();
-            clyde.FrightenedTimer.Dispose();
-            clyde.PersecutionOrRunawayWatch.Stop();
-            clyde.IsFrightenedWatch.Stop();
+                clyde.PersecutionOrRunawayTimer.Dispose();
+                clyde.FrightenedTimer.Dispose();
+                clyde.PersecutionOrRunawayWatch.Stop();
+                clyde.IsFrightenedWatch.Stop();
+            }
+            catch
+            { }
         }
     }
 }

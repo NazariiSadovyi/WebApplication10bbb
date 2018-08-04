@@ -67,7 +67,10 @@ namespace WebApplication10bbb.GhostsAndPacman
             else
             {
                 PersecutionOrRunaway = true;
-                PersecutionOrRunawayTimer.Change(time, 0);
+                if (PersecutionOrRunawayTimer != null)
+                {
+                    PersecutionOrRunawayTimer.Change(time, 0);
+                }
                 PersecutionOrRunawayWatch.Restart();
                 time = 20000;
             }

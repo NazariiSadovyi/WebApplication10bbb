@@ -12,13 +12,8 @@ namespace WebApplication10bbb
 {
     public class GameLogic
     {
-        public List<string> clients = new List<string>();
 
-        private GameMap _gameMap = new GameMap();
-
-        private Pacman _pacman = new Pacman();
-
-        private Blinky blinky = new Blinky();
+        Timer UserRemoveTimer;
 
         internal void Disconnected(string connectionId, string username)
         {
@@ -26,6 +21,7 @@ namespace WebApplication10bbb
             {   
                 dict[username].clients.Remove(connectionId);
                 dict[username].PauseGame();
+                dict[username].stopwatch.Restart();
                 
             }
             catch (Exception)
@@ -35,11 +31,31 @@ namespace WebApplication10bbb
            
         }
 
+        private void DeleteUser(object state)
+        {
+            if (dict != null)
+            {
+                try
+                {
+                    foreach (var item in dict)
+                    {
+                        if ((item.Value.clients.Count == 0) && (item.Value.stopwatch.ElapsedMilliseconds > 50000))
+                        {
+                            dict[item.Key].Dispose();
+                            dict.Remove(item.Key);
+                        }
+                    }
+                }
+                catch { }
+            }
+        }
+
         private IHubContext<GameHub> Hub { get; set; }            
 
         public GameLogic(IHubContext<GameHub> hub)
         {
             Hub = hub;
+            UserRemoveTimer = new Timer(DeleteUser, null, 60000, 60000);
         }
 
         internal Task Move(int move,string username)
@@ -63,10 +79,12 @@ namespace WebApplication10bbb
             {
                 dict[username].StartGame();
                 dict[username].IsGameStarted = true;
+                dict[username].stopwatch.Stop();
             }
             else
             {
                 dict[username].StartNewGame();
+                dict[username].stopwatch.Stop();
             }
 
             return Task.CompletedTask;
@@ -97,18 +115,21 @@ namespace WebApplication10bbb
             }
             else
             {
-                foreach (var item in dict)
+                try
                 {
-                    if (item.Key == username)
+                   
+                    if (dict.ContainsKey(username))
                     {
-                        item.Value.clients.Add(connectionId);
-                        item.Value.ContGameAfterReconect();
+                        dict[username].clients.Add(connectionId);
+                        dict[username].ContGameAfterReconect();
                     }
                     else
                     {
                         dict.Add(username, new Class(connectionId, Hub));
                     }
+                    
                 }
+                catch { }
             }
             
         }

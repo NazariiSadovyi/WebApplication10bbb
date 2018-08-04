@@ -239,7 +239,7 @@ namespace AspNetCore
             ");
             EndContext();
             BeginContext(4960, 176, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "e87ec83fc6c246c89ab5f0b2e19a11e0", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1062b9766111486bbd913086fdfc9939", async() => {
                 BeginContext(4980, 149, true);
                 WriteLiteral("\r\n                <button type=\"submit\" style=\"background-color:transparent; padding:10px; font-size: 12px; border:none\">Вихід</button>\r\n            ");
                 EndContext();
