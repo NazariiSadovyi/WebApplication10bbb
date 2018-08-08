@@ -21,7 +21,6 @@ c:\users\назар\source\repos\WebApplication10bbb\WebApplication10bbb\obj\Deb
 c:\users\назар\source\repos\WebApplication10bbb\WebApplication10bbb\obj\Debug\netcoreapp2.1\WebApplication10bbb.pdb
 c:\users\назар\source\repos\WebApplication10bbb\WebApplication10bbb\obj\Debug\netcoreapp2.1\WebApplication10bbb.csproj.CopyComplete
 C:\Users\Назар\source\repos\WebApplication10bbb\WebApplication10bbb\obj\Debug\netcoreapp2.1\WebApplication10bbb.csprojAssemblyReference.cache
-C:\Users\Назар\source\repos\WebApplication10bbb\WebApplication10bbb\obj\Debug\netcoreapp2.1\Razor\Pages\test.g.cshtml.cs
 C:\Users\Назар\source\repos\WebApplication10bbb\WebApplication10bbb\obj\Debug\netcoreapp2.1\Razor\Pages\LoginPage.g.cshtml.cs
 C:\Users\Назар\source\repos\WebApplication10bbb\WebApplication10bbb\obj\Debug\netcoreapp2.1\Razor\Pages\RegisterPage.g.cshtml.cs
 C:\Users\Назар\source\repos\WebApplication10bbb\WebApplication10bbb\obj\Debug\netcoreapp2.1\Razor\Pages\Shared\_ValidationScriptsPartial.g.cshtml.cs

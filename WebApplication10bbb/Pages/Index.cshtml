@@ -13,6 +13,8 @@
 
     html {
         height: 100%;
+        overflow:hidden;
+        margin: 0;
         /*background-image: linear-gradient(to right top, #3498db 0%, #3498db 100%);*/
     }
 
@@ -24,6 +26,7 @@
     }
 
         nav ul {
+            padding: 0px;
             text-align: center;
             background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.2) 25%, rgba(255, 255, 255, 0.2) 75%, rgba(255, 255, 255, 0) 100%);
             box-shadow: 0 0 25px rgba(0, 0, 0, 0.1), inset 0 0 1px rgba(255, 255, 255, 0.6);
@@ -52,12 +55,14 @@
     #myContainer {
         width: 448px;
         height: 496px;
-        
+        margin: 0 auto;
+        margin-top: 50px;
         background-image: url('images/wallpacman2.jpg');
         background-size: cover;
         position: relative;
     }
 
+   
     #pacman {
         top: 16px;
         left: 16px;
@@ -98,6 +103,8 @@
         background-image: url('images/pinkyright.png');
     }
 
+
+
     #clyde {
         top: 44.3548387%;
         left: 53.5714286%;
@@ -107,6 +114,18 @@
         background-size: contain;
         background-image: url('images/cludyright.png');
     }
+
+    .fruit {
+        margin-left: -2.45535714%;
+        margin-top: -1.71774194%;
+        width: 5.80357142857%;
+        height: 5.24193548387%;
+        position: absolute;
+        background-repeat:no-repeat;
+        background-size: contain;
+        background-image: url('images/Cherry.png');
+    }
+
 
     .coin {
         width: 0.892857143%;
@@ -129,6 +148,7 @@
         position: absolute;
         background-color: mediumblue;
         border-radius: 50%;
+
     }
 
     table {
@@ -145,7 +165,7 @@
         position: absolute;
     }
 
-    #pacmann {         
+    #pacmann {
         width: 100%;
         height: 100%;
     }
@@ -153,7 +173,7 @@
         #pacmann circle {
             stroke: yellow;
             stroke-width: 50%;
-            fill: none;             
+            fill: none;
             transform-origin: center;
             animation: chomp 0.15s linear infinite alternate;
             animation-play-state: paused;
@@ -172,7 +192,7 @@
 
 </style>
 
-<nav>
+@*<nav>
     <ul>
         <li>
             <button id="sendBtn" type="submit" style="background-color:transparent; padding:10px; font-size: 12px; border:none">Нова гра</button>
@@ -189,7 +209,7 @@
             </form>
         </li>
     </ul>
-</nav>
+</nav>*@
 <div id="myContainer">
 
     <br><div id="1o1" class="coin" style="top:4.435483870967742%; left:4.910714285714286%"></div>
@@ -316,11 +336,11 @@
 
 
 
-    <div style="position: absolute;top:496px; left:16px">
+    <div style="position: absolute;bottom:100%; left:3.57142857%">
         <label style="font-size:medium;">Score: </label>
         <label id="score" style="font-size:medium">0</label>
     </div>
-    <div style="position: absolute;top:496px; left:374px">
+    <div style="position: absolute;bottom:100%; left:50.4821429%">
         <label style="font-size:medium;">Lifes: </label>
         <label id="lifes" style="font-size:medium">3</label>
     </div>
@@ -329,26 +349,69 @@
             <circle id="circl" cx="50%" cy="50%" r="25%"></circle>
         </svg>
     </div>
-    <div id="blinky" ></div>
+    <div id="blinky"></div>
     <div id="pinky"></div>
     <div id="clyde"></div>
     <div id="inky"></div>
     <div id="bonus_score" style="width: 48px; height: 16px;position: absolute; visibility:hidden;">
         <label id="bonus_label" style="font-size:medium"></label>
     </div>
+    <div style="width: 70px; height: 16px;position: absolute; top:100%; visibility:visible;">
+        <label id="connection_state" style="font-size:medium"></label>
+    </div>
 
 
+    <label id="count" style="font-size:4vw;color:black;position: absolute; background-color:white;
+            top:40%;left:35%; text-align:center; width:30%"></label>
+
+    <div style="position: absolute;bottom:100%; right:2%; width:18%">
+        <button id="pause" type="submit" style="background-color:transparent;font-size:medium; width:100%; font-size: 12px; border:none">Пауза</button>
+    </div>
+
+    <div id="menu" style="text-align:center;align-items:center; border-radius:10%; top:15%; visibility:visible; left:25%; height:70%; width:50%; background-color:white; position:absolute">
+        <button id="sendBtn" style="margin-top:5%;width:100%; background-color:transparent; border:none">Нова гра</button>
+        <button id="" style="margin-top:5%;width:100%; background-color:transparent; border:none">Продовжити гру</button>
+        <button id="" style="margin-top:5%;width:100%; background-color:transparent; border:none">Статистика</button>
+        <button id="" style="margin-top:5%;width:100%; background-color:transparent; border:none">Про автора</button>
+        <form method="Post">
+            <button type="submit" style="background-color:transparent; padding:10px; font-size: 12px; border:none">Вихід</button>
+        </form>
+    </div>
+    <div id="end_game" style="align-items:center; top:15%; visibility:hidden; left:25%; height:70%; width:50%; background-color:white; position:absolute">
+        <div style="text-align:center;margin-top:5%">
+          
+            <label style="font-size:1.2vw;">You score: </label>
+            <br />
+            <label id="EndGameScore" style="font-size:1.2vw;">1500</label>
+        </div>
+
+        <div style="text-align:center;font-size:1.2vw;margin-top:5%">
+            <label style="">Найкращі рахунки:</label>
+            <ol>
+                <li id="user_best_1">-</li>
+                <li id="user_best_2">-</li>
+                <li id="user_best_3">-</li>
+                <li id="user_best_4">-</li>
+                <li id="user_best_5">-</li>
+                <li id="user_best_6">-</li>
+                <li id="user_best_7">-</li>
+                <li id="user_best_8">-</li>
+                <li id="user_best_9">-</li>
+                <li id="user_best_10">-</li>
+            </ol>
+        </div>
+        <div style=" display: flex;justify-content: center;font-size:1.2vw">
+            <button id="sendBtn2" style="width:100%; background-color:transparent; border:none">Нова гра</button>
+            <button style="width:100%; background-color:transparent; border:none">Меню</button>
+        </div>
+    </div>
 
 </div>
 
-<p>
-    <textarea id="tf1"></textarea>
-    <textarea id="tf2"></textarea>
-</p>
 
 
-<script src="js/signalr.min.js"></script>
-<script src="hammer.min.js"></script>
+
+<script src='js/signalr.min.js'></script>
 <script src='js/hammer.min.js'></script>
 
 <script>
@@ -408,62 +471,33 @@
         }       
         
     });
-
-    function drawWorld() {
-        
        
-
-        //var yy = 0;
-        //var xx = 0;
-
-        //for (var y = 0; y < 32; y = y + 1) {
-        //    for (var x = 0; x < 28; x = x + 1) {
-        //        if (map[y][x] === 2) {
-        //            yy = (y * item + 6) / 496 * 100;
-        //            xx = (x * item + 6) / 448 * 100;
-        //            el.innerHTML += '<div id="' + y + "o" + x + '" class="coin" style="top:' + yy + '%; left:' + xx + '%"></div>';
-        //        } else if (map[y][x] === 3) {
-        //            yy = (y * item + 4) / 496 * 100;
-        //            xx = (x * item + 4) / 448 * 100;
-        //            el.innerHTML += '<div id="' + y + "o" + x + '" class="energizer" style="top:' + yy + '%; left:' + xx + '%"></div>';
-        //        }
-        //    }
-        //    el.innerHTML += "<br>";
-        //}
-
-    //    el.innerHTML += '<div style="position: absolute;top:' + 496 + 'px; left:16px"> <label style="font-size:medium;">Score: </label><label id="score" style="font-size:medium">' + 0 + '</label></div>';
-
-    //    el.innerHTML += '<div id="pacmannn"><svg id="pacmann"  viewBox="0 0 100 100"><circle id="circl"  cx="50%" cy="50%" r="25%" /></svg></div>';
-
-       
-    //    //el.innerHTML += '<div id="pacman"></div>';
-    //    el.innerHTML += '<div id="blinky"></div>';
-    //    el.innerHTML += '<div id="pinky"></div>';
-    //    el.innerHTML += '<div id="clyde"></div>';
-    //    el.innerHTML += '<div id="inky"></div>';
-    //    el.innerHTML += '<div id="bonus_score" style="width: 48px; top: 16px;left: 16px; border - radius: 50 %; height: 16px;position: absolute; visibility:hidden;">  <label id="bonus_label" style="font-size:medium"></label></div>';
-
-        var w = window.innerWidth;
-        el.style.left = (w - 448) / 2;
-    }
-
-    drawWorld();
-
     current_pacman = {
         x: 1,
         y: 1
     }
 
+    //let hubUrl = 'https://localhost:44325/stocks';
+
     let hubUrl = 'https://localhost:44379/stocks';
     //let hubUrl = 'https://pacmansadoviy.azurewebsites.net/stocks';
    
-    const hubConnection = new signalR.HubConnectionBuilder().withUrl(hubUrl).configureLogging(signalR.LogLevel.Information).build();
+    var hubConnection = new signalR.HubConnectionBuilder().withUrl(hubUrl).configureLogging(signalR.LogLevel.Information).build();
 
-    hubConnection.start();
-        
+    hubConnection.start().catch(
+        err => { document.getElementById('connection_state').textContent = 'Connection faild'; }
+    );
+    
     document.getElementById("sendBtn").addEventListener("click", function (e) {
         hubConnection.invoke("StartGame");
+        document.getElementById('menu').style.visibility = 'hidden'
     });
+
+    document.getElementById("sendBtn2").addEventListener("click", function (e) {
+        hubConnection.invoke("StartGame");
+        document.getElementById('end_game').style.visibility = 'hidden'
+    });
+
 
     document.onkeydown = function (event) {
 
@@ -808,6 +842,12 @@
         alert("You win!");
     });
 
+    hubConnection.on("GameLost", function (score) {
+        document.getElementById('EndGameScore').textContent = score;
+        document.getElementById('end_game').style.visibility = 'visible';
+
+    });
+
     hubConnection.on("PacmanLoseLife", async function (life) {
         var l = document.getElementById("lifes");
         l.textContent = life;
@@ -832,16 +872,17 @@
         return new Promise(resolve => setTimeout(resolve, ms));
     }
 
+    var dist = 8;
+
     hubConnection.on("Eated_ghost", function (ited_x, ited_y, bonuss_scores) {
-
-
+        
         var bonus_score = document.getElementById("bonus_score");
         var bonus_label = document.getElementById("bonus_label");
 
         bonus_label.textContent = bonuss_scores;
 
-        var xxXX = (ited_x * item);
-        var yyXX = (ited_y * item);
+        var xxXX = (ited_x * dist);
+        var yyXX = (ited_y * dist);
 
         bonus_score.style.top = xxXX + 'px';
         bonus_score.style.left = yyXX + 'px';
@@ -865,17 +906,70 @@
 
     });
 
-    hubConnection.on("ContinGameAfterReconnect", function (eated_coin) {
+    hubConnection.on("ContinGameAfterReconnect", function (eated_coin, eated_ener) {
 
         document.getElementById("circl").style.animationPlayState = 'paused';
         for (var i = 0; i < eated_coin.length; i = i + 1) {
             document.getElementById(eated_coin[i]).className = 'ground';            
         };
+        alert(eated_ener[0]);
+        for (var t = 0; t < eated_ener.length; t = t + 1) {
+            document.getElementById(eated_ener[t]).className = 'ground';
+        };
         pauses();
 
     });
+
+
+    hubConnection.on("ResetAllItem", function (eated_coin, eated_ener) {
+               
+        for (var i = 0; i < eated_coin.length; i = i + 1) {
+            document.getElementById(eated_coin[i]).className = 'coin';
+        };
+         
+        for (var t = 0; t < eated_ener.length; t = t + 1) {
+            document.getElementById(eated_ener[t]).className = 'energizer';
+        };    
+
+    });
+
+
+    hubConnection.on("CreateFruit", function (fruit) {
+
+        document.getElementById(fruit).className = 'fruit';
       
+    });
+
+    hubConnection.on("DestroyFruit", function (fruit) {
+
+        document.getElementById(fruit).className = 'ground';
+
+    });
+
     var p = false;
+
+    hubConnection.on("Countdown", function (dataa) {
+        document.getElementById("pinky").style.left = '47.3214286%';
+        document.getElementById("pinky").style.top = '44.3548387%';
+        document.getElementById("pinky").style.backgroundImage = "url('images/pinkyright.png')";
+
+        document.getElementById("inky").style.left = '40.625%';
+        document.getElementById("inky").style.top = '44.3548387%';
+        document.getElementById("inky").style.backgroundImage = "url('images/inkyright.png')";
+
+        document.getElementById("clyde").style.left = '53.5714286%';
+        document.getElementById("clyde").style.top = '44.3548387%';
+        document.getElementById("clyde").style.backgroundImage = "url('images/cludyright.png')";
+        document.getElementById('count').style.visibility = 'visible'; 
+        document.getElementById('count').textContent = dataa;
+        if (dataa === 'hidd') {          
+            document.getElementById('count').style.visibility = 'hidden'; 
+        };
+    });
+
+    window.onload = function () {
+        myFunctionq();
+    };
 
     document.getElementById("pause").addEventListener("click", function (e) {
         pauses();
@@ -892,12 +986,16 @@
             document.getElementById("pause").textContent = "Продовжити гру";
         }
     }
-    
+
+   
+
+
+
     function ObjectMove(x, y, px, py, object_id, tim) {
               
 
         var k = 0.3125;
-        var dist = 8;
+        
         var q = dist * 0.3125;
         var w = 1;
         var poss = dist;
@@ -979,15 +1077,35 @@
     function myFunctionq() {
 
         var w = window.innerWidth;
+        var h = window.innerHeight;
+      
+        if ((w < 362) || (h < 446))
+        { 
+            document.getElementById('myContainer').style.height = '248px';
+            document.getElementById('myContainer').style.width = '224px';
+            dist = 8;
+        } 
+        else if ((w < 496)||(h < 570))
+        {
+            document.getElementById('myContainer').style.height = '372px';
+            document.getElementById('myContainer').style.width = '336px';
+            dist = 12;
+        } else if ((w > 496) || (h> 570))
+        {
+            document.getElementById('myContainer').style.height = '496px';
+            document.getElementById('myContainer').style.width = '448px';
+            dist = 16;
+        }
 
 
-        document.getElementById('tf1').textContent = document.getElementById('myContainer').offsetWidth;
-        document.getElementById('tf2').textContent = w;
-        //if (500 > w) {
-        //    console.log("fsfsdfs");
-        //}
+        //var gg = document.getElementById('myContainer').offsetWidth;
+        //document.getElementById('myContainer').style.left = (w - gg) / 2 - 8;
+
+        //var gf = document.getElementById('myContainer').offsetTop + document.getElementById('myContainer').offsetHeight;;
         
-        document.getElementById('myContainer').style.left = (w - 448) / 2 - 8;
+
+        //document.getElementById('tf1').textContent = gf;
+        //document.getElementById('tf2').textContent = h;
     }
 </script>
 
