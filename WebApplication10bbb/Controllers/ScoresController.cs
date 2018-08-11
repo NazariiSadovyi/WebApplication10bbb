@@ -24,9 +24,18 @@ namespace WebApplication10bbb.Controllers
 
         // GET: api/Scores
         [HttpGet]
-        public IEnumerable<Scores> GetScores()
+        public async Task<List<string>> GetScores()
         {
-            return _context.Scores.ToList().OrderByDescending(a => a.Score).Take(10);
+            var scores = _context.Scores.ToList().OrderByDescending(a => a.Score).Take(10);
+
+            List<string> userscore = new List<string>();
+
+            foreach (var item in scores)
+            {
+                userscore.Add(item.UserName + "  " + item.Score.ToString());
+            }
+
+            return userscore;
         }
 
         // GET: api/Scores/user
@@ -35,27 +44,41 @@ namespace WebApplication10bbb.Controllers
         {
             IEnumerable<Scores> scores = _context.Scores.Where(a => a.UserName == user).OrderByDescending(a => a.Score).Take(10);
 
+            List<string> userscore = new List<string>();
+
+            foreach (var item in scores)
+            {
+                userscore.Add(item.Score.ToString());
+            }
+
             if (scores == null)
             {
                 return NotFound();
             }
 
-            return Ok(scores);
+            return Ok(userscore);
         }
               
 
         // POST: api/Scores
         [HttpPost]
-        public async Task<IEnumerable<Scores>> PostScores([FromBody] Scores scores)
+        public async Task<List<string>> PostScores([FromBody] Scores userscores)
         {
            
-            _context.Scores.Add(scores);
+            _context.Scores.Add(userscores);
 
             await _context.SaveChangesAsync();
 
-            var best_score = _context.Scores.ToList().OrderByDescending(a => a.Score).Take(10);
-                        
-            return best_score;
+            var best_score = _context.Scores.ToList().Where(a => a.UserName == userscores.UserName).OrderByDescending(a => a.Score).Take(10);
+
+            List<string> userscore = new List<string>();
+
+            foreach (var item in best_score)
+            {
+                userscore.Add(item.Score.ToString());
+            }
+
+            return userscore;
         }
 
        

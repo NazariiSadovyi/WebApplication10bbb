@@ -57,6 +57,7 @@
         height: 496px;
         margin: 0 auto;
         margin-top: 50px;
+        font-size:18px;
         background-image: url('images/wallpacman2.jpg');
         background-size: cover;
         position: relative;
@@ -336,14 +337,8 @@
 
 
 
-    <div style="position: absolute;bottom:100%; left:3.57142857%">
-        <label style="font-size:medium;">Score: </label>
-        <label id="score" style="font-size:medium">0</label>
-    </div>
-    <div style="position: absolute;bottom:100%; left:50.4821429%">
-        <label style="font-size:medium;">Lifes: </label>
-        <label id="lifes" style="font-size:medium">3</label>
-    </div>
+    
+
     <div id="pacmannn">
         <svg id="pacmann" viewBox="0 0 100 100">
             <circle id="circl" cx="50%" cy="50%" r="25%"></circle>
@@ -353,41 +348,58 @@
     <div id="pinky"></div>
     <div id="clyde"></div>
     <div id="inky"></div>
+
     <div id="bonus_score" style="width: 48px; height: 16px;position: absolute; visibility:hidden;">
-        <label id="bonus_label" style="font-size:medium"></label>
-    </div>
-    <div style="width: 70px; height: 16px;position: absolute; top:100%; visibility:visible;">
-        <label id="connection_state" style="font-size:medium"></label>
+        <label id="bonus_label" ></label>
     </div>
 
+    <div style="display:flex; bottom:100%; position:absolute; justify-content:space-between; width:100%">
+        <div >
+            <label >Score: </label>
+            <label id="score" >0</label>
+        </div>
+        <div>
+            <label id="level"></label>
+        </div>
+        <div >
+            <label>Lifes: </label>
+            <label id="lifes">3</label>
+        </div>
+    </div>
 
-    <label id="count" style="font-size:4vw;color:black;position: absolute; background-color:white;
+    <div style="width: 70%; height: 16px;position: absolute; top:100%; visibility:visible;">
+        <label id="connection_state" >Встановлення з'єднання ... </label>
+    </div>
+
+    <label id="count" style="color:black;position: absolute; background-color:white;
             top:40%;left:35%; text-align:center; width:30%"></label>
 
-    <div style="position: absolute;bottom:100%; right:2%; width:18%">
-        <button id="pause" type="submit" style="background-color:transparent;font-size:medium; width:100%; font-size: 12px; border:none">Пауза</button>
+    <div style="position: absolute;top:100%; right:2%; width:18%">
+        <button id="pause" type="submit" style="background-color:transparent;width:100%; border:none">Пауза</button>
     </div>
 
     <div id="menu" style="text-align:center;align-items:center; border-radius:10%; top:15%; visibility:visible; left:25%; height:70%; width:50%; background-color:white; position:absolute">
         <button id="sendBtn" style="margin-top:5%;width:100%; background-color:transparent; border:none">Нова гра</button>
-        <button id="" style="margin-top:5%;width:100%; background-color:transparent; border:none">Продовжити гру</button>
-        <button id="" style="margin-top:5%;width:100%; background-color:transparent; border:none">Статистика</button>
+        <button id="pause2" disabled style="margin-top:5%;width:100%; background-color:transparent; border:none">Продовжити гру</button>
+        <button id="scoreBtn" style="margin-top:5%;width:100%; background-color:transparent; border:none">Статистика</button>
         <button id="" style="margin-top:5%;width:100%; background-color:transparent; border:none">Про автора</button>
         <form method="Post">
             <button type="submit" style="background-color:transparent; padding:10px; font-size: 12px; border:none">Вихід</button>
         </form>
     </div>
-    <div id="end_game" style="align-items:center; top:15%; visibility:hidden; left:25%; height:70%; width:50%; background-color:white; position:absolute">
-        <div style="text-align:center;margin-top:5%">
-          
-            <label style="font-size:1.2vw;">You score: </label>
-            <br />
-            <label id="EndGameScore" style="font-size:1.2vw;">1500</label>
-        </div>
 
-        <div style="text-align:center;font-size:1.2vw;margin-top:5%">
-            <label style="">Найкращі рахунки:</label>
-            <ol>
+    <div id="end_game" style="align-items:center; top:12%; visibility:hidden; left:25%; height:76%; width:50%; background-color:white; position:absolute">
+        <div style="text-align:center;margin-top:5%">
+
+            <label >Ваш результат: </label>
+            <br />
+            <label id="EndGameScore"></label>
+        </div>
+        <div style="text-align:center;margin-top:5%">
+            <label style="">Найкращі результати:</label>
+            <label id="load" style="margin-top:5%;">Завантаження...</label>
+            <ol id="ol_list" style="visibility:hidden;margin-top:-5%">
+                <li id="user_best_0">-</li>
                 <li id="user_best_1">-</li>
                 <li id="user_best_2">-</li>
                 <li id="user_best_3">-</li>
@@ -397,97 +409,127 @@
                 <li id="user_best_7">-</li>
                 <li id="user_best_8">-</li>
                 <li id="user_best_9">-</li>
-                <li id="user_best_10">-</li>
             </ol>
         </div>
-        <div style=" display: flex;justify-content: center;font-size:1.2vw">
+        <div style=" display: flex;justify-content: center;">
             <button id="sendBtn2" style="width:100%; background-color:transparent; border:none">Нова гра</button>
-            <button style="width:100%; background-color:transparent; border:none">Меню</button>
+            <button id="open_menu" style="width:100%; background-color:transparent; border:none">Меню</button>
+        </div>
+    </div>
+
+    <div id="score_page" style="align-items:center; top:12%; visibility:hidden; left:10%; height:76%; width:80%; background-color:white; position:absolute">
+        <div style="justify-content:center;display:flex">
+            <div style="padding-left:10px;margin-top:5%;width:50%">
+                <label style="">Найкращі ваші результати:</label>
+                <label id="load2" style="margin-top:5%;">Завантаження...</label>
+                <ol id="ol_list2" style="visibility:hidden;margin-top:-5%;padding-left: 20%;">
+                    <li id="best_0">-</li>
+                    <li id="best_1">-</li>
+                    <li id="best_2">-</li>
+                    <li id="best_3">-</li>
+                    <li id="best_4">-</li>
+                    <li id="best_5">-</li>
+                    <li id="best_6">-</li>
+                    <li id="best_7">-</li>
+                    <li id="best_8">-</li>
+                    <li id="best_9">-</li>
+                </ol>
+            </div>
+            <div style="margin-top:5%; width:50%">
+                <label style="">Найкращі глобальні результати:</label>
+                <label id="load3" style="margin-top:5%;">Завантаження...</label>
+                <ol id="ol_list3" style="visibility:hidden;margin-top:-5%;padding-left: 10%;">
+                    <li id="worldbest_0">-</li>
+                    <li id="worldbest_1">-</li>
+                    <li id="worldbest_2">-</li>
+                    <li id="worldbest_3">-</li>
+                    <li id="worldbest_4">-</li>
+                    <li id="worldbest_5">-</li>
+                    <li id="worldbest_6">-</li>
+                    <li id="worldbest_7">-</li>
+                    <li id="worldbest_8">-</li>
+                    <li id="worldbest_9">-</li>
+                </ol>
+            </div>
+        </div>
+        <div style=" display: flex;justify-content: center;bottom:5%;">
+            <button id="open_menu2" style="width:20%; background-color:transparent; border:none">Меню</button>
         </div>
     </div>
 
 </div>
 
 
-
-
 <script src='js/signalr.min.js'></script>
-<script src='js/hammer.min.js'></script>
 
 <script>
 
-    var map = [
-        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-        [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
-        [1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1],
-        [1, 3, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 3, 1],
-        [1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1],
-        [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
-        [1, 2, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 2, 1],
-        [1, 2, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 2, 1],
-        [1, 2, 2, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 2, 2, 1],
-        [1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1],
-        [4, 4, 4, 4, 4, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 4, 4, 4, 4, 4],
-        [4, 4, 4, 4, 4, 1, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 2, 1, 4, 4, 4, 4, 4],
-        [4, 4, 4, 4, 4, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 4, 4, 4, 4, 4],
-        [1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 4, 4, 4, 4, 4, 4, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1],
-        [4, 4, 4, 4, 4, 1, 2, 2, 2, 2, 1, 4, 4, 4, 4, 4, 4, 1, 2, 2, 2, 2, 1, 4, 4, 4, 4, 4],
-        [1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 4, 4, 4, 4, 4, 4, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1],
-        [4, 4, 4, 4, 4, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 4, 4, 4, 4, 4],
-        [4, 4, 4, 4, 4, 1, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 2, 1, 4, 4, 4, 4, 4],
-        [4, 4, 4, 4, 4, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 4, 4, 4, 4, 4],
-        [1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1],
-        [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
-        [1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1],
-        [1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1],
-        [1, 3, 2, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 2, 2, 3, 1],
-        [1, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 1],
-        [1, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 1],
-        [1, 2, 2, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 2, 2, 1],
-        [1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1],
-        [1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1],
-        [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
-        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-
-    ];
-
     var el = document.getElementById('myContainer');
 
-    var mc = new Hammer(el);
+    document.getElementById('myContainer').addEventListener('touchstart', function (e) {
+        
+        var touchX = e.touches[0].clientX;
+        var touchY = e.touches[0].clientY - 50;
+        var x = screen.width;
 
-    mc.on("panleft panright panup pandown", function (ev) {
-     
-        if (ev.type === "panleft" ) {
-            hubConnection.invoke("MovePacmen", 4);
-        }
-        else if (ev.type === "panright") {
-            hubConnection.invoke("MovePacmen", 6);
-        }
-        else if (ev.type === "panup") {
+        var y = document.getElementById('myContainer').offsetWidth;
+
+        var up = y / 6 * 2;
+        var down = y / 6 * 4;
+
+        if (touchY < up)
+        {
             hubConnection.invoke("MovePacmen", 8);
         }
-        else if (ev.type === "pandown") {
+        else if (touchY > down)
+        {
             hubConnection.invoke("MovePacmen", 2);
-        }       
-        
-    });
+        }
+        else if (touchX < (x / 2))
+        {
+            hubConnection.invoke("MovePacmen", 4);
+        }
+        else if (touchX > (x / 2))
+        {
+            hubConnection.invoke("MovePacmen", 6);
+        }
        
-    current_pacman = {
-        x: 1,
-        y: 1
-    }
+    }, false);
 
     //let hubUrl = 'https://localhost:44325/stocks';
 
     let hubUrl = 'https://localhost:44379/stocks';
     //let hubUrl = 'https://pacmansadoviy.azurewebsites.net/stocks';
    
-    var hubConnection = new signalR.HubConnectionBuilder().withUrl(hubUrl).configureLogging(signalR.LogLevel.Information).build();
+    var hubConnection = new signalR.HubConnectionBuilder().withUrl(hubUrl).build();
+
+    //hubConnection.serverTimeoutInMilliseconds = 6000;
 
     hubConnection.start().catch(
-        err => { document.getElementById('connection_state').textContent = 'Connection faild'; }
+        err => { document.getElementById('connection_state').textContent = 'Помилка з`єднання'; }
     );
-    
+
+    hubConnection.onclose(function (e) {
+        var state = false;
+        document.getElementById('connection_state').textContent = 'Спроба відновити зєднання ... ';
+
+        while (!state) {
+            state = true;
+            console.log(state);
+            hubConnection.start().catch(
+                err => { state = false; }
+            );
+            sleep(5000);
+        }
+    });
+
+    var UserName = ' ';
+
+    hubConnection.on("ConnectionCreated", function (name) {
+        document.getElementById('connection_state').textContent = 'З`єднання успішно встановлено';
+        UserName = name;
+    });
+
     document.getElementById("sendBtn").addEventListener("click", function (e) {
         hubConnection.invoke("StartGame");
         document.getElementById('menu').style.visibility = 'hidden'
@@ -495,12 +537,103 @@
 
     document.getElementById("sendBtn2").addEventListener("click", function (e) {
         hubConnection.invoke("StartGame");
-        document.getElementById('end_game').style.visibility = 'hidden'
+        document.getElementById('end_game').style.visibility = 'hidden';
+        document.getElementById('ol_list').style.visibility = 'hidden';
     });
 
+    document.getElementById("open_menu").addEventListener("click", function (e) {       
+        document.getElementById('end_game').style.visibility = 'hidden';
+        document.getElementById('menu').style.visibility = 'visible';
+        document.getElementById('ol_list').style.visibility = 'hidden';
+    });
+
+    document.getElementById("open_menu2").addEventListener("click", function (e) {
+        document.getElementById('score_page').style.visibility = 'hidden';
+        document.getElementById('menu').style.visibility = 'visible';
+        document.getElementById('ol_list2').style.visibility = 'hidden';
+        document.getElementById('ol_list3').style.visibility = 'hidden';
+    });
+
+    document.getElementById("scoreBtn").addEventListener("click", function (e) {
+        document.getElementById('menu').style.visibility = 'hidden';
+        document.getElementById('score_page').style.visibility = 'visible';
+
+
+        var xmlhttp = new XMLHttpRequest(),
+            method = 'GET';
+
+        var url = 'https://localhost:44379/api/scores/' + UserName;
+        //var url = 'https://pacmansadoviy.azurewebsites.net/api/scores/' + UserName;
+       
+
+
+        xmlhttp.open(method, url, true);
+        xmlhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById('ol_list2').style.visibility = 'visible';
+                document.getElementById('load2').style.visibility = 'hidden';
+                var myArr = JSON.parse(this.responseText);
+                for (var i = 0; i < myArr.length; i++) {
+                    document.getElementById(('best_' + i).toString()).textContent = myArr[i];
+
+                }
+            }
+        };
+        xmlhttp.send();
+
+
+
+        var xml = new XMLHttpRequest(),
+            methodd = 'GET';
+        var urll = 'https://localhost:44379/api/scores/';
+        //var urll = 'https://pacmansadoviy.azurewebsites.net/api/scores/';
+    
+        xml.open(methodd, urll, true);
+        xml.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById('ol_list3').style.visibility = 'visible';
+                document.getElementById('load3').style.visibility = 'hidden';
+                var myArr = JSON.parse(this.responseText);
+                for (var i = 0; i < myArr.length; i++) {
+                    document.getElementById(('worldbest_' + i).toString()).textContent = myArr[i];
+
+                }
+            }
+        };
+        xml.send();
+
+    });
+
+    var p = false;
+
+    document.getElementById("pause").addEventListener("click", function (e) {
+        pauses();
+        hubConnection.invoke("Pause");
+    });
+
+    document.getElementById("pause2").addEventListener("click", function (e) {
+        pauses();
+        hubConnection.invoke("Pause");
+    });
+
+    function pauses() {
+        if (p) {
+            p = false;
+            document.getElementById("pause").textContent = "Пауза";
+            document.getElementById("menu").style.visibility = 'hidden';
+            document.getElementById("pause").disabled = false;
+            document.getElementById("pause2").disabled = true;
+        }
+        else {
+            p = true;          
+            document.getElementById("pause").disabled = true;
+            document.getElementById("pause2").disabled = false;
+            document.getElementById("menu").style.visibility = 'visible';
+        }
+    }
 
     document.onkeydown = function (event) {
-
+       
         if (event.keyCode === 37) {
 
             hubConnection.invoke("MovePacmen", 4);
@@ -548,6 +681,10 @@
         x: 11,
         y: 13
     }
+
+    hubConnection.on("Level", function (lvl) {
+        document.getElementById('level').textContent = 'Level ' + lvl;     
+    });
 
     hubConnection.on("ChangePacmanPosition", function (pacman_x, pacman_y, score) {
 
@@ -842,18 +979,50 @@
         alert("You win!");
     });
 
-    hubConnection.on("GameLost", function (score) {
+    hubConnection.on("GameLost", function (score, username) {
         document.getElementById('EndGameScore').textContent = score;
         document.getElementById('end_game').style.visibility = 'visible';
 
+
+        var xhr = new XMLHttpRequest();
+
+        var json = JSON.stringify({
+            UserName: username,
+            Score: score
+        });
+
+        //xhr.open("POST", 'https://pacmansadoviy.azurewebsites.net/api/scores', true)
+        xhr.open("POST", 'https://localhost:44379/api/scores', true)
+        xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+
+        xhr.send(json);
+             
+
+        xhr.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById('ol_list').style.visibility = 'visible';
+                document.getElementById('load').style.visibility = 'hidden';
+                var myArr = JSON.parse(this.responseText);
+                for (var i = 0; i < myArr.length; i++) {
+                    document.getElementById(('user_best_' + i).toString()).textContent = myArr[i];
+                   
+                }
+            }
+        };
+       
+
+
     });
 
-    hubConnection.on("PacmanLoseLife", async function (life) {
+    hubConnection.on("PacmanLoseLife", function (life) {
         var l = document.getElementById("lifes");
         l.textContent = life;
 
-        await sleep(100);
-        
+        setTimeout(defposition, 120);
+          
+    });
+
+    function defposition() {
         document.getElementById("pinky").style.left = '47.3214286%';
         document.getElementById("pinky").style.top = '44.3548387%';
         document.getElementById("pinky").style.backgroundImage = "url('images/pinkyright.png')";
@@ -866,7 +1035,7 @@
         document.getElementById("clyde").style.top = '44.3548387%';
         document.getElementById("clyde").style.backgroundImage = "url('images/cludyright.png')";
 
-    });
+    }
 
     function sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
@@ -901,27 +1070,27 @@
                 xxXX = xxXX - pos;
                 bonus_score.style.top = xxXX + 'px';
             }
-        }
-        //alert("dsfsdf");
+        }       
 
     });
 
-    hubConnection.on("ContinGameAfterReconnect", function (eated_coin, eated_ener) {
+    hubConnection.on("ContinGameAfterReconnect", function (eated_coin, eated_ener, life) {
 
         document.getElementById("circl").style.animationPlayState = 'paused';
         for (var i = 0; i < eated_coin.length; i = i + 1) {
             document.getElementById(eated_coin[i]).className = 'ground';            
-        };
-        alert(eated_ener[0]);
+        };       
         for (var t = 0; t < eated_ener.length; t = t + 1) {
             document.getElementById(eated_ener[t]).className = 'ground';
         };
+
+        document.getElementById("lifes").textContent = life;
+
         pauses();
 
     });
 
-
-    hubConnection.on("ResetAllItem", function (eated_coin, eated_ener) {
+    hubConnection.on("ResetAllItem", function (eated_coin, eated_ener, life) {
                
         for (var i = 0; i < eated_coin.length; i = i + 1) {
             document.getElementById(eated_coin[i]).className = 'coin';
@@ -931,9 +1100,10 @@
             document.getElementById(eated_ener[t]).className = 'energizer';
         };    
 
+        document.getElementById("lifes").textContent = life;
+
     });
-
-
+    
     hubConnection.on("CreateFruit", function (fruit) {
 
         document.getElementById(fruit).className = 'fruit';
@@ -946,7 +1116,7 @@
 
     });
 
-    var p = false;
+    
 
     hubConnection.on("Countdown", function (dataa) {
         document.getElementById("pinky").style.left = '47.3214286%';
@@ -970,26 +1140,6 @@
     window.onload = function () {
         myFunctionq();
     };
-
-    document.getElementById("pause").addEventListener("click", function (e) {
-        pauses();
-        hubConnection.invoke("Pause");
-    });
-
-    function pauses() {
-        if (p) {
-            p = false;
-            document.getElementById("pause").textContent = "Пауза";
-        }
-        else {
-            p = true;
-            document.getElementById("pause").textContent = "Продовжити гру";
-        }
-    }
-
-   
-
-
 
     function ObjectMove(x, y, px, py, object_id, tim) {
               
@@ -1084,28 +1234,23 @@
             document.getElementById('myContainer').style.height = '248px';
             document.getElementById('myContainer').style.width = '224px';
             dist = 8;
+            document.getElementById('myContainer').style.fontSize = '9px';
         } 
         else if ((w < 496)||(h < 570))
         {
             document.getElementById('myContainer').style.height = '372px';
             document.getElementById('myContainer').style.width = '336px';
             dist = 12;
+            document.getElementById('myContainer').style.fontSize = '12px';
         } else if ((w > 496) || (h> 570))
         {
             document.getElementById('myContainer').style.height = '496px';
             document.getElementById('myContainer').style.width = '448px';
             dist = 16;
+            document.getElementById('myContainer').style.fontSize = '18px';
         }
 
 
-        //var gg = document.getElementById('myContainer').offsetWidth;
-        //document.getElementById('myContainer').style.left = (w - gg) / 2 - 8;
-
-        //var gf = document.getElementById('myContainer').offsetTop + document.getElementById('myContainer').offsetHeight;;
-        
-
-        //document.getElementById('tf1').textContent = gf;
-        //document.getElementById('tf2').textContent = h;
     }
 </script>
 

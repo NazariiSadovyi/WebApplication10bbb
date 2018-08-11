@@ -14,10 +14,12 @@ namespace WebApplication10bbb.GhostsAndPacman
         public int last_move_X;
         public int last_move_Y;
         public int lifes = 3;
+        public bool isMoving = false;
+
 
         public Pacman()
         { }
 
-
+        
     }
 }

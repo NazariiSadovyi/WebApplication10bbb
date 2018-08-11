@@ -21,6 +21,8 @@ namespace WebApplication10bbb
 
         public bool IsGameStarted = false;
 
+        public bool CanGameBeContinuos = false;
+
         private GameMap _gameMap = new GameMap();
 
         private Pacman _pacman = new Pacman();
@@ -33,9 +35,11 @@ namespace WebApplication10bbb
 
         private GhostInky inky;
 
+        private Score score = new Score();
+
         public Timer PacmanTimer, ClydeTimer, PinkyTimer, BlinkyTimer, InkyTimer;
 
-        private bool pause = false;
+        public bool pause = false;
 
         List<string> eated_coin = new List<string>();
 
@@ -43,21 +47,18 @@ namespace WebApplication10bbb
         
         public string ConnectionID { get; set; }
 
-        private int score;
-        private int ghost_start_score;
-        private int bonus_score = 100;
-        private int sum_bonus_score = 0;
+       
         string fruit_pos;
+        private int level = 1;
 
         private IHubContext<GameHub> hub { get; set; }
 
-        public Class(string connectionID, IHubContext<GameHub> hub)
+        public Class(string connectionID, IHubContext<GameHub> hub, string username)
         {
             clients.Add(connectionID);
+            UserName = username;
             this.hub = hub;
         }
-
-
 
         public Task Move(int move)
         {
@@ -107,7 +108,27 @@ namespace WebApplication10bbb
             pinky = new GhostPinky();
             clyde = new GhostClyde();
             inky = new GhostInky();
-            
+
+            _pacman.isMoving = false;
+            _pacman.position_x = 1;
+            _pacman.position_y = 1;
+            _pacman.move_X = 0;
+            _pacman.move_Y = 1;
+
+            level = 1;
+            _pacman.lifes = 3;
+            score.coin_sum = 0;
+            score.game_finish = 0;
+            score.sum_bonus_coin = 0;
+
+            CountDown();
+
+            eated_coin.Clear();
+            eated_energizer.Clear();
+
+            _gameMap.RestorMap();
+
+            _pacman.isMoving = true;
             PacmanTimer = new Timer(UpdatePacman, null, 0, 100);
             InkyTimer = new Timer(UpdateInky, null, 0, 120);
             ClydeTimer = new Timer(UpdateCloudy, null, 0, 120);
@@ -116,17 +137,15 @@ namespace WebApplication10bbb
 
             blinky.StartMoving();
 
+
             return Task.CompletedTask;
         }
 
-        internal Task StartNewGame()
+        private void CountDown()
         {
-            blinky = new GhostBlinky();
-            pinky = new GhostPinky();
-            clyde = new GhostClyde();
-            inky = new GhostInky();
+            hub.Clients.Clients(clients).SendAsync("Level", level);
 
-            int count = 3;           
+            int count = 3;
             hub.Clients.Clients(clients).SendAsync("Countdown", count);
             Thread.Sleep(400);
             ResetAllObject();
@@ -137,7 +156,33 @@ namespace WebApplication10bbb
             hub.Clients.Clients(clients).SendAsync("Countdown", "Вперед");
             Thread.Sleep(200);
             hub.Clients.Clients(clients).SendAsync("Countdown", "hidd");
+        }
 
+        internal Task StartNewGame()
+        {
+            blinky = new GhostBlinky();
+            pinky = new GhostPinky();
+            clyde = new GhostClyde();
+            inky = new GhostInky();
+
+            _pacman.isMoving = false;
+            _pacman.position_x = 1;
+            _pacman.position_y = 1;
+            _pacman.move_X = 0;
+            _pacman.move_Y = 1;
+
+            level = 1;
+            _pacman.lifes = 3;
+            score.coin_sum = 0;
+            score.game_finish = 0;
+            score.sum_bonus_coin = 0;
+
+            CountDown();
+
+            eated_coin.Clear();
+            eated_energizer.Clear();
+
+            _pacman.isMoving = true;
             PacmanTimer.Change(0, 100);
             InkyTimer.Change(0, 120);
             ClydeTimer.Change(0, 120);
@@ -145,20 +190,19 @@ namespace WebApplication10bbb
             BlinkyTimer.Change(0, 120);
 
             blinky.StartMoving();
+                       
 
-            ghost_start_score = 0;
-            score = 0;
-
-            _gameMap.CoinMap = _gameMap.DefaultCoinMap;
-                      
+            _gameMap.RestorMap();
+            
 
             return Task.CompletedTask;
         }
 
         public void ContGameAfterReconect()
         {
-            hub.Clients.Clients(clients).SendAsync("ChangePacmanPosition", _pacman.position_x, _pacman.position_y, score * 10 + sum_bonus_score);
-            hub.Clients.Clients(clients).SendAsync("ContinGameAfterReconnect", eated_coin, eated_energizer);
+            hub.Clients.Clients(clients).SendAsync("ChangePacmanPosition", _pacman.position_x, _pacman.position_y, score.coin_sum + score.sum_bonus_coin);
+            hub.Clients.Clients(clients).SendAsync("ContinGameAfterReconnect", eated_coin, eated_energizer, _pacman.lifes);
+            hub.Clients.Clients(clients).SendAsync("Level", level);
             hub.Clients.Clients(clients).SendAsync("ChangeInkyPosition", inky.position_x, inky.position_y, inky.IsFrightened, inky.MovingToHome);
             hub.Clients.Clients(clients).SendAsync("ChangeBlinkyPosition", blinky.position_x, blinky.position_y, blinky.IsFrightened, blinky.MovingToHome);
             hub.Clients.Clients(clients).SendAsync("ChangePinkyPosition", pinky.position_x, pinky.position_y, pinky.IsFrightened, pinky.MovingToHome);
@@ -168,8 +212,9 @@ namespace WebApplication10bbb
 
         public void ResetAllObject()
         {
-            hub.Clients.Clients(clients).SendAsync("ChangePacmanPosition", _pacman.position_x, _pacman.position_y, score * 10 + sum_bonus_score);
-            hub.Clients.Clients(clients).SendAsync("ResetAllItem", eated_coin, eated_energizer);
+            hub.Clients.Clients(clients).SendAsync("ChangePacmanPosition", _pacman.position_x, _pacman.position_y, score.coin_sum + score.sum_bonus_coin);
+            hub.Clients.Clients(clients).SendAsync("ResetAllItem", eated_coin, eated_energizer, _pacman.lifes);
+            hub.Clients.Clients(clients).SendAsync("Level", level);
             hub.Clients.Clients(clients).SendAsync("ChangeInkyPosition", inky.position_x, inky.position_y, inky.IsFrightened, inky.MovingToHome);
             hub.Clients.Clients(clients).SendAsync("ChangeBlinkyPosition", blinky.position_x, blinky.position_y, blinky.IsFrightened, blinky.MovingToHome);
             hub.Clients.Clients(clients).SendAsync("ChangePinkyPosition", pinky.position_x, pinky.position_y, pinky.IsFrightened, pinky.MovingToHome);
@@ -200,8 +245,14 @@ namespace WebApplication10bbb
             pinky = new GhostPinky();
             clyde = new GhostClyde();
             inky = new GhostInky();
-           
-            hub.Clients.Clients(clients).SendAsync("GameLost", sum_bonus_score + score*10);
+
+            _pacman.isMoving = false;
+
+            IsGameStarted = false;
+
+            Dispose();
+
+            hub.Clients.Clients(clients).SendAsync("GameLost", score.coin_sum + score.sum_bonus_coin, UserName);
         }
 
         private void ContinGhostMoving(Ghost ghost)
@@ -268,9 +319,9 @@ namespace WebApplication10bbb
                 {
                     ghost.FrightenedChange(new object());
                     ghost.MovingToHome = true;
-                    bonus_score = bonus_score * 2;
-                    sum_bonus_score += bonus_score;
-                    hub.Clients.Clients(clients).SendAsync("Eated_ghost", ghost.position_x, ghost.position_y, bonus_score);
+                    score.bonus_coin = score.bonus_coin * 2;
+                    score.sum_bonus_coin += score.bonus_coin;
+                    hub.Clients.Clients(clients).SendAsync("Eated_ghost", ghost.position_x, ghost.position_y, score.bonus_coin);
                 }
                 else if ((ghost.IsFrightened == false) && (ghost.MovingToHome == false) && (ghost.IsMoving))
                 {                                        
@@ -332,7 +383,7 @@ namespace WebApplication10bbb
 
         private void GhostRerun()
         {
-            ghost_start_score = 0;
+            score.ghost_start = 0;
             
             Rerun(blinky);
             blinky.StartMoving();
@@ -342,152 +393,192 @@ namespace WebApplication10bbb
             Rerun(clyde);
 
         }
-        
+
+        private void NextLevel()
+        {
+            blinky = new GhostBlinky();
+            pinky = new GhostPinky();
+            clyde = new GhostClyde();
+            inky = new GhostInky();
+
+            _pacman.isMoving = false;
+            _pacman.position_x = 1;
+            _pacman.position_y = 1;
+            _pacman.move_X = 0;
+            _pacman.move_Y = 1;
+
+            _pacman.lifes++;
+            level++;
+            score.game_finish = 0;
+
+            CountDown();
+
+            eated_coin.Clear();
+            eated_energizer.Clear();
+
+            _pacman.isMoving = true;
+            PacmanTimer.Change(0, 100);
+            InkyTimer.Change(0, 120);
+            ClydeTimer.Change(0, 120);
+            PinkyTimer.Change(0, 120);
+            BlinkyTimer.Change(0, 120);
+
+            blinky.StartMoving();
+
+            score.ghost_start = 0;
+            
+
+            _gameMap.RestorMap();
+        }
+
         private void UpdatePacman(object state)
         {
-            if (pause == false)
+            if (_pacman.isMoving)
             {
-                if (_gameMap.CoinMap[_pacman.position_x, _pacman.position_y] == 'c')
+                if (pause == false)
                 {
-                    _gameMap.CoinMap[_pacman.position_x, _pacman.position_y] = ' ';
-                    score++;
-                    ghost_start_score++;
-                    //if (ghost_start_score == blinky.initial_score_limit)
-                    //{
-                    //    blinky.StartMoving();
-                    //}
-                    if ((ghost_start_score == pinky.initial_score_limit) && (pinky.IsMoving == false))
+                    if (_gameMap.CoinMap[_pacman.position_x, _pacman.position_y] == 'c')
                     {
-                        pinky.StartMoving();
+                        _gameMap.CoinMap[_pacman.position_x, _pacman.position_y] = ' ';
+                        score.coin_sum += 10;
+                        score.ghost_start++;
+                        score.game_finish++;
+                        //if (ghost_start_score == blinky.initial_score_limit)
+                        //{
+                        //    blinky.StartMoving();
+                        //}
+                        if ((score.ghost_start == pinky.initial_score_limit) && (pinky.IsMoving == false))
+                        {
+                            pinky.StartMoving();
+                        }
+                        if ((score.ghost_start == clyde.initial_score_limit) && (clyde.IsMoving == false))
+                        {
+                            clyde.StartMoving();
+                        }
+                        if ((score.ghost_start == inky.initial_score_limit) && (inky.IsMoving == false))
+                        {
+                            inky.StartMoving();
+                        }
+                        if (score.game_finish == 96)
+                        {
+                            Random random = new Random();
+                            var t = random.Next(eated_coin.Count);
+                            fruit_pos = eated_coin[t];
+
+                            int first;
+                            int second;
+
+                            if (fruit_pos[1] == 'o')
+                            {
+                                first = Convert.ToInt32(fruit_pos[0].ToString());
+                            }
+                            else
+                            {
+                                first = Convert.ToInt32(((fruit_pos[0].ToString() + fruit_pos[1].ToString())).ToString());
+                            }
+
+                            if (fruit_pos[fruit_pos.Length - 2] == 'o')
+                            {
+                                second = Convert.ToInt32((fruit_pos[fruit_pos.Length - 1]).ToString());
+                            }
+                            else
+                            {
+                                second = Convert.ToInt32(((fruit_pos[fruit_pos.Length - 2].ToString() + fruit_pos[fruit_pos.Length - 1].ToString())).ToString());
+                            }
+
+
+                            _gameMap.CoinMap[first, second] = 'f';
+                            hub.Clients.Clients(clients).SendAsync("CreateFruit", fruit_pos);
+
+                        }
+                        if (score.game_finish == 200)
+                        {
+                            Random random = new Random();
+                            var t = random.Next(eated_coin.Count);
+                            fruit_pos = eated_coin[t];
+
+                            int first;
+                            int second;
+
+                            if (fruit_pos[1] == 'o')
+                            {
+                                first = Convert.ToInt32(fruit_pos[0].ToString());
+                            }
+                            else
+                            {
+                                first = Convert.ToInt32(((fruit_pos[0].ToString() + fruit_pos[1].ToString())).ToString());
+                            }
+
+                            if (fruit_pos[fruit_pos.Length - 2] == 'o')
+                            {
+                                second = Convert.ToInt32((fruit_pos[fruit_pos.Length - 1]).ToString());
+                            }
+                            else
+                            {
+                                second = Convert.ToInt32(((fruit_pos[fruit_pos.Length - 2].ToString() + fruit_pos[fruit_pos.Length - 1].ToString())).ToString());
+                            }
+
+
+                            _gameMap.CoinMap[first, second] = 'f';
+                            hub.Clients.Clients(clients).SendAsync("CreateFruit", fruit_pos);
+
+                        }
+                        if (score.game_finish == 284)
+                        {
+                            NextLevel();
+                        }
+
+                        eated_coin.Add((_pacman.position_x).ToString() + "o" + (_pacman.position_y).ToString());
+
                     }
-                    if ((ghost_start_score == clyde.initial_score_limit) && (clyde.IsMoving == false))
+                    else if (_gameMap.CoinMap[_pacman.position_x, _pacman.position_y] == 'k')
                     {
-                        clyde.StartMoving();
+                        eated_energizer.Add((_pacman.position_x).ToString() + "o" + (_pacman.position_y).ToString());
+
+                        //score = score + 10;
+                        score.bonus_coin = 100;
+
+                        MakeGhostFrightened(blinky, BlinkyTimer);
+
+                        MakeGhostFrightened(pinky, PinkyTimer);
+
+                        MakeGhostFrightened(clyde, ClydeTimer);
+
+                        MakeGhostFrightened(inky, InkyTimer);
+
+                        _gameMap.CoinMap[_pacman.position_x, _pacman.position_y] = ' ';
                     }
-                    if ((ghost_start_score == inky.initial_score_limit) && (inky.IsMoving == false))
+                    else if (_gameMap.CoinMap[_pacman.position_x, _pacman.position_y] == 'f')
                     {
-                        inky.StartMoving();
+                        score.sum_bonus_coin = score.sum_bonus_coin + 500;
+                        hub.Clients.Clients(clients).SendAsync("DestroyFruit", fruit_pos);
+                        _gameMap.CoinMap[_pacman.position_x, _pacman.position_y] = ' ';
                     }
-                    if (score == 96)
-                    {
-                        Random random = new Random();
-                        var t = random.Next(eated_coin.Count);
-                        fruit_pos = eated_coin[t];
-
-                        int first;
-                        int second;
-
-                        if (fruit_pos[1] == 'o')
-                        {
-                            first = Convert.ToInt32(fruit_pos[0].ToString());
-                        }
-                        else
-                        {
-                            first = Convert.ToInt32(((fruit_pos[0].ToString() + fruit_pos[1].ToString())).ToString());
-                        }
-
-                        if (fruit_pos[fruit_pos.Length - 2] == 'o')
-                        {
-                            second = Convert.ToInt32((fruit_pos[fruit_pos.Length - 1]).ToString());
-                        }
-                        else
-                        {
-                            second = Convert.ToInt32(((fruit_pos[fruit_pos.Length - 2].ToString() + fruit_pos[fruit_pos.Length - 1].ToString())).ToString());
-                        }
-
-
-                        _gameMap.CoinMap[first, second] = 'f';
-                        hub.Clients.Clients(clients).SendAsync("CreateFruit", fruit_pos);
-                        
-                    }
-                    if (score == 200)
-                    {
-                        Random random = new Random();
-                        var t = random.Next(eated_coin.Count);
-                        fruit_pos = eated_coin[t];
-
-                        int first;
-                        int second;
-
-                        if (fruit_pos[1] == 'o')
-                        {
-                            first = Convert.ToInt32(fruit_pos[0].ToString());
-                        }
-                        else
-                        {
-                            first = Convert.ToInt32(((fruit_pos[0].ToString() + fruit_pos[1].ToString())).ToString());
-                        }
-
-                        if (fruit_pos[fruit_pos.Length - 2] == 'o')
-                        {
-                            second = Convert.ToInt32((fruit_pos[fruit_pos.Length - 1]).ToString());
-                        }
-                        else
-                        {
-                            second = Convert.ToInt32(((fruit_pos[fruit_pos.Length - 2].ToString() + fruit_pos[fruit_pos.Length - 1].ToString())).ToString());
-                        }
-
-
-                        _gameMap.CoinMap[first, second] = 'f';
-                        hub.Clients.Clients(clients).SendAsync("CreateFruit", fruit_pos);
-
-                    }
-                    if (score == 284)
-                    {
-                        hub.Clients.Clients(clients).SendAsync("EndGame");
-                    }
-
-                    eated_coin.Add((_pacman.position_x).ToString() + "o" + (_pacman.position_y).ToString());
-
-                }
-                else if (_gameMap.CoinMap[_pacman.position_x, _pacman.position_y] == 'k')
-                {
-                    eated_energizer.Add((_pacman.position_x).ToString() + "o" + (_pacman.position_y).ToString());
-
-                    //score = score + 10;
-                    bonus_score = 100;
-
-                    MakeGhostFrightened(blinky, BlinkyTimer);
-
-                    MakeGhostFrightened(pinky, PinkyTimer);
-
-                    MakeGhostFrightened(clyde, ClydeTimer);
-
-                    MakeGhostFrightened(inky, InkyTimer);
-
-                    _gameMap.CoinMap[_pacman.position_x, _pacman.position_y] = ' ';
-                }
-                else if (_gameMap.CoinMap[_pacman.position_x, _pacman.position_y] == 'f')
-                {
-                    sum_bonus_score = sum_bonus_score + 500;
-                    hub.Clients.Clients(clients).SendAsync("DestroyFruit", fruit_pos);
-                    _gameMap.CoinMap[_pacman.position_x, _pacman.position_y] = ' ';
-                }
 
                     //pacman logic
-                if (_gameMap.map[_pacman.position_x + _pacman.move_X, _pacman.position_y + _pacman.move_Y] != 'w')
-                {
-                    _pacman.position_x += _pacman.move_X;
-                    _pacman.position_y += _pacman.move_Y;
+                    if (_gameMap.map[_pacman.position_x + _pacman.move_X, _pacman.position_y + _pacman.move_Y] != 'w')
+                    {
+                        _pacman.position_x += _pacman.move_X;
+                        _pacman.position_y += _pacman.move_Y;
+                    }
+
+                    // перевірка чи пакмен не натрапив на блінкі            
+                    CheckPacmanTouchGhost(blinky);
+
+                    // перевірка чи пакмен не натрапив на пінкі             
+                    CheckPacmanTouchGhost(pinky);
+
+                    // перевірка чи пакмен не натрапив на клуді
+                    CheckPacmanTouchGhost(clyde);
+
+                    // перевірка чи пакмен не натрапив на інкі
+                    CheckPacmanTouchGhost(inky);
+
+
+                    hub.Clients.Clients(clients).SendAsync("ChangePacmanPosition", _pacman.position_x, _pacman.position_y, score.coin_sum + score.sum_bonus_coin);
+
                 }
-
-                // перевірка чи пакмен не натрапив на блінкі            
-                CheckPacmanTouchGhost(blinky);
-
-                // перевірка чи пакмен не натрапив на пінкі             
-                CheckPacmanTouchGhost(pinky);
-
-                // перевірка чи пакмен не натрапив на клуді
-                CheckPacmanTouchGhost(clyde);
-
-                // перевірка чи пакмен не натрапив на інкі
-                CheckPacmanTouchGhost(inky);
-                                
-
-                hub.Clients.Clients(clients).SendAsync("ChangePacmanPosition", _pacman.position_x, _pacman.position_y, score * 10 + sum_bonus_score);
-
             }
-
         }
 
         public void UpdateInky(object state)
@@ -910,8 +1001,12 @@ namespace WebApplication10bbb
                     }
                 }
 
-                clyde.position_x += clyde.move_X;
-                clyde.position_y += clyde.move_Y;
+                if (_gameMap.map[clyde.position_x + clyde.move_X, clyde.position_y + clyde.move_Y] != 'w')
+                {
+                    clyde.position_x += clyde.move_X;
+                    clyde.position_y += clyde.move_Y;
+                }
+                
 
                 // перевірка чи клуді не зловив пакмена
                 CheckPacmanTouchGhost(clyde);
@@ -1092,6 +1187,7 @@ namespace WebApplication10bbb
                 PinkyTimer.Dispose();
                 ClydeTimer.Dispose();
                 InkyTimer.Dispose();
+                PacmanTimer.Dispose();
 
                 blinky.PersecutionOrRunawayTimer.Dispose();
                 blinky.FrightenedTimer.Dispose();

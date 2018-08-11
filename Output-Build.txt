@@ -1,0 +1,16 @@
+﻿1>------ Build started: Project: WebApplication10bbb, Configuration: Release Any CPU ------
+1>WebApplication10bbb -> C:\Users\Назар\source\repos\WebApplication10bbb\WebApplication10bbb\bin\Release\netcoreapp2.1\WebApplication10bbb.dll
+1>WebApplication10bbb -> C:\Users\Назар\source\repos\WebApplication10bbb\WebApplication10bbb\bin\Release\netcoreapp2.1\WebApplication10bbb.Views.dll
+2>------ Publish started: Project: WebApplication10bbb, Configuration: Release Any CPU ------
+WebApplication10bbb -> C:\Users\Назар\source\repos\WebApplication10bbb\WebApplication10bbb\bin\Release\netcoreapp2.1\WebApplication10bbb.dll
+WebApplication10bbb -> C:\Users\Назар\source\repos\WebApplication10bbb\WebApplication10bbb\bin\Release\netcoreapp2.1\WebApplication10bbb.Views.dll
+WebApplication10bbb -> C:\Users\Назар\source\repos\WebApplication10bbb\WebApplication10bbb\obj\Release\netcoreapp2.1\PubTmp\Out\
+Updating file (PacmanSadoviy\web.config).
+Updating file (PacmanSadoviy\WebApplication10bbb.deps.json).
+Updating file (PacmanSadoviy\WebApplication10bbb.runtimeconfig.json).
+Updating file (PacmanSadoviy\WebApplication10bbb.Views.dll).
+Updating file (PacmanSadoviy\WebApplication10bbb.Views.pdb).
+Publish Succeeded.
+Web App was published successfully http://pacmansadoviy.azurewebsites.net/
+========== Build: 1 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========
+========== Publish: 1 succeeded, 0 failed, 0 skipped ==========

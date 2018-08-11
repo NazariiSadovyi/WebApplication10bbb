@@ -106,6 +106,9 @@
 </style>
 
 <div class="form-wrapper">
+    <div>
+        <img src="/images/pacmanlogo.png" style="width:100%;padding-top:3%" />
+    </div>
     <h1>Реєстрація</h1>
     <form method="post">
         <div>
@@ -161,7 +164,11 @@
         <div class="button-panel">
             <input type="submit" class="button" title="Sign In" value="Зареєструватись" />
         </div>
-        <div class="form-footer">
-        </div>
     </form>
+        <div class="form-footer">
+            <form method="post">
+                <input type="submit" class="button" style="background-color:transparent;border:none" asp-page-handler="SignIn" title="Сторінка входу" value="Сторінка входу" />
+            </form>
+        </div>
+    
 </div>

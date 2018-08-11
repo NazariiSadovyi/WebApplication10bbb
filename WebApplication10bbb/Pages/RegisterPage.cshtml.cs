@@ -80,6 +80,11 @@ namespace WebApplication10bbb.Pages
             }          
         }
 
+        public async Task<IActionResult> OnPostSignIn()
+        {
+            return Redirect("/LoginPage/a");
+        }
+
         private bool UsersExists(string id)
         {
             return _context.Users.Any(e => e.UserName == id);

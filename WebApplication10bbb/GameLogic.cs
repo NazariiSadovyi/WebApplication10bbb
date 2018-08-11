@@ -20,7 +20,10 @@ namespace WebApplication10bbb
             try
             {   
                 dict[username].clients.Remove(connectionId);
-                dict[username].PauseGame();
+                if (!dict[username].pause)
+                {
+                    dict[username].PauseGame();
+                }                
                 dict[username].stopwatch.Restart();
                 
             }
@@ -109,9 +112,11 @@ namespace WebApplication10bbb
 
         public void Connected(string connectionId, string username)
         {
+            Hub.Clients.Client(connectionId).SendAsync("ConnectionCreated", username);
+
             if (dict.Count == 0)
             {
-                dict.Add(username, new Class(connectionId, Hub));
+                dict.Add(username, new Class(connectionId, Hub, username));
             }
             else
             {
@@ -121,11 +126,14 @@ namespace WebApplication10bbb
                     if (dict.ContainsKey(username))
                     {
                         dict[username].clients.Add(connectionId);
-                        dict[username].ContGameAfterReconect();
+                        if (dict[username].IsGameStarted)
+                        {
+                            dict[username].ContGameAfterReconect();
+                        }                        
                     }
                     else
                     {
-                        dict.Add(username, new Class(connectionId, Hub));
+                        dict.Add(username, new Class(connectionId, Hub, username));
                     }
                     
                 }

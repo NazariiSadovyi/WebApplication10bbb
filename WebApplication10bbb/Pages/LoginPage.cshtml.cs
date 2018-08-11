@@ -41,42 +41,42 @@ namespace WebApplication10bbb.Pages
 
         public async Task<IActionResult> OnPostSignIn()
         {
-            //if (!ModelState.IsValid)
-            //{
-            //    return Page();
-            //}
-            //else
-            //{
-            //    Result = null;
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
+            else
+            {
+                Result = null;
 
-            //    var users = await _context.Users.FindAsync(UserName);
+                var users = await _context.Users.FindAsync(UserName);
 
-            //    if (users == null)
-            //    {
-            //        Result = "Користувача з таким логіном не знайдено";
-            //        return Page();
-            //    }
-            //    else
-            //    {
-            //        int l = users.UserPassword.Length;
-            //        string temp = "";
-            //        int i = 0;
-            //        bool a = false;
-            //        while (a == false)
-            //        {
-            //            if (users.UserPassword[i] != ' ')
-            //            {
-            //                temp = temp + users.UserPassword[i];
-            //                i++;
-            //            }
-            //            else
-            //            {
-            //                a = true;
-            //            }
-            //        }
+                if (users == null)
+                {
+                    Result = "Користувача з таким логіном не знайдено";
+                    return Page();
+                }
+                else
+                {
+                    int l = users.UserPassword.Length;
+                    string temp = "";
+                    int i = 0;
+                    bool a = false;
+                    while (a == false)
+                    {
+                        if (users.UserPassword[i] != ' ')
+                        {
+                            temp = temp + users.UserPassword[i];
+                            i++;
+                        }
+                        else
+                        {
+                            a = true;
+                        }
+                    }
 
-            //        if (temp == Password)
-            //        {
+                    if (temp == Password)
+                    {
 
                         List<Claim> claims = new List<Claim>
                         {
@@ -86,21 +86,21 @@ namespace WebApplication10bbb.Pages
                         ClaimsIdentity identity = new ClaimsIdentity(claims, "login");
                         ClaimsPrincipal principal = new ClaimsPrincipal(identity);
 
-                        // sign-in  
+                        //signin  
                         await HttpContext.SignInAsync(principal);
 
 
                         return Redirect("/Index");
-            //        }
-            //        else
-            //        {
-            //            Result = "Невірний пароль";
-            //            return Page();
-            //        }
-            //    }
+                    }
+                    else
+                    {
+                        Result = "Невірний пароль";
+                        return Page();
+                    }
+                }
 
 
-            //}
+            }
         }
 
         public async Task<IActionResult> OnPostSignUp()

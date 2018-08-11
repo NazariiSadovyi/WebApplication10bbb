@@ -42,7 +42,10 @@ namespace WebApplication10bbb
                     options.LoginPath = "/LoginPage/ "
                 );
 
-            services.AddSignalR();
+            services.AddSignalR(options =>
+            {                
+                options.KeepAliveInterval = TimeSpan.FromSeconds(1);
+            });
             services.AddSingleton<GameLogic>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
